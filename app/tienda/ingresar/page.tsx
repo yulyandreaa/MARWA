@@ -2,7 +2,7 @@
 
 import {Suspense, useState, type FormEvent} from 'react';
 import {useRouter, useSearchParams} from 'next/navigation';
-import {login} from '@/lib/shop';
+import {demoLogin, login, type Role} from '@/lib/shop';
 import {AuthAlt, AuthField, AuthShell, PasswordField} from '@/components/shop/AuthShell';
 
 const recover = `https://wa.me/573102569469?text=${encodeURIComponent('Hola MARWA, olvidé la contraseña de mi cuenta en la tienda.')}`;
@@ -27,6 +27,11 @@ function LoginForm() {
     }
   };
 
+  const enterDemo = (role: Role) => {
+    demoLogin(role);
+    router.push(role === 'vendedor' ? '/tienda/admin' : '/tienda/cuenta');
+  };
+
   return (
     <AuthShell title="Accede a tu cuenta" lead="Ingresa o crea tu cuenta para continuar.">
       <form onSubmit={submit} className="form">
@@ -37,6 +42,13 @@ function LoginForm() {
         <button className="button primary block" disabled={busy}>{busy ? 'Ingresando…' : 'Iniciar sesión'}</button>
       </form>
       <AuthAlt question="¿Es tu primera vez en MARWA?" href={`/tienda/registro${next ? `?next=${encodeURIComponent(next)}` : ''}`}>Crear una cuenta</AuthAlt>
+      <div className="au-demo">
+        <p>Acceso directo a la demo</p>
+        <div>
+          <button className="button ghost" type="button" onClick={() => enterDemo('comprador')}>Panel de comprador</button>
+          <button className="button ghost" type="button" onClick={() => enterDemo('vendedor')}>Panel de vendedor</button>
+        </div>
+      </div>
     </AuthShell>
   );
 }

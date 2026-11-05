@@ -259,6 +259,58 @@ export function placeOrder(input: {email: string; customer: Profile; notes: stri
   return order;
 }
 
+/* ------------------------------------------------------------------ */
+/* Acceso directo de la demo                                           */
+/* ------------------------------------------------------------------ */
+/* INTEGRACIÓN PENDIENTE: retirar esto al conectar la autenticación real. */
+const demoBuyer: User = {
+  email: 'comprador@marwa.test', role: 'comprador', passwordHash: '', createdAt: '2026-01-01T00:00:00.000Z',
+  name: 'Cliente de ejemplo', company: 'Empresa de ejemplo S.A.S.', docId: '900000000', phone: '3000000000',
+  department: 'Bogotá D.C.', city: 'Bogotá', address: 'Calle de ejemplo #1-23',
+};
+
+function seedDemoOrders() {
+  const orders = readOrders();
+  if (orders.some(o => o.email === demoBuyer.email)) return;
+  const products = readProducts();
+  const {email, role: _role, passwordHash: _hash, createdAt: _created, ...customer} = demoBuyer;
+  const samples: {ids: string[]; status: OrderStatus; daysAgo: number}[] = [
+    {ids: ['patch-panel', 'patch-cord'], status: 'preparando', daysAgo: 1},
+    {ids: ['fibra-drop'], status: 'enviado', daysAgo: 4},
+    {ids: ['cable-cat5e', 'rack-piso'], status: 'entregado', daysAgo: 12},
+  ];
+  const last = orders.reduce((m, o) => Math.max(m, Number(o.id.split('-')[1]) || 1000), 1000);
+  const demo = samples.flatMap(({ids, status, daysAgo}, i): Order[] => {
+    const items = products.filter(p => ids.includes(p.id)).map(p => ({id: p.id, sku: p.sku, name: p.name, image: p.image, price: p.price, qty: 2, unit: p.unit}));
+    if (!items.length) return [];
+    const at = (days: number) => new Date(Date.now() - days * 86400000).toISOString();
+    const steps = statusFlow.slice(0, statusFlow.indexOf(status) + 1);
+    return [{
+      id: `MAR-${last + samples.length - i}`,
+      email,
+      customer,
+      notes: 'Pedido de ejemplo',
+      items,
+      total: items.reduce((sum, item) => sum + item.price * item.qty, 0),
+      payment: {method: 'pse', reference: `SIM-DEMO${i + 1}`},
+      status,
+      tracking: steps.includes('enviado') ? `GUIA-DEMO-${i + 1}` : undefined,
+      history: steps.map((s, step) => ({status: s, at: at(Math.max(daysAgo - step, 0))})),
+      createdAt: at(daysAgo),
+    }];
+  });
+  write(K.orders, [...demo, ...orders]);
+}
+
+/** Entra sin contraseña a la cuenta de ejemplo, con pedidos para que el panel no se vea vacío. */
+export function demoLogin(role: Role): User {
+  if (!readUsers().some(u => u.email === demoBuyer.email)) write(K.users, [...readUsers(), demoBuyer]);
+  seedDemoOrders();
+  const user = role === 'vendedor' ? sellerUser : demoBuyer;
+  write(K.session, {email: user.email});
+  return user;
+}
+
 export function setOrderStatus(id: string, status: OrderStatus, extra: {tracking?: string; note?: string} = {}) {
   const orders = readOrders();
   const order = orders.find(o => o.id === id);

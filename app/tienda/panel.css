@@ -391,6 +391,12 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .pm.shop .au .button.ghost { border-width: 1.5px; background: transparent; color: var(--blue); }
 .pm.shop .au .button.ghost:hover { background: var(--blue); color: #fff; }
 
+.pm .au-demo { margin-top: 18px; padding-top: 16px; border-top: 1.5px solid #d5dbea; }
+.pm .au-demo p { margin: 0 0 10px; font-size: 14px; font-weight: 400; text-align: center; color: var(--navy-t); }
+.au-demo div { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pm.shop .au .au-demo .button { min-height: 42px; padding: 0 10px; font-size: 14px; }
+@media (max-width: 420px) { .au-demo div { grid-template-columns: 1fr; } }
+
 /* registro */
 .au-register { --blue: #003cff; --blue-hover: #0030cc; grid-template-columns: minmax(0, 1fr) minmax(0, 500px); padding-top: 24px; padding-bottom: 24px; }
 .pm.shop .au-register .form { gap: 10px; }

@@ -1,0 +1,3 @@
+import Image from 'next/image';
+type Props={title:string;description:string;image:string;icon:string;tone:string;href:string;cta:string;index:number};
+export function ProductCategoryCard(p:Props){return <article className="scroll-card"><a className="scroll-card-image" href={p.href}><Image src={p.image} alt={p.title} fill sizes="(max-width: 760px) 82vw, 420px"/><span className={`scroll-card-icon ${p.tone}`}>{p.icon}</span><small>0{p.index+1}</small></a><div className="scroll-card-copy"><p>Soluciones MARWA</p><h3>{p.title}</h3><i/><span>{p.description}</span><a href={p.href}>{p.cta} <b>→</b></a></div></article>}

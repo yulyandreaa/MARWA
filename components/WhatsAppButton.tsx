@@ -1,0 +1,1 @@
+export function WhatsAppButton({number='573102569469',message='Hola MARWA, quiero conocer más sobre sus soluciones.'}:{number?:string;message?:string}){return <a className="float-button whatsapp" href={`https://wa.me/${number}?text=${encodeURIComponent(message)}`} aria-label="Contactar por WhatsApp" title="WhatsApp">✆</a>}

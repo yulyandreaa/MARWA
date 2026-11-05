@@ -1,0 +1,19 @@
+# dependencias
+node_modules/
+node_modules.broken/
+
+# build de Next.js
+.next/
+out/
+*.tsbuildinfo
+
+# variables de entorno y Vercel
+.env*
+.vercel
+
+# respaldos locales de versiones anteriores
+_backup/
+
+# sistema y logs
+.DS_Store
+*.log

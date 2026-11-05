@@ -1,0 +1,2 @@
+import { navigation } from '@/data/navigation'; import { MobileMenu } from './MobileMenu'; import { Logo } from './Logo';
+export function Header(){return <header className="header"><div className="container header-inner"><Logo/><nav>{navigation.map(x=><a key={x.label} href={x.href} {...(x.newTab?{target:'_blank',rel:'noopener'}:{})}>{x.label}</a>)}</nav><a className="button primary desktop-cta" href="/tienda" target="_blank" rel="noopener">Ver tienda <span>→</span></a><MobileMenu/></div></header>}

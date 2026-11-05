@@ -1,0 +1,3 @@
+'use client';
+import { useState } from 'react'; import { navigation } from '@/data/navigation';
+export function MobileMenu(){ const [open,setOpen]=useState(false); return <><button className="hamburger" aria-label="Abrir menú" aria-expanded={open} onClick={()=>setOpen(!open)}><span/><span/><span/></button>{open&&<div className="mobile-menu">{navigation.map(x=><a key={x.label} href={x.href} {...(x.newTab?{target:'_blank',rel:'noopener'}:{})} onClick={()=>setOpen(false)}>{x.label}</a>)}<a className="button primary" href="/tienda" target="_blank" rel="noopener" onClick={()=>setOpen(false)}>Ver tienda</a></div>}</> }

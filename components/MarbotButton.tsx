@@ -1,0 +1,2 @@
+'use client'; import {useState} from 'react';
+export function MarbotButton(){const [open,setOpen]=useState(false);return <><button onClick={()=>setOpen(!open)} className="float-button marbot" aria-label="Abrir MARBOT">M</button>{open&&<div className="chat"><div><span className="mini-logo">M</span><p><b>MARBOT</b><small>Asistente virtual</small></p><button onClick={()=>setOpen(false)}>×</button></div><p>Hola, soy MARBOT. ¿Cómo puedo ayudarte?</p><button className="chat-option">Conocer productos</button><button className="chat-option">Hablar con un asesor</button></div>}</>}

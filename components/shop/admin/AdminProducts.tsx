@@ -159,8 +159,14 @@ function ProductEditor({product, onClose, existingIds}: {product: Product | null
         <div className="form-grid">
           <label>Referencia (SKU)<input required value={p.sku} onChange={e => set('sku', e.target.value.toUpperCase())}/></label>
           <label>Categoría
-            <select value={p.category} onChange={e => set('category', e.target.value as CategoryId)}>
+            <select value={p.category} onChange={e => setP(x => ({...x, category: e.target.value as CategoryId, specs: {...x.specs, tipo: ''}}))}>
               {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </label>
+          <label>Subcategoría
+            <select required value={p.specs?.tipo ?? ''} onChange={e => set('specs', {...p.specs, tipo: e.target.value})}>
+              <option value="">Elige una</option>
+              {categories.find(c => c.id === p.category)?.subs.map(sub => <option key={sub} value={sub}>{sub}</option>)}
             </select>
           </label>
           <label>Precio (COP, IVA incluido)<input required type="number" min={0} step={100} value={p.price || ''} onChange={e => set('price', Number(e.target.value))}/></label>

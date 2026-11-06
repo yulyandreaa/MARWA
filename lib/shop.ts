@@ -36,6 +36,30 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
+/* Una sola vez por navegador: pasa el catálogo guardado a las seis líneas oficiales.
+   Conserva precio, stock y foto; retira lo que ya no pertenece a ninguna línea. */
+const LINES_FLAG = 'marwa.catalog-lines.v2';
+const RETIRED = new Set(['ref-switch-8', 'ref-switch-24poe', 'ref-router', 'ref-ap', 'ref-sfp', 'ref-bandeja', 'ref-multitoma']);
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(LINES_FLAG)) {
+      const list = (JSON.parse(raw) as Product[]).filter(p => !RETIRED.has(p.id));
+      const ids = new Set(list.map(p => p.id));
+      const known = new Set(seedProducts.map(p => p.category as string));
+      const migrated = list.map(p => {
+        const seed = seedProducts.find(s => s.id === p.id);
+        if (seed) return {...p, name: seed.name, description: seed.description, features: seed.features, category: seed.category, specs: seed.specs};
+        if (known.has(p.category)) return p;
+        // Productos creados por el vendedor en líneas retiradas: quedan ocultos para reasignarlos.
+        return (p.category as string) === 'infraestructura' ? {...p, category: 'metalmecanica' as const} : {...p, category: 'cableado' as const, visible: false};
+      });
+      localStorage.setItem(K.products, JSON.stringify([...migrated, ...seedProducts.filter(p => !ids.has(p.id))]));
+    }
+    localStorage.setItem(LINES_FLAG, '1');
+  } catch {}
+}
+
 export const useProducts = () => usePersisted<Product[]>(K.products, seedProducts);
 export const readProducts = () => read<Product[]>(K.products, seedProducts);
 

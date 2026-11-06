@@ -57,7 +57,7 @@ function BuyerPanel() {
 
       <div className="pa-body">
         <aside className="pa-side">
-          <p className="pa-side-title"><Icon name="user"/>Mi cuenta</p>
+          <p className="pa-side-title"><Icon name="menu"/>Mi cuenta</p>
           <button type="button" className="pa-menu-btn" aria-expanded={menu} aria-controls="pa-nav" onClick={() => setMenu(!menu)}>
             <Icon name={tab.icon}/>{tab.label}<Icon name={menu ? 'close' : 'menu'}/>
           </button>

@@ -1,15 +1,23 @@
 import {referenceProducts, seedSpecs} from './catalogRefs';
 
-export type CategoryId = 'cableado' | 'fibra' | 'networking' | 'plastica' | 'infraestructura';
+export type CategoryId = 'cableado' | 'fibra' | 'plastica' | 'hdtv' | 'canalizacion' | 'metalmecanica';
 
-export type Category = {id: CategoryId; name: string; description: string; photo: string};
+/** subs = subcategorías oficiales; cada una coincide con specs.tipo de sus productos. */
+export type Category = {id: CategoryId; name: string; description: string; photo: string; subs: string[]};
 
 export const categories: Category[] = [
-  {id: 'cableado', name: 'Cableado estructurado', description: 'Sistemas confiables para redes organizadas y de alto desempeño.', photo: '/assets/solution-cabling.jpg'},
-  {id: 'fibra', name: 'Fibra óptica', description: 'Conectividad de alta velocidad para operaciones que no se detienen.', photo: '/assets/solution-fiber.jpg'},
-  {id: 'networking', name: 'Networking', description: 'Equipos que conectan, protegen y hacen crecer tu infraestructura.', photo: '/assets/solution-networking.jpg'},
-  {id: 'plastica', name: 'Línea plástica', description: 'Canalización y organización con acabados durables y funcionales.', photo: '/assets/solution-plastic.jpg'},
-  {id: 'infraestructura', name: 'Infraestructura', description: 'Gabinetes, racks y accesorios para entornos de misión crítica.', photo: '/assets/solution-infrastructure.jpg'},
+  {id: 'cableado', name: 'Cableado estructurado', description: 'Cables UTP, FTP, LSZH, flexibles multifilares y sus accesorios pasivos.', photo: '/assets/solution-cabling.jpg',
+    subs: ['Cable UTP', 'Cable FTP', 'Cable LSZH', 'Cable flexible multifilar', 'Accesorios pasivos']},
+  {id: 'fibra', name: 'Fibra óptica', description: 'Fibra monomodo ADSS y DROP, multimodo OM3, herrajería y accesorios.', photo: '/assets/solution-fiber.jpg',
+    subs: ['Monomodo ADSS', 'Monomodo DROP', 'Multimodo OM3', 'Herrajería', 'Accesorios']},
+  {id: 'plastica', name: 'Línea plástica', description: 'Amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores horizontales.', photo: '/assets/solution-plastic.jpg',
+    subs: ['Amarres plásticos', 'Espirales plásticas', 'Cajas de paso plásticas', 'Prensa estopas', 'Face plate', 'Organizadores horizontales']},
+  {id: 'hdtv', name: 'HDTV', description: 'Cables, extender y splitter para llevar tu señal de video.', photo: '/assets/solution-hdtv.jpg',
+    subs: ['Cables', 'Extender', 'Splitter']},
+  {id: 'canalizacion', name: 'Canalización y ductería', description: 'Canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.', photo: '/assets/solution-plastic.jpg',
+    subs: ['Canaletas', 'Tubería SCH 40', 'Tubería EMT', 'Tubería IMC', 'Ductos', 'Bandejas porta cables']},
+  {id: 'metalmecanica', name: 'Metalmecánica', description: 'Racks y gabinetes para telecomunicaciones.', photo: '/assets/solution-infrastructure.jpg',
+    subs: ['Racks', 'Gabinetes']},
 ];
 
 export const categoryName = (id: string) => categories.find(c => c.id === id)?.name ?? id;
@@ -74,14 +82,14 @@ const initialProducts: Product[] = [
     price: 18500, unit: 'unidad', stock: 120, visible: true,
   },
   {
-    id: 'rack-piso', sku: 'MW-RK-PISO', name: 'Rack de piso para comunicaciones', category: 'infraestructura',
+    id: 'rack-piso', sku: 'MW-RK-PISO', name: 'Rack de piso para comunicaciones', category: 'metalmecanica',
     description: 'Gabinete vertical de alta capacidad para organizar y proteger equipos de red.',
     image: '/assets/producto-rack-piso.png', badge: 'Profesional',
     features: ['Instalación de piso', 'Organización vertical de equipos', 'Puerta frontal ventilada', 'Uso en cuartos técnicos'],
     price: 1890000, unit: 'unidad', stock: 6, visible: true,
   },
   {
-    id: 'gabinete-pared', sku: 'MW-GB-PARED', name: 'Gabinete de pared', category: 'infraestructura',
+    id: 'gabinete-pared', sku: 'MW-GB-PARED', name: 'Gabinete de pared', category: 'metalmecanica',
     description: 'Gabinete compacto con puerta ventilada y cerradura para instalaciones seguras.',
     image: '/assets/producto-gabinete-pared.jpg',
     features: ['Instalación en pared', 'Cerradura de seguridad', 'Ventilación frontal y lateral', 'Formato compacto'],

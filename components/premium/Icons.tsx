@@ -35,6 +35,7 @@ const paths: Record<string, ReactNode> = {
   fiber: <><path d="M3 21c5 0 6-4 8-8s3-6 7-8"/><path d="m16 3 5 3M18 8l3-1M14 5l1-3M4 16l3 3"/></>,
   network: <><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="12" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v9M5 16.5V13h14v3.5"/></>,
   pipes: <><ellipse cx="8" cy="15" rx="5" ry="5.5"/><path d="M8 9.5h8a5 5 0 0 1 0 11h-8"/><ellipse cx="16" cy="9" rx="5" ry="4.5"/></>,
+  duct: <><rect x="3" y="7" width="18" height="10" rx="1"/><path d="M7 7v10M12 7v10M17 7v10"/></>,
   server: <><rect x="4" y="3" width="16" height="8" rx="1.5"/><rect x="4" y="13" width="16" height="8" rx="1.5"/><path d="M8 7h.01M8 17h.01M12 7h4M12 17h4"/></>,
   tv: <><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></>,
   bolt: <path d="M13 2 5 14h6l-1 8 8-12h-6z"/>,

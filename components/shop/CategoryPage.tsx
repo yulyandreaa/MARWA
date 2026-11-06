@@ -40,11 +40,13 @@ const labelTone: Record<string, string> = {'Más vendido': 'hot', Nuevo: 'new', 
 type Scope = CategoryId | 'todos';
 const pageOf = (cat: Scope): CategoryPageInfo => (cat === 'todos' ? allCatalogPage : categoryPages[cat]);
 const nameOf = (cat: Scope) => (cat === 'todos' ? 'Todo el catálogo' : categories.find(c => c.id === cat)!.name);
+/** Nombre de la línea dentro de una frase; HDTV es sigla y no va en minúscula. */
+const inline = (name: string) => (name === 'HDTV' ? name : name.toLowerCase());
 const norm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 /** Valor de un producto para un filtro: la línea o una especificación. */
 const valueOf = (p: Product, key: string) => (key === 'linea' ? categoryName(p.category) : p.specs?.[key]);
 
-export function CategoryPage({cat, q = ''}: {cat: Scope; q?: string}) {
+export function CategoryPage({cat, q = '', sub = ''}: {cat: Scope; q?: string; sub?: string}) {
   const page = pageOf(cat);
   const title = q ? <>Resultados para “{q}”</> : nameOf(cat);
   const products = useProducts();
@@ -76,10 +78,10 @@ export function CategoryPage({cat, q = ''}: {cat: Scope; q?: string}) {
       </nav>
 
       {!q && best.length >= 2 && <BestSellers items={best}/>}
-      <Listing cat={cat} list={list} search={!!q}/>
+      <Listing cat={cat} list={list} search={!!q} sub={sub}/>
       <TrustRow/>
       {!q && <Guide page={page}/>}
-      <Faq page={page} title={cat === 'todos' ? 'la tienda MARWA' : nameOf(cat).toLowerCase()}/>
+      <Faq page={page} title={cat === 'todos' ? 'la tienda MARWA' : inline(nameOf(cat))}/>
     </div>
   );
 }
@@ -133,11 +135,11 @@ function BestSellers({items}: {items: Product[]}) {
 }
 
 /* Pestañas de subcategoría + barra + filtros + cuadrícula. */
-function Listing({cat, list, search}: {cat: Scope; list: Product[]; search: boolean}) {
+function Listing({cat, list, search, sub}: {cat: Scope; list: Product[]; search: boolean; sub: string}) {
   const page = pageOf(cat);
   const all = cat === 'todos';
   const name = nameOf(cat);
-  const [tipo, setTipo] = useState('');
+  const [tipo, setTipo] = useState(sub);
   const [checked, setChecked] = useState<Record<string, string[]>>({});
   const [closed, setClosed] = useState<Record<string, boolean>>({});
   const [sort, setSort] = useState<Sort>('recomendados');
@@ -146,12 +148,14 @@ function Listing({cat, list, search}: {cat: Scope; list: Product[]; search: bool
   // En celular los filtros empiezan ocultos, como en Anker.
   useEffect(() => { if (window.innerWidth < 760) setShowFilters(false); }, []);
 
-  /* Pestañas: en una línea, sus tipos de producto; en todo el catálogo, las líneas. */
+  /* Pestañas: en una línea, sus subcategorías oficiales; en todo el catálogo, las líneas. */
   const tabKey = all ? 'linea' : 'tipo';
   const tipos = useMemo(() => {
     const found = Array.from(new Set(list.map(p => valueOf(p, tabKey)).filter(Boolean) as string[]));
-    return all ? categories.map(c => c.name).filter(n => found.includes(n)) : found;
-  }, [list, tabKey, all]);
+    if (all) return categories.map(c => c.name).filter(n => found.includes(n));
+    const subs = categories.find(c => c.id === cat)?.subs ?? [];
+    return [...subs, ...found.filter(t => !subs.includes(t))];
+  }, [list, tabKey, all, cat]);
   const base = useMemo(() => (tipo ? list.filter(p => valueOf(p, tabKey) === tipo) : list), [list, tipo, tabKey]);
 
   const groups = useMemo(() => [
@@ -193,7 +197,7 @@ function Listing({cat, list, search}: {cat: Scope; list: Product[]; search: bool
     <section className="pc-listing" id="productos">
       <div className="pc-tabs" role="tablist" aria-label="Subcategorías">
         <div className="pc-wrap">
-          <button role="tab" aria-selected={!tipo} className={!tipo ? 'on' : ''} onClick={() => pick('')}>{all ? 'Todos' : `Todo ${name.toLowerCase()}`}</button>
+          <button role="tab" aria-selected={!tipo} className={!tipo ? 'on' : ''} onClick={() => pick('')}>Todos</button>
           {tipos.map(t => <button key={t} role="tab" aria-selected={tipo === t} className={tipo === t ? 'on' : ''} onClick={() => pick(t)}>{t}</button>)}
         </div>
       </div>
@@ -249,7 +253,7 @@ function Listing({cat, list, search}: {cat: Scope; list: Product[]; search: bool
                 <p>{list.length ? 'Prueba quitando algún filtro.' : search ? 'Prueba con otra palabra o referencia, o pregúntale a un asesor.' : 'Estamos cargando esta línea. Un asesor te cotiza lo que necesites.'}</p>
                 {list.length
                   ? <button className="pm-btn ghost sm" onClick={clear}>Limpiar filtros</button>
-                  : <a className="pm-btn sm" href={waLink(`Hola MARWA, quiero cotizar productos de ${name.toLowerCase()}.`)} target="_blank" rel="noopener">Cotizar con un asesor</a>}
+                  : <a className="pm-btn sm" href={waLink(`Hola MARWA, quiero cotizar productos de ${inline(name)}.`)} target="_blank" rel="noopener">Cotizar con un asesor</a>}
               </div>
             )}
             {shown.length > limit && (
@@ -289,8 +293,8 @@ function Promo({name}: {name: string}) {
     <article className="pc-promo">
       <div className="pc-promo-copy">
         <span>MARWA · Asesoría experta</span>
-        <h3>¿No sabes qué {name ? name.toLowerCase() : 'producto'} elegir? Te ayudamos</h3>
-        <a className="pc-buy" href={waLink(name ? `Hola MARWA, necesito asesoría con productos de ${name.toLowerCase()}.` : 'Hola MARWA, necesito asesoría para elegir productos.')} target="_blank" rel="noopener">Cotizar ahora</a>
+        <h3>¿No sabes qué {name ? inline(name) : 'producto'} elegir? Te ayudamos</h3>
+        <a className="pc-buy" href={waLink(name ? `Hola MARWA, necesito asesoría con productos de ${inline(name)}.` : 'Hola MARWA, necesito asesoría para elegir productos.')} target="_blank" rel="noopener">Cotizar ahora</a>
       </div>
       <div className="pc-promo-img"><Image src="/assets/solution-infrastructure.jpg" alt="" fill sizes="(max-width: 760px) 92vw, 330px"/></div>
     </article>

@@ -5,62 +5,20 @@ import Link from 'next/link';
 import {useState, type KeyboardEvent, type MouseEvent} from 'react';
 import {categories, type CategoryId} from '@/data/shopSeed';
 import {Icon} from '@/components/premium/Icons';
-import {waLink} from '@/components/premium/SiteChrome';
 
-type Line = {
-  id: string;
-  name: string;
-  icon: string;
-  blurb: string;
-  headline: string;
-  image?: string;
-  links: [label: string, href: string][];
-  /** Con categoría hay productos; sin ella la línea aún no se vende en la tienda. */
-  category?: CategoryId;
+type Line = {id: CategoryId; name: string; icon: string; blurb: string; headline: string; image: string; subs: string[]};
+
+/* Las subcategorías salen de shopSeed; aquí solo va la presentación de cada línea. */
+const look: Record<CategoryId, {icon: string; headline: string; image: string}> = {
+  cableado: {icon: 'ethernet', headline: 'Conectividad sin interrupciones', image: '/assets/mega-cableado.jpg'},
+  fibra: {icon: 'fiber', headline: 'Velocidad para tu operación', image: '/assets/solution-fiber.jpg'},
+  plastica: {icon: 'pipes', headline: 'Tu cableado sujeto y organizado', image: '/assets/solution-plastic.jpg'},
+  hdtv: {icon: 'tv', headline: 'Tu señal de video, de punta a punta', image: '/assets/solution-hdtv.jpg'},
+  canalizacion: {icon: 'duct', headline: 'Canalización ordenada y durable', image: '/assets/solution-plastic.jpg'},
+  metalmecanica: {icon: 'server', headline: 'Tu cuarto técnico en orden', image: '/assets/solution-infrastructure.jpg'},
 };
-
-const find = (q: string) => `/tienda?q=${encodeURIComponent(q)}`;
-const blurb = (id: CategoryId) => categories.find(c => c.id === id)?.description ?? '';
-const line = (id: CategoryId, name: string, icon: string, headline: string, image: string, links: Line['links']): Line =>
-  ({id, name, icon, headline, image, links, category: id, blurb: blurb(id)});
-
-const lines: Line[] = [
-  line('cableado', 'Cableado estructurado', 'ethernet', 'Conectividad sin interrupciones', '/assets/mega-cableado.jpg', [
-    ['Cables de red (UTP / FTP)', find('UTP')],
-    ['Conectores y plugs', find('RJ45')],
-    ['Patch cords', find('Patch cord')],
-    ['Patch panels', find('Patch panel')],
-    ['Organizadores de cable', find('Organizador')],
-    ['Racks y gabinetes', '/tienda?categoria=infraestructura'],
-  ]),
-  line('fibra', 'Fibra óptica', 'fiber', 'Velocidad para tu operación', '/assets/solution-fiber.jpg', [
-    ['Cables de fibra', find('Cable de fibra')],
-    ['Patch cords de fibra', find('Patch cord de fibra')],
-    ['Conectores', find('Conector rápido')],
-    ['Cajas NAP', find('NAP')],
-  ]),
-  line('networking', 'Networking', 'network', 'Redes que crecen contigo', '/assets/solution-networking.jpg', [
-    ['Switches', find('Switch')],
-    ['Routers', find('Router')],
-    ['Access points', find('Access point')],
-    ['Módulos SFP', find('SFP')],
-  ]),
-  line('plastica', 'Línea plástica', 'pipes', 'Canalización ordenada y durable', '/assets/solution-plastic.jpg', [
-    ['Canaletas', find('Canaleta')],
-    ['Tubería conduit', find('conduit')],
-    ['Cajas plásticas', find('Caja plástica')],
-    ['Accesorios para canaleta', find('Ángulo')],
-  ]),
-  line('infraestructura', 'Infraestructura', 'server', 'Tu cuarto técnico en orden', '/assets/solution-infrastructure.jpg', [
-    ['Racks de piso', find('Rack de piso')],
-    ['Gabinetes', find('Gabinete')],
-    ['Bandejas', find('Bandeja')],
-    ['Multitomas', find('Multitoma')],
-    ['Organizadores', find('Organizador')],
-  ]),
-  {id: 'hdtv', name: 'HDTV', icon: 'tv', blurb: 'Estamos preparando esta línea para la tienda.', headline: 'Muy pronto en la tienda', links: []},
-  {id: 'energia', name: 'Energía', icon: 'bolt', blurb: 'Estamos preparando esta línea para la tienda.', headline: 'Muy pronto en la tienda', links: []},
-];
+const lines: Line[] = categories.map(c => ({id: c.id, name: c.name, blurb: c.description, subs: c.subs, ...look[c.id]}));
+const subHref = (id: CategoryId, sub: string) => `/tienda?categoria=${id}&tipo=${encodeURIComponent(sub)}`;
 
 export function CategoryMega({onNavigate}: {onNavigate?: () => void}) {
   const [show, setShow] = useState(false);
@@ -83,45 +41,37 @@ export function CategoryMega({onNavigate}: {onNavigate?: () => void}) {
       <div className="mg-panel">
         <div className="mg-card">
           <ul className="mg-lines">
-            {lines.map(l => {
-              const props = {
-                className: l.id === current.id ? 'on' : '',
-                onMouseEnter: () => setCurrent(l),
-                onFocus: () => setCurrent(l),
-              };
-              const body = <><Icon name={l.icon}/><span>{l.name}</span>{l.category ? <Icon name="chevron"/> : <small>Próximamente</small>}</>;
-              return (
-                <li key={l.id}>
-                  {l.category
-                    ? <Link {...props} href={`/tienda?categoria=${l.category}`} onClick={close}>{body}</Link>
-                    : <button {...props} type="button" onClick={() => setCurrent(l)}>{body}</button>}
-                </li>
-              );
-            })}
+            {lines.map(l => (
+              <li key={l.id}>
+                <Link
+                  className={l.id === current.id ? 'on' : ''}
+                  href={`/tienda?categoria=${l.id}`}
+                  onClick={close}
+                  onMouseEnter={() => setCurrent(l)}
+                  onFocus={() => setCurrent(l)}
+                >
+                  <Icon name={l.icon}/><span>{l.name}</span><Icon name="chevron"/>
+                </Link>
+              </li>
+            ))}
           </ul>
 
           <div className="mg-detail">
             <h2>{current.name}</h2>
             <p>{current.blurb}</p>
-            {current.links.length > 0 && (
-              <>
-                <h3>Explora la categoría</h3>
-                <ul>
-                  {current.links.map(([label, href]) => <li key={label}><Link href={href} onClick={close}>{label}</Link></li>)}
-                </ul>
-              </>
-            )}
+            <h3>Explora la categoría</h3>
+            <ul>
+              {current.subs.map(sub => <li key={sub}><Link href={subHref(current.id, sub)} onClick={close}>{sub}</Link></li>)}
+            </ul>
             <Link className="mg-all" href="/tienda?vista=todos" onClick={close}>Ver todo el catálogo</Link>
           </div>
 
           <div className={current.id === 'cableado' ? 'mg-banner' : 'mg-banner striped'}>
-            {current.image && <Image src={current.image} alt="" fill sizes="340px"/>}
+            <Image src={current.image} alt="" fill sizes="340px"/>
             <div>
               <span>{current.name}</span>
               <b>{current.headline}</b>
-              {current.category
-                ? <Link href={`/tienda?categoria=${current.category}`} onClick={close}>Ver productos <Icon name="arrow"/></Link>
-                : <a href={waLink(`Hola MARWA, quiero cotizar productos de ${current.name}.`)} target="_blank" rel="noopener">Cotizar con un asesor <Icon name="arrow"/></a>}
+              <Link href={`/tienda?categoria=${current.id}`} onClick={close}>Ver productos <Icon name="arrow"/></Link>
             </div>
           </div>
         </div>

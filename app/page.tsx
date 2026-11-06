@@ -47,8 +47,8 @@ export default function Home() {
             tiles={[
               {title: 'Fibra óptica sin pausas', text: 'Conectividad de alta velocidad para operaciones que no se detienen.', image: '/assets/solution-fiber.jpg', href: '/tienda?categoria=fibra'},
               {title: 'Cableado que ordena tu red', text: 'Cable UTP, patch panel y patch cords certificados.', image: '/assets/solution-cabling.jpg', href: '/tienda?categoria=cableado'},
-              {title: 'Infraestructura de misión crítica', text: 'Racks y gabinetes para cuartos técnicos y data centers.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=infraestructura'},
-              {title: 'Networking que crece contigo', text: 'Equipos que conectan, protegen y escalan tu operación.', image: '/assets/solution-networking.jpg', href: '/tienda?categoria=networking'},
+              {title: 'Metalmecánica para tu cuarto técnico', text: 'Racks y gabinetes para telecomunicaciones.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=metalmecanica'},
+              {title: 'Canalización y ductería', text: 'Canaletas, tubería, ductos y bandejas porta cables.', image: '/assets/solution-plastic.jpg', href: '/tienda?categoria=canalizacion'},
             ]}
           />
           <PmCategoryRow newTab/>
@@ -69,10 +69,10 @@ export default function Home() {
             title="Soluciones para cada proyecto"
             items={[
               {title: 'Oficinas corporativas', text: 'Redes ordenadas y escalables para equipos que no pueden detenerse.', image: '/assets/equipo-marwa-colombia.png', href: '/tienda?categoria=cableado', cta: 'Ver cableado', newTab: true},
-              {title: 'Data centers', text: 'Racks, gabinetes y organización para entornos de misión crítica.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=infraestructura', cta: 'Ver infraestructura', newTab: true},
+              {title: 'Data centers', text: 'Racks, gabinetes y organización para entornos de misión crítica.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=metalmecanica', cta: 'Ver metalmecánica', newTab: true},
               {title: 'Proveedores de internet', text: 'Fibra óptica y conectividad para despliegues FTTH.', image: '/assets/solution-fiber.jpg', href: '/tienda?categoria=fibra', cta: 'Ver fibra óptica', newTab: true},
-              {title: 'Construcción', text: 'Canalización y línea plástica para obras nuevas y remodelaciones.', image: '/assets/solution-plastic.jpg', href: '/tienda?categoria=plastica', cta: 'Ver línea plástica', newTab: true},
-              {title: 'Redes empresariales', text: 'Switches y equipos de red para crecer con seguridad.', image: '/assets/solution-networking.jpg', href: '/tienda?categoria=networking', cta: 'Ver networking', newTab: true},
+              {title: 'Construcción', text: 'Canalización y ductería para obras nuevas y remodelaciones.', image: '/assets/solution-plastic.jpg', href: '/tienda?categoria=canalizacion', cta: 'Ver canalización', newTab: true},
+              {title: 'Salas y comercios', text: 'Cables, extender y splitter para tu señal de video.', image: '/assets/solution-hdtv.jpg', href: '/tienda?categoria=hdtv', cta: 'Ver HDTV', newTab: true},
             ]}
           />
           <PmProducts newTab/>

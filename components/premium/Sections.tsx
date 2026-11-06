@@ -46,7 +46,7 @@ export function PmIntro() {
   const stats = [
     ['+12 años', 'importando y distribuyendo'],
     ['32 departamentos', 'con despacho nacional'],
-    ['5 líneas', 'de producto oficiales'],
+    ['6 líneas', 'de producto oficiales'],
   ];
   return (
     <section className="pm-wrap pm-intro">
@@ -270,7 +270,7 @@ export function PmAbout() {
       <div className="pm-about-copy">
         <span className="pm-kicker">Quiénes somos</span>
         <h2>El equipo detrás de las redes de Colombia</h2>
-        <p><b>MARWA Redes y Energía</b> es importador y distribuidor directo, especialista en suministro de soluciones completas en cableado estructurado, fibra óptica, networking, línea plástica e infraestructura.</p>
+        <p><b>MARWA Redes y Energía</b> es importador y distribuidor directo, especialista en suministro de soluciones completas en cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y ductería, y metalmecánica.</p>
         <ul>{pillars.map(([t, d]) => <li key={t}><b>{t}</b><span>{d}</span></li>)}</ul>
         <a className="pm-btn" href={waLink('Hola MARWA, quiero cotizar un proyecto.')} target="_blank" rel="noopener">Cotizar un proyecto</a>
       </div>

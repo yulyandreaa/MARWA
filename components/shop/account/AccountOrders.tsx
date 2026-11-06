@@ -3,14 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {useState} from 'react';
-import {isOrderActive, paymentLabel, statusLabel, type Order, type OrderStatus} from '@/lib/shop';
+import {paymentLabel, statusLabel, useProducts, type Order, type OrderStatus} from '@/lib/shop';
+import {categories} from '@/data/shopSeed';
 import {date, dateTime, money} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {ProductImage} from '@/components/shop/ShopUI';
 import {OrderTimeline} from '@/components/shop/OrderTimeline';
 import {EmptyState, ReorderDialog, SectionHead, units} from './AccountUI';
 
-const statuses: OrderStatus[] = ['pendiente', 'pagado', 'preparando', 'enviado', 'entregado', 'cancelado'];
 const catalogLink = <Link className="button primary" href="/tienda?vista=todos">Ir al catálogo</Link>;
 
 const statusIcon: Record<OrderStatus, string> = {
@@ -20,20 +20,11 @@ function StatusBadge({status}: {status: OrderStatus}) {
   return <span className={`pill pill-${status} pa-status`}><Icon name={statusIcon[status]}/>{statusLabel[status]}</span>;
 }
 
-const copCurrency = (n: number) => `COP ${money(n).replace(/\s/g, '')}`;
-
-const groups: {id: string; label: string; test: (o: Order) => boolean}[] = [
-  {id: 'todas', label: 'Todas', test: () => true},
-  {id: 'curso', label: 'En curso', test: isOrderActive},
-  {id: 'entregadas', label: 'Entregadas', test: o => o.status === 'entregado'},
-  {id: 'canceladas', label: 'Canceladas', test: o => o.status === 'cancelado'},
-];
-
 export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: string | null}) {
   const [query, setQuery] = useState('');
   const [days, setDays] = useState('');
-  const [status, setStatus] = useState('');
-  const [group, setGroup] = useState('todas');
+  const [category, setCategory] = useState('');
+  const products = useProducts();
   const [buying, setBuying] = useState<Order | null>(null);
 
   if (orderId) return <OrderDetail order={orders.find(o => o.id === orderId)} id={orderId}/>;
@@ -41,15 +32,15 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
   const term = query.trim().toLowerCase();
   const matches = (o: Order) => !term || [o.id, ...o.items.flatMap(i => [i.name, i.sku])].some(t => t.toLowerCase().includes(term));
   const inDates = (o: Order) => !days || Date.now() - new Date(o.createdAt).getTime() <= Number(days) * 864e5;
-  const inGroup = groups.find(g => g.id === group)!.test;
+  const inCategory = (o: Order) => !category || o.items.some(i => products.find(p => p.id === i.id)?.category === category);
   const shown = orders
-    .filter(o => matches(o) && inDates(o) && inGroup(o) && (!status || o.status === status))
+    .filter(o => matches(o) && inDates(o) && inCategory(o))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  const clear = () => { setQuery(''); setDays(''); setStatus(''); setGroup('todas'); };
+  const clear = () => { setQuery(''); setDays(''); setCategory(''); };
 
   return (
     <>
-      <SectionHead title="Mis compras" text="Consulta el historial y estado de tus pedidos."/>
+      <SectionHead title="Mis compras"/>
       {!orders.length ? (
         <section className="pa-section">
           <EmptyState icon="cart" title="Aún no tienes compras" text="Explora el catálogo y haz tu primer pedido." action={catalogLink}/>
@@ -60,32 +51,24 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
             <label className="pa-search">
               <Icon name="search"/>
               <span className="au-sr">Buscar en mis compras</span>
-              <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Busca por pedido, producto o referencia…"/>
+              <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Busca por compra, producto o referencia…"/>
             </label>
-            <label className="pa-pill-select">
-              <span className="au-sr">Estado</span>
-              <select value={status} onChange={e => { setStatus(e.target.value); setGroup('todas'); }}>
-                <option value="">Estado</option>
-                {statuses.map(s => <option key={s} value={s}>{statusLabel[s]}</option>)}
-              </select>
-            </label>
-            <label className="pa-pill-select">
-              <span className="au-sr">Fecha</span>
+            <label className="pa-plain-select">
+              <span className="au-sr">Fecha de compra</span>
               <select value={days} onChange={e => setDays(e.target.value)}>
-                <option value="">Fecha</option>
+                <option value="">Fecha de compra</option>
                 <option value="30">Últimos 30 días</option>
                 <option value="90">Últimos 3 meses</option>
                 <option value="365">Último año</option>
               </select>
             </label>
-          </div>
-
-          <div className="pa-tabs" role="group" aria-label="Filtrar por grupo">
-            {groups.map(g => (
-              <button key={g.id} type="button" className={group === g.id ? 'active' : ''} aria-pressed={group === g.id} onClick={() => { setGroup(g.id); setStatus(''); }}>
-                {g.label} ({orders.filter(g.test).length})
-              </button>
-            ))}
+            <label className="pa-plain-select">
+              <span className="au-sr">Categorías</span>
+              <select value={category} onChange={e => setCategory(e.target.value)}>
+                <option value="">Categorías</option>
+                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </label>
           </div>
 
           <p className="au-sr" role="status">{shown.length} {shown.length === 1 ? 'compra' : 'compras'}</p>
@@ -107,19 +90,18 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
 
 function PurchaseRow({order, onBuy}: {order: Order; onBuy: () => void}) {
   const first = order.items[0];
+  const others = order.items.length - 1;
   const href = `/tienda/cuenta?tab=pedidos&pedido=${order.id}`;
-  const count = units(order);
   return (
     <li className="pa-buy">
-      <span className="pa-buy-img"><ProductImage src={first.image} alt={first.name} sizes="104px"/></span>
+      <span className="pa-buy-img"><ProductImage src={first.image} alt="" sizes="80px"/></span>
       <div className="pa-buy-info">
-        <h2><Link href={href}>{order.id}</Link></h2>
-        <p>{date(order.createdAt)} · {count} {count === 1 ? 'producto' : 'productos'} · {copCurrency(order.total)}</p>
+        <h2><Link href={href}>{first.name}{others > 0 && ` y ${others} ${others === 1 ? 'producto' : 'productos'} más`}</Link></h2>
+        <p>Comprado el {date(order.createdAt)} | {money(order.total)} | {statusLabel[order.status]}</p>
       </div>
-      <StatusBadge status={order.status}/>
       <div className="pa-buy-actions">
-        <Link className="button ghost" href={href}>Ver detalle<span className="au-sr"> de {order.id}</span></Link>
-        <button type="button" className="button primary" onClick={onBuy}>Volver a comprar<span className="au-sr"> {order.id}</span></button>
+        <button type="button" className="pa-text-btn" onClick={onBuy}>Volver a comprar<span className="au-sr"> {order.id}</span></button>
+        <Link className="pa-buy-detail" href={href}>Ver detalle<span className="au-sr"> de {order.id}</span></Link>
       </div>
     </li>
   );

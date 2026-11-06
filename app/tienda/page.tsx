@@ -10,7 +10,6 @@ import {Loading, PageTitle, ProductCard, ProductRow} from '@/components/shop/Sho
 import {LineIcon} from '@/components/shop/LineIcon';
 import {StoreLanding} from '@/components/shop/StoreLanding';
 import {CategoryPage} from '@/components/shop/CategoryPage';
-import type {CategoryId} from '@/data/shopSeed';
 
 const sorts = {
   relevancia: 'Relevancia',
@@ -145,11 +144,13 @@ function Shop() {
   const q = params?.get('q') ?? '';
   const cat = params?.get('categoria') ?? null;
   const view = params?.get('vista');
+  const line = categories.find(c => c.id === cat);
+  const tipo = params?.get('tipo') ?? '';
   const all = view === 'todos';
   if (!q && !cat && (view === 'novedades' || view === 'ofertas')) return <StoreView view={view}/>;
   if (!q && !cat && !all) return <StoreLanding/>;
-  if (!q && cat && categories.some(c => c.id === cat)) return <CategoryPage key={cat} cat={cat as CategoryId}/>;
-  if (all || (q && !cat)) return <CategoryPage key={`todos|${q}`} cat="todos" q={q}/>;
+  if (!q && line) return <CategoryPage key={`${line.id}|${tipo}`} cat={line.id} sub={line.subs.includes(tipo) ? tipo : ''}/>;
+  if (all || !line) return <CategoryPage key={`todos|${q}`} cat="todos" q={q}/>;
   return <Results key={`${q}|${cat}`} q={q} cat={cat}/>;
 }
 

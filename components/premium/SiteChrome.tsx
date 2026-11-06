@@ -48,9 +48,10 @@ export function PmLogo({href = '/'}: {href?: string}) {
 export const catImages: Record<CategoryId, {src: string; photo?: boolean}> = {
   cableado: {src: '/assets/producto-cable-cat5e.jpg'},
   fibra: {src: '/assets/producto-fibra-drop.png'},
-  networking: {src: '/assets/solution-networking.jpg', photo: true},
-  infraestructura: {src: '/assets/producto-rack-piso.png'},
   plastica: {src: '/assets/solution-plastic.jpg', photo: true},
+  hdtv: {src: '/assets/solution-hdtv.jpg', photo: true},
+  canalizacion: {src: '/assets/solution-plastic.jpg', photo: true},
+  metalmecanica: {src: '/assets/producto-rack-piso.png'},
 };
 
 /* Menú desplegable "Catálogo" (mega menú estilo Anker):

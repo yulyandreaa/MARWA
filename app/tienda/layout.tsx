@@ -10,7 +10,7 @@ import {CartDrawer} from '@/components/shop/CartDrawer';
 
 export const metadata: Metadata = {
   title: 'Tienda MARWA | Redes y Energía',
-  description: 'Compra en línea cableado estructurado, fibra óptica, networking e infraestructura con despacho a todo Colombia.',
+  description: 'Compra en línea cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y metalmecánica con despacho a todo Colombia.',
 };
 
 export default function ShopLayout({children}: {children: React.ReactNode}) {

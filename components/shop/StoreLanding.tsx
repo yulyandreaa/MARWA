@@ -30,10 +30,10 @@ export function StoreLanding() {
         </section>
         <PmPromoGrid
           tiles={[
-            {title: 'Cableado estructurado', text: 'Cable UTP, patch panel y patch cords certificados.', image: '/assets/solution-cabling.jpg', href: '/tienda?categoria=cableado', cta: 'Ver productos'},
-            {title: 'Fibra óptica', text: 'Cable drop y patch cords de fibra con baja pérdida.', image: '/assets/solution-fiber.jpg', href: '/tienda?categoria=fibra', cta: 'Ver productos'},
-            {title: 'Infraestructura', text: 'Racks de piso y gabinetes de pared para cuartos técnicos.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=infraestructura', cta: 'Ver productos'},
-            {title: 'Networking', text: 'Equipos que conectan, protegen y escalan tu red.', image: '/assets/solution-networking.jpg', href: '/tienda?categoria=networking', cta: 'Ver productos'},
+            {title: 'Cableado estructurado', text: 'Cables UTP, FTP, LSZH, multifilares y accesorios pasivos.', image: '/assets/solution-cabling.jpg', href: '/tienda?categoria=cableado', cta: 'Ver productos'},
+            {title: 'Fibra óptica', text: 'Monomodo ADSS y DROP, multimodo OM3, herrajería y accesorios.', image: '/assets/solution-fiber.jpg', href: '/tienda?categoria=fibra', cta: 'Ver productos'},
+            {title: 'Metalmecánica', text: 'Racks y gabinetes para telecomunicaciones.', image: '/assets/solution-infrastructure.jpg', href: '/tienda?categoria=metalmecanica', cta: 'Ver productos'},
+            {title: 'Canalización y ductería', text: 'Canaletas, tubería, ductos y bandejas porta cables.', image: '/assets/solution-plastic.jpg', href: '/tienda?categoria=canalizacion', cta: 'Ver productos'},
           ]}
         />
       </div>
@@ -44,7 +44,7 @@ export function StoreLanding() {
 }
 
 const faqs = [
-  {q: '¿Qué productos encuentro en la tienda?', a: 'Las cinco líneas oficiales de MARWA: cableado estructurado, fibra óptica, networking, infraestructura y línea plástica. Si no encuentras una referencia, escríbenos y la cotizamos.'},
+  {q: '¿Qué productos encuentro en la tienda?', a: 'Las seis líneas oficiales de MARWA: cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y ductería, y metalmecánica. Si no encuentras una referencia, escríbenos y la cotizamos.'},
   {q: '¿Qué medios de pago aceptan?', a: 'Puedes pagar con tarjeta débito o crédito, PSE o Nequi. Recibirás la confirmación de tu pedido apenas se apruebe el pago.'},
   {q: '¿Hacen envíos a todo Colombia?', a: 'Sí, despachamos a los 32 departamentos. El costo del envío se coordina contigo al momento de despachar, según el destino del pedido.'},
   {q: '¿Cómo hago seguimiento a mi pedido?', a: 'En “Mi cuenta” ves el estado de cada pedido (pagado, preparando, enviado y entregado) y el número de guía cuando sale de nuestra bodega.'},

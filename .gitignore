@@ -17,3 +17,7 @@ _backup/
 # sistema y logs
 .DS_Store
 *.log
+
+# borradores y referencias de trabajo
+_propuestas/
+_ref/

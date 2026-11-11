@@ -1,5 +1,6 @@
 'use client';
 
+import {shippingCost, shippingText, useSettings} from '@/lib/settings';
 import Link from 'next/link';
 import {detailCart, setCartQty, useCart, useProducts, useSessionUser} from '@/lib/shop';
 import {useHydrated} from '@/lib/persist';
@@ -15,6 +16,7 @@ export default function CartPage() {
   const user = useSessionUser();
   const hydrated = useHydrated();
   const {lines, subtotal, units} = detailCart(cart, products);
+  const shipping = shippingCost(subtotal, useSettings());
 
   if (!hydrated) return <Loading/>;
 
@@ -69,7 +71,7 @@ export default function CartPage() {
                   </li>
                 ))}
               </ul>
-              <div className="ct-ship"><span>Envío</span><span>Se coordina al despachar</span></div>
+              <div className="ct-ship"><span>Envío</span><span>{shippingText(shipping, money)}</span></div>
             </div>
           </div>
 
@@ -78,8 +80,8 @@ export default function CartPage() {
             <div className="ct-sum-body">
               <dl>
                 <div><dt>{units === 1 ? 'Producto' : `Productos (${units})`}</dt><dd>{money(subtotal)}</dd></div>
-                <div><dt>Envío</dt><dd className="soft">Se coordina al despachar</dd></div>
-                <div className="total"><dt>Total</dt><dd>{money(subtotal)}</dd></div>
+                <div><dt>Envío</dt><dd className="soft">{shippingText(shipping, money)}</dd></div>
+                <div className="total"><dt>Total</dt><dd>{money(subtotal + (shipping ?? 0))}</dd></div>
               </dl>
               <p>Precios en COP, IVA incluido.</p>
               <Link className="button primary" href={user ? '/tienda/checkout' : '/tienda/ingresar?next=/tienda/checkout'}>

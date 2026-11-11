@@ -2,10 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {useMemo, useState, type ReactNode} from 'react';
+import {useEffect, useMemo, useState, type ReactNode} from 'react';
 import {categories, type CategoryId, type Product} from '@/data/shopSeed';
 import {useProducts} from '@/lib/shop';
 import {Icon} from './Icons';
+import {ShipToBar} from '@/components/shop/ShipTo';
 
 export const WA = 'https://wa.me/573102569469';
 export const waLink = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -17,6 +18,7 @@ export function PmAnnouncement({shop = false}: {shop?: boolean}) {
     return (
       <div className="pm-announce mh-bar">
         <div className="pm-wrap">
+          <ShipToBar/>
           <ul>
             <li><Icon name="truck"/>Despacho a los 32 departamentos de Colombia</li>
             <li><Icon name="shield"/>Compra segura</li>
@@ -30,7 +32,7 @@ export function PmAnnouncement({shop = false}: {shop?: boolean}) {
   return (
     <div className="pm-announce">
       <div className="pm-wrap">
-        <p>Compra en línea con despacho a todo Colombia. <a href="/tienda" {...newTab}>Ir a la tienda &gt;&gt;</a></p>
+        <p>Compra en línea con despacho a todo Colombia. <a href="/tienda">Ir a la tienda &gt;&gt;</a></p>
       </div>
     </div>
   );
@@ -39,7 +41,7 @@ export function PmAnnouncement({shop = false}: {shop?: boolean}) {
 export function PmLogo({href = '/'}: {href?: string}) {
   return (
     <Link href={href} className="pm-logo" aria-label="MARWA Redes y Energía — inicio">
-      <Image src="/assets/marwa-hex-logo.svg" alt="MARWA Redes y Energía" width={261} height={290} priority/>
+      <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
     </Link>
   );
 }
@@ -141,74 +143,110 @@ export function CatalogMenu({newTab: open = false, active, onNavigate}: {newTab?
   );
 }
 
-/* Encabezado del sitio: logo · Inicio / Quiénes somos / Catálogo · botón Ir a la tienda. */
+/* Menú de la página de inicio (landing premium, 10-nov-2026):
+   transparente sobre la portada; al bajar se vuelve blanco translúcido, más bajo y con sombra.
+   Enlaces a las secciones de la página con el activo resaltado según la sección visible.
+   En celular abre un menú a pantalla completa. */
+const landingLinks: [string, string][] = [
+  ['ecosistema', 'Ecosistema'],
+  ['nosotros', 'Quiénes somos'],
+  ['soluciones', 'Soluciones'],
+  ['contacto', 'Contacto'],
+];
 export function PmSiteHeader() {
   const [menu, setMenu] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState('ecosistema');
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive: true});
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+    }, {rootMargin: '-45% 0px -50% 0px'});
+    landingLinks.forEach(([id]) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    return () => { window.removeEventListener('scroll', onScroll); io.disconnect(); };
+  }, []);
+  useEffect(() => {
+    document.body.style.overflow = menu ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menu]);
 
   return (
-    <header className={`pm-header${menu ? ' menu-open' : ''}`}>
-      <div className="pm-wrap pm-header-row">
+    <header className={`pm-header lh${scrolled ? ' is-scrolled' : ''}${menu ? ' menu-open' : ''}`}>
+      <div className="pm-wrap lh-row">
         <PmLogo/>
-        <nav className="pm-menu" aria-label="Principal">
-          <a href="/#inicio" onClick={() => setMenu(false)}>Inicio</a>
-          <a href="/#nosotros" onClick={() => setMenu(false)}>Quiénes somos</a>
-          <CatalogMenu newTab onNavigate={() => setMenu(false)}/>
+        <nav className="lh-menu" aria-label="Principal">
+          {landingLinks.map(([id, label]) => (
+            <a key={id} href={`/#${id}`} className={active === id ? 'on' : ''} aria-current={active === id ? 'true' : undefined} onClick={() => setMenu(false)}>{label}</a>
+          ))}
         </nav>
-        <div className="pm-icons">
-          <a className="pm-btn pm-shop-btn" href="/tienda" {...newTab}>Ir a la tienda</a>
-          <button className="pm-burger" onClick={() => setMenu(!menu)} aria-label="Menú" aria-expanded={menu}><Icon name={menu ? 'close' : 'menu'}/></button>
+        <div className="lh-actions">
+          <a className="lh-quote" href="https://wa.me/573102569469?text=Hola%20MARWA%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">Cotizar</a>
+          <a className="lh-shop" href="/tienda">Ir a la tienda <Icon name="arrow"/></a>
+          <button className="lh-burger" onClick={() => setMenu(!menu)} aria-label={menu ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menu}><Icon name={menu ? 'close' : 'menu'}/></button>
         </div>
+      </div>
+      <div className="lh-sheet" aria-hidden={!menu}>
+        <nav aria-label="Principal (celular)">
+          {landingLinks.map(([id, label], i) => (
+            <a key={id} href={`/#${id}`} style={{transitionDelay: `${menu ? 80 + i * 60 : 0}ms`}} onClick={() => setMenu(false)}>{label}</a>
+          ))}
+        </nav>
+        <a className="lh-shop big" href="/tienda" onClick={() => setMenu(false)}>Ir a la tienda <Icon name="arrow"/></a>
       </div>
     </header>
   );
 }
 
 /* Pie de página negro. */
+/* Footer compacto adaptado del de LUMINA: marca (logo, frase, descriptor) · 4 columnas · legales.
+   En celular las columnas se pliegan (una abierta a la vez) para que no quede tan alto. */
 export function PmFooter({shop = false}: {shop?: boolean}) {
-  const extra = shop ? {} : newTab;
-  const trust: [string, string][] = [['truck', 'Despacho a todo Colombia'], ['shield', 'Calidad certificada RITEL · RETIE'], ['card', 'Pago seguro'], ['chat', 'Asesoría experta']];
+  const extra = {};
+  const [openCol, setOpenCol] = useState<string | null>(null);
   const cols: {title: string; links: [string, string, boolean?][]}[] = [
     {title: 'Productos', links: [...categories.map(c => [c.name, `/tienda?categoria=${c.id}`, true] as [string, string, boolean]), ['Todo el catálogo', '/tienda?vista=todos', true]]},
     {title: 'MARWA', links: [['Quiénes somos', '/#nosotros'], ['Ecosistema MARWA', '/#ecosistema'], ['Soluciones', '/#soluciones']]},
-    {title: 'Soporte', links: [['Mi cuenta', '/tienda/cuenta', true], ['Seguimiento de pedidos', '/tienda/cuenta', true], ['Devoluciones y garantía', '/#contacto'], ['PQRS', '/#contacto']]},
+    {title: 'Soporte', links: [['Mi cuenta', '/tienda/cuenta', true], ['Seguimiento de pedidos', '/tienda/cuenta', true], ['Devoluciones y garantía', '/tienda/devoluciones', true], ['PQRS', '/tienda/pqrs', true]]},
+    {title: 'Contacto', links: [['310 256 9469', 'tel:+573102569469'], ['info@marwa.com.co', 'mailto:info@marwa.com.co'], ['Av. 70 #49-39, Bogotá', '#contacto']]},
   ];
   return (
-    <div className="pm-footer" id="contacto">
-      <div className="pm-wrap">
-        <div className="pm-footer-trust">
-          <b>Compra en la tienda MARWA</b>
-          <ul>{trust.map(([i, t]) => <li key={t}><Icon name={i}/>{t}</li>)}</ul>
+    <footer className="mf" id="contacto">
+      <div className="pm-wrap mf-grid">
+        <div className="mf-brand">
+          <Image className="mf-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445}/>
+          <p className="mf-quote">“Calidad que no admite fallas.”</p>
+          <span className="mf-desc">Redes y energía · Colombia</span>
         </div>
-        <div className="pm-footer-cols">
-          {cols.map(c => (
-            <div key={c.title}>
-              <h3>{c.title}</h3>
-              {c.links.map(([label, href, store]) => {
-                const ext = href.startsWith('http');
-                return <a key={label} href={href} {...(ext ? newTab : store ? extra : {})}>{label}</a>;
-              })}
-            </div>
-          ))}
-          <div>
-            <h3>Contacto</h3>
-            <p><Icon name="phone"/><span>Línea de ventas<br/><a href="tel:+573102569469">310 256 9469</a></span></p>
-            <p><Icon name="mail"/><span>Escríbenos<br/><a href="mailto:info@marwa.com.co">info@marwa.com.co</a></span></p>
-            <p><Icon name="pin"/><span>Nuestra sede<br/>Av. 70 #49-39, Bogotá</span></p>
-          </div>
-        </div>
-        <div className="pm-footer-brands">
-          <strong>MARWA</strong>
-          {categories.map(c => <span key={c.id}>{c.name}</span>)}
-          <em>Colombia / Español</em>
-        </div>
-        <div className="pm-footer-legal">
-          <span>© 2026 MARWA · Redes y Energía. Todos los derechos reservados.</span>
-          <a href="#">Tratamiento de datos</a>
-          <a href="#">Privacidad</a>
-          <a href="#">Términos y condiciones</a>
-        </div>
+        {cols.map((c, i) => {
+          const open = openCol === c.title;
+          return (
+            <nav key={c.title} className={`mf-col${open ? ' open' : ''}`} aria-label={c.title}>
+              <h2>
+                <button type="button" aria-expanded={open} aria-controls={`mf-col-${i}`} onClick={() => setOpenCol(open ? null : c.title)}>
+                  {c.title}<i aria-hidden="true"/>
+                </button>
+              </h2>
+              <ul id={`mf-col-${i}`}>
+                {c.links.map(([label, href, store]) => {
+                  const ext = href.startsWith('http');
+                  return <li key={label}><a href={href} {...(ext ? newTab : store ? extra : {})}>{label}</a></li>;
+                })}
+              </ul>
+            </nav>
+          );
+        })}
       </div>
-    </div>
+      <div className="pm-wrap mf-bottom">
+        <p>© {new Date().getFullYear()} MARWA · Redes y Energía · Colombia (COP)</p>
+        <ul>
+          <li><a href="/tienda/terminos-y-condiciones" {...extra}>Términos y condiciones</a></li>
+          <li><a href="/tienda/tratamiento-de-datos" {...extra}>Tratamiento de datos</a></li>
+        </ul>
+      </div>
+    </footer>
   );
 }
 

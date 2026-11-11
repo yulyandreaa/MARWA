@@ -5,17 +5,27 @@ import {useRouter, useSearchParams} from 'next/navigation';
 import Link from 'next/link';
 import {logout, useOrders, useProducts, useSessionUser} from '@/lib/shop';
 import {useHydrated} from '@/lib/persist';
-import {Loading} from '@/components/shop/ShopUI';
+import {Icon} from '@/components/premium/Icons';
+import {PanelShell, PanelSkeleton} from '@/components/shop/account/PanelShell';
 import {AdminSummary} from '@/components/shop/admin/AdminSummary';
 import {AdminOrders} from '@/components/shop/admin/AdminOrders';
 import {AdminProducts} from '@/components/shop/admin/AdminProducts';
 import {AdminCustomers} from '@/components/shop/admin/AdminCustomers';
+import {AdminReports} from '@/components/shop/admin/AdminReports';
+import {AdminPqr} from '@/components/shop/admin/AdminPqr';
+import {AdminReviews} from '@/components/shop/admin/AdminReviews';
+import {AdminSettings} from '@/components/shop/admin/AdminSettings';
+import {usePqrs} from '@/lib/pqr';
 
 const tabs = {
-  resumen: 'Resumen',
-  pedidos: 'Pedidos',
-  productos: 'Productos e inventario',
-  clientes: 'Clientes',
+  resumen: {label: 'Resumen', icon: 'grid'},
+  pedidos: {label: 'Pedidos', icon: 'box'},
+  productos: {label: 'Productos', icon: 'tag'},
+  clientes: {label: 'Clientes', icon: 'user'},
+  reportes: {label: 'Reportes', icon: 'layers'},
+  pqr: {label: 'PQR', icon: 'help'},
+  opiniones: {label: 'Opiniones', icon: 'star'},
+  ajustes: {label: 'Ajustes', icon: 'tools'},
 } as const;
 type Tab = keyof typeof tabs;
 
@@ -25,6 +35,7 @@ function Admin() {
   const user = useSessionUser();
   const orders = useOrders();
   const products = useProducts();
+  const pqrs = usePqrs();
   const param = useSearchParams()?.get('tab');
   const tab: Tab = param && param in tabs ? (param as Tab) : 'resumen';
 
@@ -34,35 +45,37 @@ function Admin() {
     else if (user.role !== 'vendedor') router.replace('/tienda/cuenta');
   }, [hydrated, user, router]);
 
-  if (!hydrated || !user || user.role !== 'vendedor') return <Loading/>;
+  if (!hydrated || !user || user.role !== 'vendedor') return <PanelSkeleton label="Cargando el panel"/>;
 
-  const pending = orders.filter(o => o.status === 'pagado' || o.status === 'preparando').length;
+  const pending = orders.filter(o => o.status === 'pagado' || o.status === 'preparando' || o.returnRequest?.status === 'solicitada').length;
   const out = products.filter(p => p.visible && p.stock <= 0).length;
-  const badges: Partial<Record<Tab, number>> = {pedidos: pending, productos: out};
+  const badges: Partial<Record<Tab, number>> = {pedidos: pending, productos: out, pqr: pqrs.filter(q => q.status === 'abierta').length};
+
+  const items = (Object.keys(tabs) as Tab[]).map(t => ({
+    id: t,
+    ...tabs[t],
+    href: `/tienda/admin?tab=${t}`,
+    badge: badges[t],
+  }));
 
   return (
-    <div className="container account admin">
-      <aside className="account-nav">
-        <p className="eyebrow">Panel vendedor</p>
-        <h1>Hola, equipo</h1>
-        <p>{user.email}</p>
-        <nav>
-          {(Object.keys(tabs) as Tab[]).map(t => (
-            <Link key={t} href={`/tienda/admin?tab=${t}`} className={tab === t ? 'active' : ''}>
-              {tabs[t]} {!!badges[t] && <span className="dot-count">{badges[t]}</span>}
-            </Link>
-          ))}
-          <Link href="/tienda" target="_blank">Ver tienda ↗</Link>
-          <button onClick={() => { logout(); router.push('/tienda'); }}>Cerrar sesión</button>
-        </nav>
-      </aside>
-      <section className="account-body">
-        {tab === 'resumen' && <AdminSummary/>}
-        {tab === 'pedidos' && <AdminOrders/>}
-        {tab === 'productos' && <AdminProducts/>}
-        {tab === 'clientes' && <AdminCustomers/>}
-      </section>
-    </div>
+    <PanelShell
+      title="Panel vendedor"
+      tabs={items}
+      active={tab}
+      helpHref="/tienda/admin?tab=pqr"
+      onSignOut={() => { logout(); router.push('/tienda'); }}
+      extra={<Link className="pa-signout" href="/tienda"><Icon name="bag"/>Ver tienda</Link>}
+    >
+      {tab === 'resumen' && <AdminSummary/>}
+      {tab === 'pedidos' && <AdminOrders/>}
+      {tab === 'productos' && <AdminProducts/>}
+      {tab === 'clientes' && <AdminCustomers/>}
+      {tab === 'reportes' && <AdminReports/>}
+      {tab === 'pqr' && <AdminPqr/>}
+      {tab === 'opiniones' && <AdminReviews/>}
+      {tab === 'ajustes' && <AdminSettings/>}
+    </PanelShell>
   );
 }
 

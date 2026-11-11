@@ -1,5 +1,6 @@
 'use client';
 
+import {shippingCost, shippingText, useSettings} from '@/lib/settings';
 import Image from 'next/image';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
@@ -25,6 +26,8 @@ export default function CheckoutPage() {
   const hydrated = useHydrated();
   const user = useSessionUser();
   const {lines, subtotal, units} = detailCart(useCart(), useProducts());
+  const shipping = shippingCost(subtotal, useSettings());
+  const total = subtotal + (shipping ?? 0);
   const [profile, setProfile] = useState<Profile>(emptyProfile);
   const [notes, setNotes] = useState('');
   const [save, setSave] = useState(true);
@@ -105,7 +108,7 @@ export default function CheckoutPage() {
       <div className="co-bar">
         <div className="co-bar-in">
           <Link href="/tienda" className="co-logo" aria-label="MARWA, volver a la tienda">
-            <Image src="/assets/marwa-logo-h.png" alt="" width={358} height={82} priority/>
+            <Image src="/assets/marwa-logo-oficial.png" alt="" width={900} height={445} priority/>
           </Link>
           <Link href="/tienda/carrito" className="co-back"><Icon name="cart"/>Volver al carrito</Link>
         </div>
@@ -116,7 +119,7 @@ export default function CheckoutPage() {
           <div className="co-side-in">
             <button type="button" className="co-toggle" aria-expanded={showSummary} aria-controls="co-summary" onClick={() => setShowSummary(v => !v)}>
               <span>Resumen del pedido <Icon name="chevron"/></span>
-              <b>{money(subtotal)}</b>
+              <b>{money(total)}</b>
             </button>
             <div id="co-summary" className={showSummary ? 'co-summary open' : 'co-summary'}>
               <h2 className="co-sum-title">Resumen del pedido</h2>
@@ -134,8 +137,8 @@ export default function CheckoutPage() {
               </ul>
               <dl className="co-costs">
                 <div><dt>Subtotal · {units} {units === 1 ? 'producto' : 'productos'}</dt><dd>{money(subtotal)}</dd></div>
-                <div><dt>Envío</dt><dd className="soft">Se coordina al despachar</dd></div>
-                <div className="total"><dt>Total</dt><dd><small>COP</small> {money(subtotal)}</dd></div>
+                <div><dt>Envío</dt><dd className="soft">{shippingText(shipping, money)}</dd></div>
+                <div className="total"><dt>Total</dt><dd><small>COP</small> {money(total)}</dd></div>
               </dl>
               <div className="co-why">
                 <h2>Por qué comprar en MARWA</h2>
@@ -215,6 +218,7 @@ export default function CheckoutPage() {
 
             {error && <p className="form-error" role="alert">{error}</p>}
             <button className="button primary co-submit">Pagar ahora</button>
+            <p className="co-terms">Al pagar aceptas los <a href="/tienda/terminos-y-condiciones" target="_blank" rel="noopener">Términos y condiciones</a> y la <a href="/tienda/tratamiento-de-datos" target="_blank" rel="noopener">Política de tratamiento de datos</a> de MARWA.</p>
           </div>
         </div>
       </form>
@@ -224,7 +228,7 @@ export default function CheckoutPage() {
           <div className="pay-modal">
             <p className="eyebrow">Pasarela de prueba</p>
             <h2 id="pay-title">{paymentLabel[method]}</h2>
-            <p>Simula la respuesta del banco para el pago de <b>{money(subtotal)}</b>.</p>
+            <p>Simula la respuesta del banco para el pago de <b>{money(total)}</b>.</p>
             <div className="pay-actions">
               <button className="button primary" onClick={approve} autoFocus>Aprobar pago <span>✓</span></button>
               <button className="button ghost" onClick={reject}>Rechazar</button>

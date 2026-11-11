@@ -16,7 +16,7 @@ export function AuthShell({title, lead, children, heading = <>Bienvenido a <span
         <defs>
           <linearGradient id="au-w" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="780" y2="0"><stop offset="0" stopColor="#c0d5f9"/><stop offset=".55" stopColor="#c6d9fa"/><stop offset="1" stopColor="#c6d9fa" stopOpacity="0"/></linearGradient>
           <linearGradient id="au-b" gradientUnits="userSpaceOnUse" x1="140" y1="0" x2="1290" y2="0"><stop offset="0" stopColor="#dbe6fb"/><stop offset=".65" stopColor="#e2eafb"/><stop offset="1" stopColor="#e2eafb" stopOpacity="0"/></linearGradient>
-          <linearGradient id="au-r" x1="0" y1="0" x2="1" y2="0"><stop offset=".55" stopColor="#ed111c"/><stop offset="1" stopColor="#ed111c" stopOpacity=".1"/></linearGradient>
+          <linearGradient id="au-r" x1="0" y1="0" x2="1" y2="0"><stop offset=".55" stopColor="#e52332"/><stop offset="1" stopColor="#e52332" stopOpacity=".1"/></linearGradient>
         </defs>
         <path d="M140 301C360 240 640 100 900 72c120-12 240 110 390 229z" fill="url(#au-b)"/>
         <path d="M1290 301c140-61 270-111 382-196v196z" fill="#dfe9fb"/>
@@ -24,7 +24,7 @@ export function AuthShell({title, lead, children, heading = <>Bienvenido a <span
         <path className="au-line" d="M0 87c60-19 110-25 155-25 175 0 305 78 465 153 100 47 210 75 330 86" stroke="url(#au-r)" strokeWidth="3" vectorEffect="non-scaling-stroke"/>
       </svg>
       <div className="au-intro">
-        <Image className="au-logo" src="/assets/marwa-logo-h.png" alt="MARWA Redes y Energía" width={358} height={82} priority/>
+        <Image className="au-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
         <h1>{heading}</h1>
         <p>{intro}</p>
       </div>

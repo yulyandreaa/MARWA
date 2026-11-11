@@ -143,12 +143,13 @@ export const referenceProducts: Product[] = [
 /** Textos, filtros, guía y preguntas frecuentes de cada página de categoría. */
 type Guide = {title: string; sections: {h: string; p: string}[]};
 type Faq = {q: string; a: string};
-export type CategoryPageInfo = {intro: string; hero: string; filters: {key: string; label: string}[]; guide: Guide; faq: Faq[]};
+export type CategoryPageInfo = {intro: string; tagline?: string; hero: string; filters: {key: string; label: string}[]; guide: Guide; faq: Faq[]};
 
 export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   cableado: {
-    intro: 'El cableado estructurado MARWA ofrece conexiones estables, alta velocidad de datos y redes ordenadas. Encuentra cable UTP, FTP, LSZH, flexible multifilar y accesorios pasivos como patch panels, patch cords y jacks de Cat. 5E a Cat. 6A para oficinas, edificios y cuartos técnicos.',
-    hero: '/assets/solution-cabling.jpg',
+    tagline: 'Conectividad confiable para cada proyecto.',
+    intro: 'Cables UTP, FTP, LSZH, multifilares y accesorios especializados para redes profesionales.',
+    hero: '/assets/categoria-cableado-v5.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'categoria', label: 'Categoría'}, {key: 'presentacion', label: 'Presentación'}],
     guide: {
       title: 'Encuentra el cableado estructurado que necesitas en MARWA',
@@ -168,8 +169,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
     ],
   },
   fibra: {
-    intro: 'La fibra óptica MARWA lleva conectividad de alta velocidad a largas distancias, sin interferencias. Encuentra fibra monomodo ADSS y DROP, multimodo OM3, herrajería y accesorios para despliegues FTTH y enlaces empresariales.',
-    hero: '/assets/solution-fiber.jpg',
+    tagline: 'Velocidad y precisión en cada conexión.',
+    intro: 'Soluciones monomodo ADSS y DROP, multimodo OM3, herrajes y accesorios para infraestructura de fibra óptica.',
+    hero: '/assets/categoria-fibra-v2.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'modo', label: 'Modo'}, {key: 'conector', label: 'Conector'}],
     guide: {
       title: 'Encuentra la fibra óptica que necesitas en MARWA',
@@ -189,8 +191,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
     ],
   },
   plastica: {
-    intro: 'La línea plástica MARWA sujeta, protege y organiza tu cableado. Encuentra amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores horizontales.',
-    hero: '/assets/solution-plastic.jpg',
+    tagline: 'Organización y protección para tus instalaciones.',
+    intro: 'Amarres, espirales, cajas de paso, prensaestopas, faceplates y organizadores para una gestión eficiente del cableado.',
+    hero: '/assets/categoria-plastica-v2.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'medida', label: 'Medida'}, {key: 'color', label: 'Color'}],
     guide: {
       title: 'Encuentra la línea plástica que necesitas en MARWA',
@@ -209,8 +212,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
     ],
   },
   hdtv: {
-    intro: 'La línea HDTV MARWA lleva tu señal de video de un punto a otro. Encuentra cables, extender y splitter para salas, oficinas y comercios.',
-    hero: '/assets/solution-hdtv.jpg',
+    tagline: 'Señal de alta calidad, sin límites.',
+    intro: 'Cables, extensores y splitters para soluciones de transmisión y distribución de señal de video.',
+    hero: '/assets/categoria-hdtv-v2.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'resolucion', label: 'Resolución'}],
     guide: {
       title: 'Encuentra lo que tu señal de video necesita en MARWA',
@@ -227,8 +231,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
     ],
   },
   canalizacion: {
-    intro: 'La canalización y ductería MARWA protege y guía tu cableado de punta a punta. Encuentra canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.',
-    hero: '/assets/solution-plastic.jpg',
+    tagline: 'Infraestructura segura para cada instalación.',
+    intro: 'Canaletas, tuberías SCH 40, EMT e IMC, ductos y bandejas portacables para instalaciones organizadas y confiables.',
+    hero: '/assets/categoria-canalizacion-v2.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'medida', label: 'Medida'}, {key: 'material', label: 'Material'}],
     guide: {
       title: 'Encuentra la canalización que necesitas en MARWA',
@@ -247,8 +252,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
     ],
   },
   metalmecanica: {
-    intro: 'La línea metalmecánica MARWA protege y organiza tus equipos de red. Encuentra racks y gabinetes para telecomunicaciones, para cuartos técnicos y entornos de misión crítica.',
-    hero: '/assets/solution-infrastructure.jpg',
+    tagline: 'Solidez y respaldo para tu infraestructura.',
+    intro: 'Racks y gabinetes para telecomunicaciones, diseñados para organizar y proteger tus equipos de red.',
+    hero: '/assets/categoria-metalmecanica-v2.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'tamano', label: 'Tamaño'}, {key: 'instalacion', label: 'Instalación'}],
     guide: {
       title: 'Encuentra el rack o gabinete que necesitas en MARWA',
@@ -269,8 +275,9 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
 
 /** Página "Todo el catálogo" (y resultados de búsqueda), con la misma estructura. */
 export const allCatalogPage: CategoryPageInfo = {
-  intro: 'Todo lo que tu red necesita en un solo lugar: cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y ductería, y metalmecánica, con despacho a los 32 departamentos de Colombia.',
-  hero: '/assets/marwa-hero-magnific.jpg',
+  tagline: 'Todo para tu red, en un solo lugar.',
+  intro: 'Cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y metalmecánica con despacho a toda Colombia.',
+  hero: '/assets/categoria-todos-v1.jpg',
   filters: [{key: 'linea', label: 'Línea'}],
   guide: {
     title: 'Encuentra lo que tu proyecto necesita en MARWA',

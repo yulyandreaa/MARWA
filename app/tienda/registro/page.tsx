@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import {Suspense, useRef, useState, type FormEvent, type MouseEvent} from 'react';
+import {Suspense, useRef, useState, type FormEvent} from 'react';
 import {useRouter, useSearchParams} from 'next/navigation';
 import {isEmailTaken, register} from '@/lib/shop';
 import {isStrongPassword, isValidPhone, passwordRules, phoneDigits, phoneError} from '@/lib/validation';
@@ -37,9 +37,8 @@ function validate(v: Values): Partial<Record<FieldName, string>> {
 }
 
 /* Pendiente: aún no existen las páginas legales. Cuando estén, reemplazar estas rutas. */
-const TERMS_URL = '#';
-const PRIVACY_URL = '#';
-const pendingLegal = (e: MouseEvent) => e.preventDefault();
+const TERMS_URL = '/tienda/terminos-y-condiciones';
+const PRIVACY_URL = '/tienda/tratamiento-de-datos';
 
 function RegisterForm() {
   const router = useRouter();
@@ -123,7 +122,7 @@ function RegisterForm() {
 
         <label className="shop-check">
           <input type="checkbox" checked={accepted} disabled={status !== 'idle'} onChange={e => setAccepted(e.target.checked)}/>
-          <span>Acepto los <a href={TERMS_URL} onClick={pendingLegal}>términos y condiciones</a> y la <a href={PRIVACY_URL} onClick={pendingLegal}>política de privacidad</a>.</span>
+          <span>Acepto los <a href={TERMS_URL} target="_blank" rel="noopener">términos y condiciones</a> y la <a href={PRIVACY_URL} target="_blank" rel="noopener">política de privacidad</a>.</span>
         </label>
 
         {formError && <p className="form-error" role="alert">{formError}</p>}

@@ -1,5 +1,6 @@
 'use client';
 
+import {saveNotifPrefs, useNotifPrefs, type NotifKind} from '@/lib/notifications';
 import {useState, type FormEvent} from 'react';
 import {updateAccount, type User} from '@/lib/shop';
 import {isValidPhone, phoneDigits, phoneError} from '@/lib/validation';
@@ -65,6 +66,20 @@ export function AccountProfile({user}: {user: User}) {
           <button type="button" className="button ghost" disabled={!dirty} onClick={() => { setV(saved); setErrors({}); }}>Cancelar</button>
         </div>
       </form>
+      <NotifPrefsCard email={user.email}/>
     </>
+  );
+}
+
+function NotifPrefsCard({email}: {email: string}) {
+  const prefs = useNotifPrefs(email);
+  const toggle = (kind: NotifKind) => saveNotifPrefs(email, {...prefs, [kind]: !prefs[kind]});
+  return (
+    <section className="pa-section pa-form" aria-labelledby="datos-avisos">
+      <h2 id="datos-avisos">Avisos</h2>
+      <p className="pa-section-text">Elige qué novedades ves en tu campana.</p>
+      <label className="shop-check"><input type="checkbox" checked={prefs.pedidos} onChange={() => toggle('pedidos')}/>Mis pedidos y devoluciones</label>
+      <label className="shop-check"><input type="checkbox" checked={prefs.soporte} onChange={() => toggle('soporte')}/>Respuestas a mis solicitudes</label>
+    </section>
   );
 }

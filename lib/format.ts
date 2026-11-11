@@ -29,3 +29,27 @@ export function compressPhoto(file: File, max = 900): Promise<string> {
     img.src = URL.createObjectURL(file);
   });
 }
+
+/** Tamaño legible de un archivo: 289894 → "283 KB". */
+export const fileSize = (bytes?: number) =>
+  !bytes ? '' : bytes < 1024 * 1024 ? `${Math.max(1, Math.round(bytes / 1024))} KB` : `${(bytes / 1024 / 1024).toFixed(1).replace('.', ',')} MB`;
+
+/** Abre un archivo en otra pestaña. Los navegadores bloquean abrir data URLs directamente,
+ *  así que los archivos subidos desde el panel se convierten antes en un blob. */
+export async function openFile(url: string) {
+  if (!url.startsWith('data:')) return void window.open(url, '_blank', 'noopener');
+  const blob = await (await fetch(url)).blob();
+  window.open(URL.createObjectURL(blob), '_blank', 'noopener');
+}
+
+/** Lee un PDF subido como data URL (se guarda en el navegador mientras no hay servidor). */
+export function readPdf(file: File, maxBytes = 2 * 1024 * 1024): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) return reject(new Error('La ficha técnica debe ser un archivo PDF.'));
+    if (file.size > maxBytes) return reject(new Error(`La ficha pesa ${fileSize(file.size)}. El máximo es ${fileSize(maxBytes)}.`));
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('No se pudo leer el PDF.'));
+    reader.readAsDataURL(file);
+  });
+}

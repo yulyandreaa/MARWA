@@ -5,7 +5,6 @@ import '../premium.css';
 import './panel.css';
 import {ShopHeader, Toaster} from '@/components/shop/ShopUI';
 import {PmAnnouncement, PmFooter} from '@/components/premium/SiteChrome';
-import {WhatsAppButton} from '@/components/WhatsAppButton';
 import {CartDrawer} from '@/components/shop/CartDrawer';
 
 export const metadata: Metadata = {
@@ -22,7 +21,8 @@ export default function ShopLayout({children}: {children: React.ReactNode}) {
       </Suspense>
       <main className="shop-main">{children}</main>
       <PmFooter shop/>
-      <WhatsAppButton message="Hola MARWA, tengo una pregunta sobre la tienda en línea."/>
+      {/* Botón flotante de WhatsApp oculto por ahora (pedido del usuario, se revisa después) */}
+      {/* <ShopWhatsApp message="Hola MARWA, tengo una pregunta sobre la tienda en línea."/> */}
       <Toaster/>
       <CartDrawer/>
     </div>

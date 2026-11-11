@@ -1,5 +1,6 @@
 'use client';
 
+import {shippingCost, shippingText, useSettings} from '@/lib/settings';
 import Link from 'next/link';
 import {useEffect, useRef, useState, type MouseEvent} from 'react';
 import {onCartOpen} from '@/lib/cartDrawer';
@@ -16,7 +17,9 @@ export function CartDrawer() {
 
 function Panel({onClose}: {onClose: () => void}) {
   const ref = useRef<HTMLDialogElement>(null);
+  const settings = useSettings();
   const {lines, subtotal, units} = detailCart(useCart(), useProducts());
+  const shipping = shippingCost(subtotal, settings);
 
   useEffect(() => {
     const el = ref.current;
@@ -67,8 +70,8 @@ function Panel({onClose}: {onClose: () => void}) {
             </ul>
             <footer className="cd-foot">
               <dl>
-                <div><dt>Envío</dt><dd>Se coordina al despachar</dd></div>
-                <div className="total"><dt>Total</dt><dd>{money(subtotal)}</dd></div>
+                <div><dt>Envío</dt><dd>{shippingText(shipping, money)}</dd></div>
+                <div className="total"><dt>Total</dt><dd>{money(subtotal + (shipping ?? 0))}</dd></div>
               </dl>
               <div className="cd-actions">
                 <Link className="cd-details" href="/tienda/carrito" onClick={onClose}>Ver carrito</Link>

@@ -3,38 +3,48 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useEffect, useMemo, useRef, useState, type MouseEvent} from 'react';
 import {categories, categoryName, type Product} from '@/data/shopSeed';
 import {categoryPages} from '@/data/catalogRefs';
-import {addToCart, useProducts, useSessionUser} from '@/lib/shop';
-import {money} from '@/lib/format';
+import {addToCart, isOnOffer, useProducts, useSessionUser} from '@/lib/shop';
+import {useReviews} from '@/lib/reviews';
+import {date, fileSize, money, openFile} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
+import {Stars} from './Stars';
 import {FavoriteButton, ProductImage, QtyStepper, toast} from './ShopUI';
 
 /**
- * Ficha de producto — estructura de anker.com/products:
- * subnavegación fija · galería + columna de compra (revisa tu selección, servicios) ·
- * barra de compra fija abajo · te puede interesar · descripción · especificaciones · preguntas.
+ * Ficha de producto con la estructura de Mercado Libre:
+ * tarjeta blanca con tres columnas — galería | información del producto | caja de compra —
+ * y debajo características, descripción, opiniones y preguntas.
  */
-const sections = [
-  {id: 'comprar', label: 'Comprar'},
-  {id: 'descripcion', label: 'Descripción'},
-  {id: 'especificaciones', label: 'Especificaciones'},
-  {id: 'preguntas', label: 'Preguntas'},
-];
-
 export function ProductDetail({product}: {product: Product}) {
   const router = useRouter();
   const user = useSessionUser();
   const products = useProducts();
+  const reviews = useReviews().filter(r => r.productId === product.id && r.visible);
   const [qty, setQty] = useState(1);
-  const [specsOpen, setSpecsOpen] = useState(false);
-  const [active, setActive] = useState('comprar');
+  const [payOpen, setPayOpen] = useState(false);
+  const [active, setActive] = useState('descripcion');
   const [subnav, setSubnav] = useState(false);
+  const [bar, setBar] = useState(false);
+  const top = useRef<HTMLElement>(null);
+  const cta = useRef<HTMLDivElement>(null);
   const page = categoryPages[product.category];
   const out = product.stock <= 0;
+  const low = !out && product.stock <= 5;
   const max = Math.max(1, product.stock);
+  const offer = isOnOffer(product);
+  const average = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+  const ask = waLink(`Hola MARWA, tengo una pregunta sobre: ${product.name} (Ref. ${product.sku}).`);
+
+  const sections = [
+    {id: 'descripcion', label: 'Descripción'},
+    {id: 'caracteristicas', label: 'Características'},
+    ...(reviews.length ? [{id: 'opiniones', label: `Opiniones (${reviews.length})`}] : []),
+    {id: 'preguntas', label: 'Preguntas'},
+  ];
 
   const related = useMemo(() => {
     const same = products.filter(p => p.visible && p.id !== product.id && p.category === product.category);
@@ -42,32 +52,51 @@ export function ProductDetail({product}: {product: Product}) {
     return [...same, ...other].slice(0, 8);
   }, [products, product]);
 
-  const specRows = useMemo(() => {
-    const labels = Object.fromEntries(page.filters.map(f => [f.key, f.label]));
-    return [
-      ['Referencia', product.sku],
-      ['Línea', categoryName(product.category)],
+  const labels = useMemo(() => Object.fromEntries(page.filters.map(f => [f.key, f.label])), [page.filters]);
+  /* Atributos del producto sin repetir etiquetas (la presentación se toma de `unit`). */
+  const attributes = useMemo(() => {
+    const rows = [
+      ...Object.entries(product.specs ?? {}).filter(([k]) => k !== 'presentacion').map(([k, v]) => [k === 'tipo' ? 'Tipo' : labels[k] ?? k, v]),
       ['Presentación', product.unit],
-      ...Object.entries(product.specs ?? {}).map(([k, v]) => [labels[k] ?? k, v]),
-      ['Disponibilidad', out ? 'Agotado' : product.stock <= 5 ? `Últimas ${product.stock} unidades` : 'Disponible'],
     ] as [string, string][];
-  }, [product, page.filters, out]);
+    return rows.filter(([k, v], i) => v && rows.findIndex(r => r[0] === k) === i);
+  }, [product, labels]);
+  const specRows: [string, string][] = [
+    ['Referencia', product.sku],
+    ['Línea', categoryName(product.category)],
+    ...attributes,
+    ['Disponibilidad', out ? 'Agotado' : low ? `Últimas ${product.stock} unidades` : 'Disponible'],
+  ];
+  /* "Lo que tienes que saber": datos clave + características, como en Mercado Libre. */
+  const mentioned = (v: string) => product.features.some(f => f.toLowerCase().includes(v.toLowerCase()));
+  const know = [
+    ...attributes.filter(([k, v]) => k !== 'Presentación' && !mentioned(v)).slice(0, 3).map(([k, v]) => `${k}: ${v}`),
+    ...product.features,
+  ].slice(0, 6);
 
-  /* Subnavegación: aparece al bajar y marca la sección visible. */
+  /* Pestañas fijas: aparecen al pasar la tarjeta de compra y marcan la sección visible. */
   useEffect(() => {
     const onScroll = () => {
-      setSubnav(window.scrollY > 520);
-      let current = 'comprar';
-      sections.forEach(s => {
-        const el = document.getElementById(s.id);
-        if (el && el.getBoundingClientRect().top < 200) current = s.id;
+      const el = top.current;
+      setSubnav(!!el && el.getBoundingClientRect().bottom < 140);
+      let current = 'descripcion';
+      document.querySelectorAll<HTMLElement>('[data-pp-section]').forEach(s => {
+        if (s.getBoundingClientRect().top < 220) current = s.id;
       });
       setActive(current);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, {passive: true});
-    document.body.classList.add('has-buybar');
-    return () => { window.removeEventListener('scroll', onScroll); document.body.classList.remove('has-buybar'); };
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  /* Barra de compra inferior (solo celular): cuando los botones quedan fuera de la vista. */
+  useEffect(() => {
+    const el = cta.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setBar(!e.isIntersecting && e.boundingClientRect.top < 0));
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const add = () => {
@@ -86,7 +115,9 @@ export function ProductDetail({product}: {product: Product}) {
       <div className={`pp-subnav${subnav ? ' show' : ''}`}>
         <div className="pc-wrap">
           <b>{product.name}</b>
-          <nav>{sections.map(s => <button key={s.id} className={active === s.id ? 'on' : ''} onClick={() => go(s.id)}>{s.label}</button>)}</nav>
+          <nav aria-label="Secciones del producto">
+            {sections.map(s => <button key={s.id} className={active === s.id ? 'on' : ''} onClick={() => go(s.id)}>{s.label}</button>)}
+          </nav>
         </div>
       </div>
 
@@ -95,183 +126,240 @@ export function ProductDetail({product}: {product: Product}) {
         <Link href={`/tienda?categoria=${product.category}`}>{categoryName(product.category)}</Link><span>/</span><b>{product.name}</b>
       </nav>
 
-      <section className="pc-wrap pp-top" id="comprar">
+      <section className="pc-wrap pp-card pp-top" ref={top}>
         <Gallery product={product}/>
 
-        <div className="pp-buy">
-          {product.badge && <small className="pp-badge">{product.badge}</small>}
-          <div className="pp-title"><h1>{product.name}</h1><FavoriteButton product={product}/></div>
-          <p className="pp-ref">Ref. {product.sku} · {categoryName(product.category)}</p>
-          <div className="pp-price"><b>{money(product.price)}</b><span>IVA incluido</span></div>
-
-          <a className="pp-coupon" href={waLink(`Hola MARWA, tengo una pregunta sobre: ${product.name} (Ref. ${product.sku}).`)} target="_blank" rel="noopener">
-            <span className="pp-ticket"><small>Asesoría</small><b>Experta</b></span>
-            <span><b>¿Dudas con esta referencia?</b> Un asesor MARWA te ayuda a elegir la correcta para tu red.<u>Hablar con un asesor</u></span>
-          </a>
-
-          {!user && (
-            <Link className="pp-login" href="/tienda/ingresar">
-              <Icon name="user"/>
-              <span>Ingresa para comprar más rápido y seguir tus pedidos.</span>
-              <b>Ingresar <Icon name="chevron"/></b>
-            </Link>
+        {/* columna central: información */}
+        <div className="pp-info">
+          <div className="pp-meta">
+            <span>Nuevo | Ref. {product.sku}</span>
+            <FavoriteButton product={product}/>
+          </div>
+          <p className="pp-tags">
+            {product.badge && <em>{product.badge}</em>}
+            <Link href={`/tienda?categoria=${product.category}`}>{product.specs?.tipo ?? categoryName(product.category)} {product.specs?.Marca ?? 'MARWA'}</Link>
+          </p>
+          <h1>{product.name}</h1>
+          {reviews.length > 0 && (
+            <button className="pp-rating" onClick={() => go('opiniones')}>{average.toFixed(1)} <Stars value={average}/> ({reviews.length})</button>
           )}
 
-          <div className="pp-block">
-            <button className="pp-block-title" onClick={() => go('descripcion')}>Características principales <Icon name="chevron"/></button>
-            <ul className="pp-bullets">{product.features.map(f => <li key={f}>{f}</li>)}</ul>
+          <div className="pp-price">
+            {offer && <s>{money(product.listPrice!)}</s>}
+            <p><b>{money(product.price)}</b>{offer && <em>{Math.round((1 - product.price / product.listPrice!) * 100)}% OFF</em>}</p>
+            <small>IVA incluido</small>
           </div>
-          <div className="pp-block">
-            <button className="pp-block-title" aria-expanded={specsOpen} onClick={() => setSpecsOpen(!specsOpen)}>Especificaciones <Icon name="chevron"/></button>
-            {specsOpen && <dl className="pp-mini-specs">{specRows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>}
-          </div>
+          <button className="pp-link" aria-expanded={payOpen} onClick={() => setPayOpen(o => !o)}>Ver los medios de pago</button>
+          {payOpen && (
+            <ul className="pp-pay">
+              <li>PSE</li><li>Nequi</li><li>Tarjeta débito</li><li>Tarjeta crédito</li>
+            </ul>
+          )}
 
-          <h3 className="pp-label">Presentación: <span>{product.unit}</span></h3>
-          <div className="pp-chips"><span className="on">{product.unit}</span></div>
-
-          <h3 className="pp-label">Cantidad</h3>
-          <QtyStepper value={qty} max={max} onChange={n => setQty(Math.max(1, Math.min(max, n || 1)))}/>
-
-          <div className="pp-bulk">
-            <Icon name="truck"/>
-            <p><b>Despacho a todo Colombia:</b> cuando tu pedido salga de bodega verás el número de guía en Mi cuenta. <a href={waLink(`Hola MARWA, tengo una pregunta sobre: ${product.name} (Ref. ${product.sku}).`)} target="_blank" rel="noopener">¿Necesitas ayuda? Escríbenos ›</a></p>
+          <div className="pp-variant">
+            <p>Presentación: <b>{product.unit}</b></p>
+            <div className="pp-chips"><span className="on">{product.unit}</span></div>
           </div>
 
-          <h3 className="pp-section-title">Revisa tu selección</h3>
-          <div className="pp-review">
-            <div className="pp-review-item">
-              <span className="pp-review-img"><ProductImage src={product.image} alt="" sizes="64px"/></span>
-              <div>
-                <b>{product.name}</b>
-                <small>{product.unit}</small>
-              </div>
-              <i>×{qty}</i>
-            </div>
+          <h2 className="pp-know-title">Lo que tienes que saber de este producto</h2>
+          <ul className="pp-know">{know.map(k => <li key={k}>{k}</li>)}</ul>
+          <button className="pp-link" onClick={() => go('caracteristicas')}>Ver características</button>
+        </div>
+
+        {/* columna derecha: compra */}
+        <aside className="pp-side">
+          <div className="pp-box">
+            <p className="pp-ship"><b><Icon name="truck"/>Envío a todo Colombia</b><span>Despachamos desde nuestra bodega y ves la guía en Mi cuenta.</span></p>
+
             <p className={`pp-stock${out ? ' out' : ''}`}>
-              {out ? '• Agotado por ahora' : product.stock <= 5 ? `• Últimas ${product.stock} unidades · Despacho a todo Colombia` : '• Disponible · Despacho a todo Colombia'}
+              <b>{out ? 'Sin stock por ahora' : 'Stock disponible'}</b>
+              {low && <span>¡Últimas {product.stock} unidades!</span>}
             </p>
-            <div className="pp-total"><b>{money(product.price * qty)}</b><span>IVA incluido</span></div>
-            <div className="pp-actions">
-              <button className="pm-btn ghost" disabled={out} onClick={add}>Agregar al carrito</button>
-              <button className="pm-btn" disabled={out} onClick={buy}>Comprar ahora</button>
+
+            {!out && (
+              <div className="pp-qty">
+                <span>Cantidad:</span>
+                <QtyStepper value={qty} max={max} onChange={n => setQty(Math.max(1, Math.min(max, n || 1)))}/>
+                <small>({product.stock} disponibles)</small>
+              </div>
+            )}
+
+            <div className="pp-actions" ref={cta}>
+              {out ? (
+                <a className="pm-btn" href={ask} target="_blank" rel="noopener">Cotizar con un asesor</a>
+              ) : (
+                <>
+                  <button className="pm-btn" onClick={buy}>Comprar ahora</button>
+                  <button className="pm-btn soft" onClick={add}>Agregar al carrito</button>
+                </>
+              )}
             </div>
+
+            <div className="pp-seller">
+              <span className="pp-seller-logo"><Image src="/assets/marwa-hex-logo.svg" alt="" width={30} height={30}/></span>
+              <p><span>Tienda oficial <b>MARWA</b> <Icon name="check"/></span><small>Redes y energía · Colombia</small></p>
+            </div>
+
+            <ul className="pp-perks">
+              <li><Icon name="shield"/><span><b>Compra protegida.</b> Si hay un problema con tu pedido, te respondemos por PQR.</span></li>
+              <li><Icon name="tools"/><span><b>Respaldo técnico MARWA.</b> Calidad certificada RITEL · RETIE.</span></li>
+            </ul>
           </div>
 
-          <h3 className="pp-section-title">Servicios y beneficios</h3>
-          <a className="pp-more" href={waLink(`Hola MARWA, tengo una pregunta sobre: ${product.name} (Ref. ${product.sku}).`)} target="_blank" rel="noopener">
-            <span><Icon name="chat"/></span>Habla con un asesor <Icon name="chevron"/>
-          </a>
-          <ul className="pp-services">
-            <li><Icon name="truck"/>Despacho a todo Colombia</li>
-            <li><Icon name="shield"/>Calidad certificada RITEL · RETIE</li>
-            <li><Icon name="chat"/>Asesoría experta</li>
-            <li><Icon name="tools"/>Respaldo técnico MARWA</li>
-            <li className="stack"><span><Icon name="card"/>Medios de pago</span><em><i>Tarjeta débito</i><i>Tarjeta crédito</i><i>PSE</i><i>Nequi</i></em></li>
-            <li className="stack"><span><Icon name="pin"/>Envío</span><em><i>Transportadora nacional</i><i>Guía en Mi cuenta</i></em></li>
-          </ul>
+          <div className="pp-box">
+            <DatasheetCard product={product}/>
+            <a className="pp-advisor" href={ask} target="_blank" rel="noopener">
+              <Icon name="chat"/><span><b>¿Dudas con esta referencia?</b>Habla con un asesor MARWA</span><Icon name="chevron"/>
+            </a>
+            {!user && <p className="pp-login"><Link href="/tienda/ingresar">Ingresa</Link> para comprar más rápido y seguir tus pedidos.</p>}
+          </div>
+        </aside>
+      </section>
+
+      <section className="pc-wrap pp-card pp-block">
+        <div id="descripcion" data-pp-section className="pp-desc">
+          <h2 className="pp-h2">Descripción</h2>
+          <p>{product.description}</p>
+          <p>{categories.find(c => c.id === product.category)?.description}</p>
+          <ul>{product.features.map(f => <li key={f}>{f}</li>)}</ul>
+        </div>
+
+        <hr/>
+
+        <div id="caracteristicas" data-pp-section className="pp-specs">
+          <h2 className="pp-h2">Características del producto</h2>
+          <div className="pp-spec-grid">
+            <table className="pp-spec-table">
+              <tbody>{specRows.map(([k, v]) => <tr key={k}><th scope="row">{k}</th><td>{v}</td></tr>)}</tbody>
+            </table>
+            <aside className="pp-docs">
+              <h3>Documentos</h3>
+              <DatasheetCard product={product} large/>
+              <p>¿Necesitas certificados, planos o una cotización por volumen? <a href={ask} target="_blank" rel="noopener">Escríbenos</a></p>
+            </aside>
+          </div>
+        </div>
+
+        {reviews.length > 0 && (
+          <>
+            <hr/>
+            <div className="pp-reviews" id="opiniones" data-pp-section aria-labelledby="pp-opiniones">
+              <h2 className="pp-h2" id="pp-opiniones">Opiniones del producto</h2>
+              <p className="pp-reviews-avg"><b>{average.toFixed(1)}</b><Stars value={average}/><span>{reviews.length} {reviews.length === 1 ? 'opinión' : 'opiniones'} de compras verificadas</span></p>
+              <ul>
+                {reviews.map(r => (
+                  <li key={r.id}>
+                    <Stars value={r.rating}/>
+                    {r.text && <p>{r.text}</p>}
+                    <small>{r.name.split(' ')[0]} | {date(r.at)}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
+
+        <hr/>
+
+        <div id="preguntas" data-pp-section className="pp-faq">
+          <h2 className="pp-h2">Preguntas frecuentes</h2>
+          <FaqList items={page.faq}/>
+          <a className="pp-link" href={ask} target="_blank" rel="noopener">¿No encuentras tu respuesta? Pregúntale a un asesor</a>
         </div>
       </section>
 
       {related.length > 0 && <Related items={related}/>}
 
-      <section className="pp-overview" id="descripcion">
+      <div className={`pp-bar${bar ? ' show' : ''}`} aria-hidden={!bar}>
         <div className="pc-wrap">
-          <h2 className="pc-h2">{product.name}</h2>
-          <p className="pp-overview-lead">{product.description}</p>
-        </div>
-        <div className="pc-wrap pp-overview-banner">
-          <Image src={page.hero} alt="" fill sizes="(max-width: 760px) 100vw, 1280px"/>
-          <div><span>MARWA · {categoryName(product.category)}</span><b>Calidad que conecta tu proyecto</b></div>
-        </div>
-        <div className="pc-wrap pp-feature-grid">
-          {product.features.map((f, i) => (
-            <div key={f}><span>{String(i + 1).padStart(2, '0')}</span><b>{f}</b></div>
-          ))}
-        </div>
-        <div className="pc-wrap pp-text">
-          <p>Ref.: {product.sku}</p>
-          <p>{product.name}</p>
-          <p>{product.description}</p>
-          <h4>Para qué sirve</h4>
-          <p>{categories.find(c => c.id === product.category)?.description}</p>
-          <h4>Asesoría MARWA</h4>
-          <p>¿Tienes dudas sobre esta referencia? Un asesor MARWA te ayuda a elegir el producto correcto para tu red.</p>
-        </div>
-      </section>
-
-      <section className="pc-wrap pp-specs" id="especificaciones">
-        <h2 className="pp-h2">Especificaciones</h2>
-        <dl>{specRows.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-      </section>
-
-      <section className="pc-faq" id="preguntas">
-        <div className="pc-wrap">
-          <h2 className="pc-h2">Preguntas frecuentes</h2>
-          <FaqList items={page.faq}/>
-        </div>
-      </section>
-
-      <div className="pp-bar">
-        <div className="pc-wrap">
-          <p><Icon name="truck"/>{out ? 'Agotado por ahora — cotízalo con un asesor.' : 'Disponible — despacho a todo Colombia.'}</p>
-          <div>
-            <b>{money(product.price)}</b>
-            <button className="pm-btn ghost" disabled={out} onClick={add}>Agregar al carrito</button>
-            <button className="pm-btn" disabled={out} onClick={buy}>Comprar ahora</button>
-          </div>
+          <b>{money(product.price * qty)}</b>
+          <button className="pm-btn soft" disabled={out} onClick={add} tabIndex={bar ? 0 : -1}>Agregar al carrito</button>
+          <button className="pm-btn" disabled={out} onClick={buy} tabIndex={bar ? 0 : -1}>Comprar ahora</button>
         </div>
       </div>
     </div>
   );
 }
 
-/* Galería: diapositivas grandes con flechas y contador, miniaturas debajo. */
+/* Ficha técnica: ver o descargar el PDF; si no hay, se pide a un asesor. */
+function DatasheetCard({product, large = false}: {product: Product; large?: boolean}) {
+  const sheet = product.datasheet;
+  if (!sheet) {
+    return (
+      <a className={`pp-sheet empty${large ? ' large' : ''}`} href={waLink(`Hola MARWA, ¿me pueden enviar la ficha técnica de ${product.name} (Ref. ${product.sku})?`)} target="_blank" rel="noopener">
+        <span className="pp-sheet-ico"><Icon name="file"/></span>
+        <span className="pp-sheet-text"><b>Ficha técnica</b><small>Solicítala a un asesor MARWA</small></span>
+        <Icon name="chevron"/>
+      </a>
+    );
+  }
+  return (
+    <div className={`pp-sheet${large ? ' large' : ''}`}>
+      <span className="pp-sheet-ico"><Icon name="file"/><em>PDF</em></span>
+      <span className="pp-sheet-text"><b>Ficha técnica</b><small>{large ? sheet.name : 'PDF'}{sheet.size ? ` · ${fileSize(sheet.size)}` : ''}</small></span>
+      <span className="pp-sheet-actions">
+        <button type="button" onClick={() => openFile(sheet.url)}>Ver</button>
+        <a href={sheet.url} download={sheet.name}><Icon name="download"/>Descargar</a>
+      </span>
+    </div>
+  );
+}
+
+/* Galería: miniaturas en columna (cambian al pasar el mouse) + imagen grande con zoom al clic. */
 function Gallery({product}: {product: Product}) {
-  const page = categoryPages[product.category];
-  const slides = [
-    {src: product.image, product: true},
-    {src: page.hero},
-    {src: '/assets/marwa-digital-building.png'},
-    {src: '/assets/equipo-marwa-colombia.png'},
-  ];
+  const slides = [product.image, ...(product.gallery ?? [])].filter(Boolean);
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
-  const goTo = (i: number) => {
+  const [zoom, setZoom] = useState(false);
+  const many = slides.length > 1;
+
+  const goTo = (i: number, smooth = true) => {
     const el = track.current;
     if (!el) return;
     const n = (i + slides.length) % slides.length;
-    el.scrollTo({left: (el.children[n] as HTMLElement).offsetLeft, behavior: 'smooth'});
+    el.scrollTo({left: (el.children[n] as HTMLElement).offsetLeft, behavior: smooth ? 'smooth' : 'auto'});
     setIndex(n);
+    setZoom(false);
   };
   const onScroll = () => {
     const el = track.current;
     if (!el) return;
-    const w = (el.children[0] as HTMLElement).offsetWidth;
-    setIndex(Math.round(el.scrollLeft / w));
+    setIndex(Math.round(el.scrollLeft / el.clientWidth));
   };
+  const pan = (e: MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--zx', `${((e.clientX - r.left) / r.width) * 100}%`);
+    e.currentTarget.style.setProperty('--zy', `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   return (
-    <div className="pp-gallery">
-      <div className="pp-stage">
+    <div className={`pp-gallery${many ? '' : ' single'}`}>
+      {many && (
+        <div className="pp-thumbs" role="tablist" aria-label="Fotos del producto">
+          {slides.map((src, i) => (
+            <button
+              key={src + i} role="tab" aria-selected={i === index} className={i === index ? 'on' : ''}
+              onClick={() => goTo(i)} onMouseEnter={() => goTo(i, false)} aria-label={`Ver foto ${i + 1}`}
+            >
+              <ProductImage src={src} alt="" sizes="80px" quality={85}/>
+            </button>
+          ))}
+        </div>
+      )}
+      <div className={`pp-stage${zoom ? ' zoom' : ''}`} onMouseMove={pan} onMouseLeave={() => setZoom(false)}>
         <div className="pp-slides" ref={track} onScroll={onScroll}>
-          {slides.map((s, i) => (
-            <div key={s.src + i} className={`pp-slide${s.product ? ' product' : ''}`}>
-              {s.product ? <ProductImage src={s.src} alt={product.name} sizes="(max-width: 760px) 90vw, 400px"/> : <Image src={s.src} alt="" fill sizes="(max-width: 760px) 90vw, 400px"/>}
+          {slides.map((src, i) => (
+            <div key={src + i} className={`pp-slide${i === index ? ' on' : ''}`} onClick={() => setZoom(z => !z)}>
+              <ProductImage src={src} alt={`${product.name} — foto ${i + 1}`} sizes="(max-width: 860px) 100vw, 560px" quality={92} priority={i === 0}/>
             </div>
           ))}
         </div>
-        {product.badge && <span className="pp-flag">{product.badge}</span>}
-        <span className="pp-count">{index + 1}/{slides.length}</span>
-        <button className="pp-nav prev" onClick={() => goTo(index - 1)} aria-label="Imagen anterior"><Icon name="chevron"/></button>
-        <button className="pp-nav next" onClick={() => goTo(index + 1)} aria-label="Imagen siguiente"><Icon name="chevron"/></button>
+        {many && <span className="pp-count">{index + 1} / {slides.length}</span>}
+        {many && <>
+          <button className="pp-nav prev" onClick={() => goTo(index - 1)} aria-label="Foto anterior"><Icon name="chevron"/></button>
+          <button className="pp-nav next" onClick={() => goTo(index + 1)} aria-label="Foto siguiente"><Icon name="chevron"/></button>
+        </>}
       </div>
-      <div className="pp-thumbs">
-        {slides.map((s, i) => (
-          <button key={s.src + i} className={i === index ? 'on' : ''} onClick={() => goTo(i)} aria-label={`Ver imagen ${i + 1}`}>
-            {s.product ? <ProductImage src={s.src} alt="" sizes="56px"/> : <Image src={s.src} alt="" fill sizes="56px"/>}
-          </button>
-        ))}
-      </div>
-      <div className="pp-views"><span className="on"><Icon name="search"/>Vista general</span></div>
     </div>
   );
 }
@@ -279,23 +367,21 @@ function Gallery({product}: {product: Product}) {
 function Related({items}: {items: Product[]}) {
   const track = useRef<HTMLDivElement>(null);
   return (
-    <section className="pp-related">
-      <div className="pc-wrap">
-        <h2 className="pp-h2">También te puede interesar</h2>
-        <div className="pm-carousel">
-          <div className="pp-related-row" ref={track}>
-            {items.map(p => (
-              <Link key={p.id} href={`/tienda/producto/${p.id}`} className="pp-related-card">
-                <span className="pp-related-img"><ProductImage src={p.image} alt="" sizes="300px"/></span>
-                {p.badge && <small>{p.badge}</small>}
-                <b>{p.name}</b>
-                <em>{money(p.price)}</em>
-              </Link>
-            ))}
-          </div>
-          <button className="pm-arrow prev" onClick={() => track.current?.scrollBy({left: -600, behavior: 'smooth'})} aria-label="Anteriores"><Icon name="chevron"/></button>
-          <button className="pm-arrow next" onClick={() => track.current?.scrollBy({left: 600, behavior: 'smooth'})} aria-label="Siguientes"><Icon name="chevron"/></button>
+    <section className="pc-wrap pp-card pp-related">
+      <h2 className="pp-h2">Productos relacionados</h2>
+      <div className="pm-carousel">
+        <div className="pp-related-row" ref={track}>
+          {items.map(p => (
+            <Link key={p.id} href={`/tienda/producto/${p.id}`} className="pp-related-card">
+              <span className="pp-related-img"><ProductImage src={p.image} alt="" sizes="220px"/></span>
+              <b>{p.name}</b>
+              <em>{money(p.price)}</em>
+              {p.badge && <small>{p.badge}</small>}
+            </Link>
+          ))}
         </div>
+        <button className="pm-arrow prev" onClick={() => track.current?.scrollBy({left: -600, behavior: 'smooth'})} aria-label="Anteriores"><Icon name="chevron"/></button>
+        <button className="pm-arrow next" onClick={() => track.current?.scrollBy({left: 600, behavior: 'smooth'})} aria-label="Siguientes"><Icon name="chevron"/></button>
       </div>
     </section>
   );

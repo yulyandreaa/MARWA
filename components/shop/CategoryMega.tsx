@@ -1,29 +1,37 @@
 'use client';
 
+import {useSubsOf} from '@/lib/settings';
 import Image from 'next/image';
 import Link from 'next/link';
-import {useState, type KeyboardEvent, type MouseEvent} from 'react';
+import {useEffect, useRef, useState, type KeyboardEvent, type MouseEvent} from 'react';
 import {categories, type CategoryId} from '@/data/shopSeed';
 import {Icon} from '@/components/premium/Icons';
 
-type Line = {id: CategoryId; name: string; icon: string; blurb: string; headline: string; image: string; subs: string[]};
-
-/* Las subcategorías salen de shopSeed; aquí solo va la presentación de cada línea. */
-const look: Record<CategoryId, {icon: string; headline: string; image: string}> = {
-  cableado: {icon: 'ethernet', headline: 'Conectividad sin interrupciones', image: '/assets/mega-cableado.jpg'},
-  fibra: {icon: 'fiber', headline: 'Velocidad para tu operación', image: '/assets/solution-fiber.jpg'},
-  plastica: {icon: 'pipes', headline: 'Tu cableado sujeto y organizado', image: '/assets/solution-plastic.jpg'},
-  hdtv: {icon: 'tv', headline: 'Tu señal de video, de punta a punta', image: '/assets/solution-hdtv.jpg'},
-  canalizacion: {icon: 'duct', headline: 'Canalización ordenada y durable', image: '/assets/solution-plastic.jpg'},
-  metalmecanica: {icon: 'server', headline: 'Tu cuarto técnico en orden', image: '/assets/solution-infrastructure.jpg'},
+/**
+ * Menú de categorías al estilo del de LUMINA: panel plano a todo el ancho bajo el encabezado,
+ * una columna de texto por línea (subcategorías + "Ver todo") y 2 tarjetas pequeñas con foto.
+ * Sin banners: liviano y fácil de leer.
+ */
+const icons: Record<CategoryId, string> = {
+  cableado: 'ethernet', fibra: 'fiber', plastica: 'pipes', hdtv: 'tv', canalizacion: 'duct', metalmecanica: 'server',
 };
-const lines: Line[] = categories.map(c => ({id: c.id, name: c.name, blurb: c.description, subs: c.subs, ...look[c.id]}));
 const subHref = (id: CategoryId, sub: string) => `/tienda?categoria=${id}&tipo=${encodeURIComponent(sub)}`;
 
+const cards = [
+  {label: 'Todo el catálogo', href: '/tienda?vista=todos', image: '/assets/tienda-carrete.jpg'},
+  {label: 'Novedades', href: '/tienda?vista=novedades', image: '/assets/producto-cable-cat5e.jpg'},
+];
+
 export function CategoryMega({onNavigate}: {onNavigate?: () => void}) {
+  const subsOf = useSubsOf();
   const [show, setShow] = useState(false);
-  const [current, setCurrent] = useState(lines[0]);
   const close = () => { setShow(false); onNavigate?.(); };
+  // Al mover el mouse del botón al panel se cruza un espacio del encabezado: esperar un momento
+  // antes de cerrar evita que el menú se cierre y se vuelva a abrir (parpadeo).
+  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const enter = () => { clearTimeout(timer.current); setShow(true); };
+  const leave = () => { clearTimeout(timer.current); timer.current = setTimeout(() => setShow(false), 250); };
+  useEffect(() => () => clearTimeout(timer.current), []);
 
   // Con mouse el menú ya abrió al pasar por encima: el clic no debe cerrarlo.
   const toggle = (e: MouseEvent) => {
@@ -33,46 +41,36 @@ export function CategoryMega({onNavigate}: {onNavigate?: () => void}) {
   const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShow(false); };
 
   return (
-    <div className={`mg${show ? ' open' : ''}`} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} onKeyDown={onKey}>
+    <div className={`mg${show ? ' open' : ''}`} onMouseEnter={enter} onMouseLeave={leave} onKeyDown={onKey}>
       <button type="button" className="mg-toggle" aria-expanded={show} onClick={toggle}>
         <Icon name="menu"/>Categorías<Icon name="chevron"/>
       </button>
 
       <div className="mg-panel">
-        <div className="mg-card">
-          <ul className="mg-lines">
-            {lines.map(l => (
-              <li key={l.id}>
-                <Link
-                  className={l.id === current.id ? 'on' : ''}
-                  href={`/tienda?categoria=${l.id}`}
-                  onClick={close}
-                  onMouseEnter={() => setCurrent(l)}
-                  onFocus={() => setCurrent(l)}
-                >
-                  <Icon name={l.icon}/><span>{l.name}</span><Icon name="chevron"/>
+        <div className="pm-wrap mg-in">
+          <div className="mg-cols">
+            {categories.map(c => (
+              <div key={c.id} className="mg-col">
+                <Link className="mg-col-title" href={`/tienda?categoria=${c.id}`} onClick={close}>
+                  <Icon name={icons[c.id]}/><span>{c.name}</span>
                 </Link>
-              </li>
+                <ul>
+                  {subsOf(c.id, c.subs).slice(0, 5).map(sub => (
+                    <li key={sub}><Link href={subHref(c.id, sub)} onClick={close}>{sub}</Link></li>
+                  ))}
+                </ul>
+                <Link className="mg-col-all" href={`/tienda?categoria=${c.id}`} onClick={close}>Ver todo</Link>
+              </div>
             ))}
-          </ul>
-
-          <div className="mg-detail">
-            <h2>{current.name}</h2>
-            <p>{current.blurb}</p>
-            <h3>Explora la categoría</h3>
-            <ul>
-              {current.subs.map(sub => <li key={sub}><Link href={subHref(current.id, sub)} onClick={close}>{sub}</Link></li>)}
-            </ul>
-            <Link className="mg-all" href="/tienda?vista=todos" onClick={close}>Ver todo el catálogo</Link>
           </div>
 
-          <div className={current.id === 'cableado' ? 'mg-banner' : 'mg-banner striped'}>
-            <Image src={current.image} alt="" fill sizes="340px"/>
-            <div>
-              <span>{current.name}</span>
-              <b>{current.headline}</b>
-              <Link href={`/tienda?categoria=${current.id}`} onClick={close}>Ver productos <Icon name="arrow"/></Link>
-            </div>
+          <div className="mg-cards">
+            {cards.map(card => (
+              <Link key={card.label} href={card.href} className="mg-card2" onClick={close}>
+                <span><Image src={card.image} alt="" fill sizes="200px"/></span>
+                <b>{card.label}</b>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

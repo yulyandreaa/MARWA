@@ -1,7 +1,7 @@
 'use client';
 
 import {useState, type FormEvent} from 'react';
-import {changePassword} from '@/lib/shop';
+import {changePassword, deleteAccount} from '@/lib/shop';
 import {isStrongPassword, passwordRules} from '@/lib/validation';
 import {FormRow, PasswordField} from '@/components/shop/AuthShell';
 import {toast} from '@/components/shop/ShopUI';
@@ -10,12 +10,14 @@ import {Dialog, SectionHead} from './AccountUI';
 type Name = 'current' | 'next' | 'confirm';
 const empty = {current: '', next: '', confirm: ''};
 
-export function AccountSecurity({email, onSignOut}: {email: string; onSignOut: () => void}) {
+export function AccountSecurity({email}: {email: string}) {
   const [v, setV] = useState(empty);
   const [errors, setErrors] = useState<Partial<Record<Name, string>>>({});
   const [busy, setBusy] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [understood, setUnderstood] = useState(false);
+  const [deletePass, setDeletePass] = useState('');
+  const [deleteError, setDeleteError] = useState('');
 
   const bind = (k: Name) => ({
     id: `clave-${k}`, value: v[k], 'aria-label': undefined, 'aria-invalid': !!errors[k],
@@ -45,12 +47,14 @@ export function AccountSecurity({email, onSignOut}: {email: string; onSignOut: (
     setBusy(false);
   };
 
-  const requestDeletion = () => {
-    const text = `Hola MARWA, solicito eliminar mi cuenta de la tienda (${email}).`;
-    window.open(`https://wa.me/573102569469?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-    setDeleting(false);
-    setUnderstood(false);
-    toast('Abrimos WhatsApp para enviar tu solicitud');
+  const closeDeletion = () => { setDeleting(false); setUnderstood(false); setDeletePass(''); setDeleteError(''); };
+  const confirmDeletion = async () => {
+    try {
+      await deleteAccount(email, deletePass);
+      toast('Tu cuenta fue eliminada');
+    } catch (err) {
+      setDeleteError((err as Error).message);
+    }
   };
 
   return (
@@ -79,38 +83,33 @@ export function AccountSecurity({email, onSignOut}: {email: string; onSignOut: (
         </div>
       </form>
 
-      <section className="pa-section pa-form pa-split" aria-labelledby="sesion-titulo">
-        <div>
-          <h2 id="sesion-titulo">Sesión</h2>
-          <p className="pa-section-text">Cierra tu sesión en este dispositivo.</p>
-        </div>
-        <button type="button" className="button ghost" onClick={onSignOut}>Cerrar sesión</button>
-      </section>
-
       <section className="pa-section pa-form pa-split" aria-labelledby="borrar-titulo">
         <div>
           <h2 id="borrar-titulo">Eliminar mi cuenta</h2>
-          <p className="pa-section-text">Solicita que MARWA elimine tu cuenta y tus datos.</p>
+          <p className="pa-section-text">Borra tu cuenta, tus direcciones y tus favoritos.</p>
         </div>
-        <button type="button" className="button ghost danger-ghost" onClick={() => setDeleting(true)}>Solicitar eliminación</button>
+        <button type="button" className="button ghost danger-ghost" onClick={() => setDeleting(true)}>Eliminar cuenta</button>
       </section>
 
       {deleting && (
         <Dialog
-          title="¿Solicitar la eliminación de tu cuenta?"
-          onClose={() => { setDeleting(false); setUnderstood(false); }}
+          title="¿Eliminar tu cuenta?"
+          onClose={closeDeletion}
           actions={<>
-            <button type="button" className="button danger" disabled={!understood} onClick={requestDeletion}>Enviar solicitud por WhatsApp</button>
-            <button type="button" className="button ghost" data-autofocus onClick={() => { setDeleting(false); setUnderstood(false); }}>Conservar mi cuenta</button>
+            <button type="button" className="button danger" disabled={!understood} onClick={confirmDeletion}>Eliminar mi cuenta</button>
+            <button type="button" className="button ghost" data-autofocus onClick={closeDeletion}>Conservar mi cuenta</button>
           </>}
         >
           <ul className="pa-bullets">
             <li>Perderás el acceso a tu historial de pedidos, direcciones y favoritos.</li>
             <li>Los pedidos en proceso se terminarán de entregar.</li>
-            <li>MARWA podría conservar los registros de compra que la ley exija.</li>
-            <li>El equipo MARWA confirmará tu solicitud antes de eliminar la cuenta.</li>
+            <li>MARWA conserva los registros de compra que la ley exija.</li>
           </ul>
-          <label className="shop-check"><input type="checkbox" checked={understood} onChange={e => setUnderstood(e.target.checked)}/>Entiendo lo que implica eliminar mi cuenta.</label>
+          <label className="pa-field">Confirma tu contraseña
+            <input type="password" autoComplete="current-password" value={deletePass} onChange={e => { setDeletePass(e.target.value); setDeleteError(''); }}/>
+          </label>
+          {deleteError && <p className="form-error" role="alert">{deleteError}</p>}
+          <label className="shop-check"><input type="checkbox" checked={understood} onChange={e => setUnderstood(e.target.checked)}/>Entiendo que esto no se puede deshacer</label>
         </Dialog>
       )}
     </>

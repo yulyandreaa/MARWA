@@ -2,6 +2,8 @@
 
 import {useState, type FormEvent} from 'react';
 import {departments} from '@/data/shopSeed';
+import {municipios} from '@/data/municipios';
+import {PlainSelect} from './PlainSelect';
 import {addressUsage, deleteAddress, saveAddress, setDefaultAddress, useAddresses, type Address, type User} from '@/lib/shop';
 import {isValidPhone, phoneDigits, phoneError} from '@/lib/validation';
 import {Icon} from '@/components/premium/Icons';
@@ -15,7 +17,7 @@ const required: [keyof Draft, string][] = [
   ['recipient', 'Escribe quién recibe el pedido.'],
   ['phone', 'Escribe un número de contacto.'],
   ['department', 'Selecciona el departamento.'],
-  ['city', 'Escribe la ciudad o municipio.'],
+  ['city', 'Selecciona la ciudad o municipio.'],
   ['address', 'Escribe la dirección completa.'],
 ];
 const failed = 'No pudimos guardar el cambio. Inténtalo de nuevo.';
@@ -121,12 +123,28 @@ function AddressForm({user, draft, onDone}: {user: User; draft: Draft; onDone: (
           <FormRow id="dir-recipient" label="Nombre del destinatario" error={errors.recipient}><input {...bind('recipient')} autoComplete="name"/></FormRow>
           <FormRow id="dir-phone" label="Número de contacto" error={errors.phone}><input {...bind('phone')} type="tel" inputMode="tel" autoComplete="tel"/></FormRow>
           <FormRow id="dir-department" label="Departamento" error={errors.department}>
-            <select {...bind('department')}>
-              <option value="">Selecciona…</option>
-              {departments.map(d => <option key={d}>{d}</option>)}
-            </select>
+            <PlainSelect
+              field
+              id="dir-department"
+              label="Departamento"
+              placeholder="Selecciona…"
+              value={v.department}
+              onChange={department => { setV({...v, department, city: ''}); setErrors({...errors, department: undefined}); }}
+              options={departments.map(d => ({value: d, label: d}))}
+            />
           </FormRow>
-          <FormRow id="dir-city" label="Ciudad o municipio" error={errors.city}><input {...bind('city')} autoComplete="address-level2"/></FormRow>
+          <FormRow id="dir-city" label="Ciudad o municipio" error={errors.city}>
+            <PlainSelect
+              field
+              id="dir-city"
+              label="Ciudad o municipio"
+              placeholder={v.department ? 'Selecciona…' : 'Elige primero el departamento'}
+              disabled={!v.department}
+              value={v.city}
+              onChange={city => { setV({...v, city}); setErrors({...errors, city: undefined}); }}
+              options={Array.from(new Set([...(v.city ? [v.city] : []), ...(municipios[v.department] ?? [])])).map(c => ({value: c, label: c}))}
+            />
+          </FormRow>
         </div>
         <FormRow id="dir-address" label="Dirección completa" error={errors.address}><input {...bind('address')} autoComplete="street-address" placeholder="Calle, número, barrio"/></FormRow>
         <FormRow id="dir-notes" label={<>Complemento o indicaciones <em>(opcional)</em></>}><input {...bind('notes')} placeholder="Ej: Bodega 3, recibe de 8 a. m. a 5 p. m."/></FormRow>

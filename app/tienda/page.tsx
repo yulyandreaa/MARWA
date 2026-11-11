@@ -4,7 +4,8 @@ import Link from 'next/link';
 import {Suspense, useEffect, useMemo, useState} from 'react';
 import {useSearchParams} from 'next/navigation';
 import {categories, categoryName} from '@/data/shopSeed';
-import {useProducts} from '@/lib/shop';
+import {isOnOffer, useProducts} from '@/lib/shop';
+import {useSubsOf} from '@/lib/settings';
 import {useHydrated} from '@/lib/persist';
 import {Loading, PageTitle, ProductCard, ProductRow} from '@/components/shop/ShopUI';
 import {LineIcon} from '@/components/shop/LineIcon';
@@ -116,12 +117,12 @@ function Results({q, cat}: {q: string; cat: string | null}) {
   );
 }
 
-/** Novedades y ofertas se arman con la etiqueta del producto. */
+/** Ofertas: productos con precio anterior. Novedades: etiqueta o productos subidos. */
 function StoreView({view}: {view: 'novedades' | 'ofertas'}) {
   const products = useProducts();
   const hydrated = useHydrated();
   const offers = view === 'ofertas';
-  const list = products.filter(p => p.visible && (offers ? p.badge === 'Oferta' : p.badge === 'Nuevo' || p.custom));
+  const list = products.filter(p => p.visible && (offers ? isOnOffer(p) || p.badge === 'Oferta' : p.badge === 'Nuevo' || p.custom));
   if (!hydrated) return <Loading/>;
   return (
     <div className="container">
@@ -141,6 +142,7 @@ function StoreView({view}: {view: 'novedades' | 'ofertas'}) {
 
 function Shop() {
   const params = useSearchParams();
+  const subsOf = useSubsOf();
   const q = params?.get('q') ?? '';
   const cat = params?.get('categoria') ?? null;
   const view = params?.get('vista');
@@ -149,7 +151,7 @@ function Shop() {
   const all = view === 'todos';
   if (!q && !cat && (view === 'novedades' || view === 'ofertas')) return <StoreView view={view}/>;
   if (!q && !cat && !all) return <StoreLanding/>;
-  if (!q && line) return <CategoryPage key={`${line.id}|${tipo}`} cat={line.id} sub={line.subs.includes(tipo) ? tipo : ''}/>;
+  if (!q && line) return <CategoryPage key={`${line.id}|${tipo}`} cat={line.id} sub={subsOf(line.id, line.subs).includes(tipo) ? tipo : ''}/>;
   if (all || !line) return <CategoryPage key={`todos|${q}`} cat="todos" q={q}/>;
   return <Results key={`${q}|${cat}`} q={q} cat={cat}/>;
 }

@@ -6,6 +6,7 @@ export const accountTabs = [
   {id: 'direcciones', label: 'Mis direcciones', icon: 'pin'},
   {id: 'datos', label: 'Mis datos', icon: 'user'},
   {id: 'seguridad', label: 'Seguridad', icon: 'lock'},
+  {id: 'pqr', label: 'Ayuda / PQR', icon: 'help'},
 ];
 
 /** Cierra un menú desplegable con Esc o al hacer clic por fuera. */

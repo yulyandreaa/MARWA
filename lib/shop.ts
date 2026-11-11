@@ -3,6 +3,7 @@
 import {read, usePersisted, write} from './persist';
 import {seedProducts, type Product} from '@/data/shopSeed';
 import {demoSeller} from '@/data/demoAccounts';
+import {readSettings, shippingCost} from './settings';
 
 const K = {
   products: 'marwa.products.v1',
@@ -12,6 +13,7 @@ const K = {
   orders: 'marwa.orders.v1',
   favorites: 'marwa.favorites.v1',
   addresses: 'marwa.addresses.v1',
+  stockLog: 'marwa.stock-log.v1',
 };
 
 /* ------------------------------------------------------------------ */
@@ -60,13 +62,119 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
+/* Una sola vez por navegador: trae las vistas, fichas técnicas y productos nuevos del
+   catálogo inicial a los productos guardados, sin pisar lo que el vendedor ya subió. */
+const MEDIA_FLAG = 'marwa.catalog-media.v2';
+const TEST_SHEET = '/fichas/marwa-ficha-gabinete-12ru.pdf';
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(MEDIA_FLAG)) {
+      const saved = JSON.parse(raw) as Product[];
+      const ids = new Set(saved.map(p => p.id));
+      const list = saved.map(p => {
+        const seed = seedProducts.find(s => s.id === p.id);
+        const next = {...p};
+        // La ficha del 12RU se probó en otro producto: ahora vive en su propio producto.
+        if (p.id !== 'gabinete-12ru' && p.datasheet?.url === TEST_SHEET) delete next.datasheet;
+        if (!seed) return next;
+        if (seed.gallery?.length && !p.gallery?.length) { next.image = seed.image; next.gallery = seed.gallery; }
+        if (seed.datasheet && !next.datasheet) next.datasheet = seed.datasheet;
+        return next;
+      });
+      localStorage.setItem(K.products, JSON.stringify([...list, ...seedProducts.filter(p => !ids.has(p.id))]));
+    }
+    localStorage.setItem(MEDIA_FLAG, '1');
+  } catch {}
+}
+
+/* Una sola vez por navegador: si el catálogo inicial ganó vistas nuevas y el vendedor
+   no cambió las fotos de ese producto, se actualiza su galería. */
+const VIEWS_FLAG = 'marwa.catalog-views.v1';
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(VIEWS_FLAG)) {
+      const list = (JSON.parse(raw) as Product[]).map(p => {
+        const seed = seedProducts.find(s => s.id === p.id);
+        const fromSeed = (src: string) => src.startsWith('/assets/productos/');
+        if (!seed?.gallery || p.image !== seed.image || !(p.gallery ?? []).every(fromSeed)) return p;
+        return {...p, gallery: seed.gallery};
+      });
+      localStorage.setItem(K.products, JSON.stringify(list));
+    }
+    localStorage.setItem(VIEWS_FLAG, '1');
+  } catch {}
+}
+
+/* Una sola vez por navegador: agrega los productos del inventario (Excel) que ya tienen fotos. */
+const EXCEL_FLAG = 'marwa.catalog-excel.v1';
+const EXCEL_IDS = ['jack-keystone-cat6-azul', 'patch-cord-fibra-sc-apc-3m', 'espiral-cables-3-4-negro', 'tuberia-pvc-sch40-1'];
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(EXCEL_FLAG)) {
+      const list = JSON.parse(raw) as Product[];
+      const ids = new Set(list.map(p => p.id));
+      const added = seedProducts.filter(p => EXCEL_IDS.includes(p.id) && !ids.has(p.id));
+      localStorage.setItem(K.products, JSON.stringify([...added, ...list]));
+    }
+    localStorage.setItem(EXCEL_FLAG, '1');
+  } catch {}
+}
+
+/* Una sola vez: actualiza los textos de esos productos (ajustados el 9-nov-2026). */
+const EXCEL_TEXT_FLAG = 'marwa.catalog-excel-text.v1';
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(EXCEL_TEXT_FLAG)) {
+      const list = (JSON.parse(raw) as Product[]).map(p => {
+        const seed = EXCEL_IDS.includes(p.id) && seedProducts.find(s => s.id === p.id);
+        return seed ? {...p, features: seed.features, description: seed.description, specs: seed.specs} : p;
+      });
+      localStorage.setItem(K.products, JSON.stringify(list));
+    }
+    localStorage.setItem(EXCEL_TEXT_FLAG, '1');
+  } catch {}
+}
+
 export const useProducts = () => usePersisted<Product[]>(K.products, seedProducts);
 export const readProducts = () => read<Product[]>(K.products, seedProducts);
 
 export function saveProduct(p: Product) {
   const list = readProducts();
-  const exists = list.some(x => x.id === p.id);
-  return write(K.products, exists ? list.map(x => (x.id === p.id ? p : x)) : [p, ...list]);
+  const before = list.find(x => x.id === p.id);
+  const ok = write(K.products, before ? list.map(x => (x.id === p.id ? p : x)) : [p, ...list]);
+  const delta = p.stock - (before?.stock ?? 0);
+  if (ok && delta) logStock([{productId: p.id, delta, reason: before ? 'Ajuste manual' : 'Inventario inicial'}]);
+  return ok;
+}
+
+/** Aplica un cambio a varios productos a la vez. */
+export const bulkUpdateProducts = (ids: string[], change: (p: Product) => Product) =>
+  write(K.products, readProducts().map(p => (ids.includes(p.id) ? change(p) : p)));
+
+export const isOnOffer = (p: Product) => !!p.listPrice && p.listPrice > p.price;
+
+/* Historial de inventario: cada venta, cancelación, devolución y ajuste manual. */
+export type StockMove = {id: string; at: string; productId: string; delta: number; reason: string; ref?: string};
+const NO_MOVES: StockMove[] = [];
+const MAX_MOVES = 500;
+export const useStockLog = () => usePersisted<StockMove[]>(K.stockLog, NO_MOVES);
+
+function logStock(moves: Omit<StockMove, 'id' | 'at'>[]) {
+  const at = new Date().toISOString();
+  const added = moves.map((m, i) => ({...m, at, id: `${Date.now().toString(36)}-${i}`}));
+  write(K.stockLog, [...added, ...read<StockMove[]>(K.stockLog, NO_MOVES)].slice(0, MAX_MOVES));
+}
+
+function restock(orderId: string, items: {id: string; qty: number}[], reason: string) {
+  write(K.products, readProducts().map(p => {
+    const it = items.find(i => i.id === p.id);
+    return it ? {...p, stock: p.stock + it.qty} : p;
+  }));
+  logStock(items.map(i => ({productId: i.id, delta: i.qty, reason, ref: orderId})));
 }
 export function deleteProduct(id: string) {
   write(K.products, readProducts().filter(p => p.id !== id));
@@ -190,6 +298,17 @@ export function updateProfile(email: string, profile: Profile) {
   write(K.users, readUsers().map(u => (u.email === email ? {...u, ...profile} : u)));
 }
 
+/** Borra la cuenta, sus favoritos y direcciones. Los pedidos se conservan como registro de venta. */
+export async function deleteAccount(email: string, password: string) {
+  const user = readUsers().find(u => u.email === email);
+  if (user?.passwordHash && user.passwordHash !== (await hash(password))) throw new Error('La contraseña no es correcta.');
+  const {[email]: _favorites, ...favorites} = read<Record<string, string[]>>(K.favorites, {});
+  write(K.favorites, favorites);
+  write(K.addresses, read<{email: string}[]>(K.addresses, []).filter(a => a.email !== email));
+  write(K.users, readUsers().filter(u => u.email !== email));
+  write(K.session, null);
+}
+
 export async function changePassword(email: string, current: string, next: string) {
   const user = readUsers().find(u => u.email === email);
   if (!user || user.passwordHash !== (await hash(current))) throw new Error('La contraseña actual no es correcta.');
@@ -225,9 +344,40 @@ export type Order = {
   payment: {method: PaymentMethod; reference: string};
   status: OrderStatus;
   tracking?: string;
+  carrier?: string;
+  /** Solo la ve el equipo MARWA. */
+  sellerNote?: string;
+  returnRequest?: ReturnRequest;
+  /** Envío cobrado; sin valor, se coordinó al despachar. */
+  shipping?: number;
+  /** Cambios de estado hacia atrás que hizo el vendedor. */
+  corrections?: {status: OrderStatus; at: string}[];
   history: {status: OrderStatus; at: string; note?: string}[];
   createdAt: string;
 };
+
+export type ReturnRequest = {
+  reason: string;
+  detail: string;
+  items: {id: string; name: string; qty: number}[];
+  photos: string[];
+  at: string;
+  status: 'solicitada' | 'aprobada' | 'rechazada';
+  answer?: string;
+  answeredAt?: string;
+};
+export const cancelReasons = ['Ya no lo necesito', 'Me equivoqué de producto', 'Encontré otra opción', 'Tarda demasiado', 'Otro motivo'];
+export const returnReasons = ['Llegó defectuoso', 'No es lo que pedí', 'Llegó incompleto', 'Ya no lo necesito', 'Otro motivo'];
+export const returnLabel: Record<ReturnRequest['status'], string> = {solicitada: 'Devolución solicitada', aprobada: 'Devolución aprobada', rechazada: 'Devolución rechazada'};
+
+export const carriers: {name: string; url?: string}[] = [
+  {name: 'Servientrega', url: 'https://www.servientrega.com'},
+  {name: 'Coordinadora', url: 'https://www.coordinadora.com'},
+  {name: 'Interrapidísimo', url: 'https://interrapidisimo.com'},
+  {name: 'TCC', url: 'https://www.tcc.com.co'},
+  {name: 'Deprisa', url: 'https://www.deprisa.com'},
+  {name: 'Otra transportadora'},
+];
 
 const NO_ORDERS: Order[] = [];
 export const useOrders = () => usePersisted<Order[]>(K.orders, NO_ORDERS);
@@ -260,6 +410,7 @@ export function placeOrder(input: {email: string; customer: Profile; notes: stri
   if (short) throw new Error(`Solo quedan ${short.product.stock} unidades de ${short.product.name}.`);
 
   const orders = readOrders();
+  const shipping = shippingCost(subtotal, readSettings());
   const last = orders.reduce((m, o) => Math.max(m, Number(o.id.split('-')[1]) || 1000), 1000);
   const now = new Date().toISOString();
   const order: Order = {
@@ -268,7 +419,8 @@ export function placeOrder(input: {email: string; customer: Profile; notes: stri
     customer: input.customer,
     notes: input.notes,
     items: lines.map(l => ({id: l.id, sku: l.product.sku, name: l.product.name, image: l.product.image, price: l.product.price, qty: l.qty, unit: l.product.unit})),
-    total: subtotal,
+    total: subtotal + (shipping ?? 0),
+    shipping: shipping ?? undefined,
     payment: {method: input.method, reference: `SIM-${Date.now().toString(36).toUpperCase()}`},
     status: 'pagado',
     history: [{status: 'pagado', at: now}],
@@ -279,6 +431,7 @@ export function placeOrder(input: {email: string; customer: Profile; notes: stri
     const l = lines.find(x => x.id === p.id);
     return l ? {...p, stock: p.stock - l.qty} : p;
   }));
+  logStock(lines.map(l => ({productId: l.id, delta: -l.qty, reason: 'Venta', ref: order.id})));
   clearCart();
   return order;
 }
@@ -335,20 +488,77 @@ export function demoLogin(role: Role): User {
   return user;
 }
 
-export function setOrderStatus(id: string, status: OrderStatus, extra: {tracking?: string; note?: string} = {}) {
-  const orders = readOrders();
-  const order = orders.find(o => o.id === id);
+export const CANCELLED_BY_MARWA = 'Cancelado por MARWA';
+export const canCancelOrder = (o: Order) => o.status === 'pagado' || o.status === 'preparando';
+export const canRequestReturn = (o: Order) => o.status === 'entregado' && !o.returnRequest;
+
+const patchOrder = (id: string, patch: (o: Order) => Order) =>
+  write(K.orders, readOrders().map(o => (o.id === id ? patch(o) : o)));
+
+/** El vendedor puede mover el pedido a cualquier estado, también hacia atrás si se equivocó. */
+export function setOrderStatus(id: string, status: OrderStatus, extra: {tracking?: string; carrier?: string; note?: string} = {}) {
+  const order = readOrders().find(o => o.id === id);
   if (!order || order.status === status) return;
-  // Returning stock when an order is cancelled
-  if (status === 'cancelado' && order.status !== 'cancelado') {
-    write(K.products, readProducts().map(p => {
-      const it = order.items.find(i => i.id === p.id);
-      return it ? {...p, stock: p.stock + it.qty} : p;
-    }));
-  }
-  write(K.orders, orders.map(o => o.id === id
-    ? {...o, status, tracking: extra.tracking ?? o.tracking, history: [...o.history, {status, at: new Date().toISOString(), note: extra.note}]}
-    : o));
+  const at = new Date().toISOString();
+
+  if (order.status === 'cancelado') takeStock(order);
+  if (status === 'cancelado') restock(order.id, order.items, 'Pedido cancelado');
+
+  const step = statusFlow.indexOf(status);
+  const kept = order.history.filter(h => h.status !== 'cancelado' && statusFlow.indexOf(h.status) <= step);
+  const missing = statusFlow.slice(0, step + 1).filter(s => !kept.some(h => h.status === s));
+  const history = status === 'cancelado'
+    ? [...order.history, {status, at, note: extra.note}]
+    : [...kept, ...missing.map(s => ({status: s, at, note: s === status ? extra.note : undefined}))];
+
+  const wentBack = status !== 'cancelado' && (order.status === 'cancelado' || step < statusFlow.indexOf(order.status));
+  patchOrder(id, o => ({
+    ...o,
+    status,
+    history,
+    tracking: extra.tracking ?? o.tracking,
+    carrier: extra.carrier ?? o.carrier,
+    corrections: wentBack ? [...(o.corrections ?? []), {status, at}] : o.corrections,
+  }));
+}
+
+/** Reactivar un pedido cancelado vuelve a apartar sus unidades. */
+function takeStock(order: Order) {
+  const products = readProducts();
+  // Un producto retirado del catálogo no tiene stock que apartar.
+  const short = order.items.find(i => {
+    const product = products.find(p => p.id === i.id);
+    return product && product.stock < i.qty;
+  });
+  if (short) throw new Error(`No hay stock suficiente de ${short.name} para reactivar el pedido.`);
+  write(K.products, products.map(p => {
+    const it = order.items.find(i => i.id === p.id);
+    return it ? {...p, stock: p.stock - it.qty} : p;
+  }));
+  logStock(order.items.map(i => ({productId: i.id, delta: -i.qty, reason: 'Pedido reactivado', ref: order.id})));
+}
+
+export const isDispatched = (o: Order) => o.status === 'enviado' || o.status === 'entregado';
+
+export const cancelOrderByBuyer = (id: string, reason: string) => setOrderStatus(id, 'cancelado', {note: `Cancelado por el comprador: ${reason}`});
+
+export const setSellerNote = (id: string, sellerNote: string) => patchOrder(id, o => ({...o, sellerNote}));
+
+export function requestReturn(id: string, data: Pick<ReturnRequest, 'reason' | 'detail' | 'items' | 'photos'>) {
+  return patchOrder(id, o => ({...o, returnRequest: {...data, status: 'solicitada', at: new Date().toISOString()}}));
+}
+
+/** Al aprobar, las unidades vuelven al inventario. El reembolso real se hace en la pasarela. */
+export function answerReturn(id: string, approved: boolean, answer: string) {
+  const order = readOrders().find(o => o.id === id);
+  if (!order?.returnRequest) return;
+  const r = order.returnRequest;
+  // Las solicitudes viejas no traían productos: devolvían el pedido completo.
+  if (approved) restock(order.id, r.items ?? order.items, 'Devolución aprobada');
+  patchOrder(id, o => ({
+    ...o,
+    returnRequest: {...o.returnRequest!, status: approved ? 'aprobada' : 'rechazada', answer, answeredAt: new Date().toISOString()},
+  }));
 }
 
 /* ------------------------------------------------------------------ */

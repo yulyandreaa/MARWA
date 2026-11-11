@@ -3,13 +3,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import {useState} from 'react';
-import {paymentLabel, statusLabel, useProducts, type Order, type OrderStatus} from '@/lib/shop';
+import {
+  canCancelOrder, canRequestReturn, cancelOrderByBuyer, cancelReasons, carriers, isDispatched, paymentLabel, requestReturn, returnLabel, returnReasons,
+  statusFlow, statusLabel, useProducts, type Order, type OrderStatus,
+} from '@/lib/shop';
 import {categories} from '@/data/shopSeed';
-import {date, dateTime, money} from '@/lib/format';
+import {compressPhoto, date, dateTime, money} from '@/lib/format';
+import {saveReview, useReviews} from '@/lib/reviews';
+import {shippingText} from '@/lib/settings';
 import {Icon} from '@/components/premium/Icons';
-import {ProductImage} from '@/components/shop/ShopUI';
+import {ProductImage, toast} from '@/components/shop/ShopUI';
 import {OrderTimeline} from '@/components/shop/OrderTimeline';
-import {EmptyState, ReorderDialog, SectionHead, units} from './AccountUI';
+import {Dialog, EmptyState, ReorderDialog, SectionHead, units} from './AccountUI';
+import {PlainSelect} from './PlainSelect';
 
 const catalogLink = <Link className="button primary" href="/tienda?vista=todos">Ir al catálogo</Link>;
 
@@ -24,6 +30,7 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
   const [query, setQuery] = useState('');
   const [days, setDays] = useState('');
   const [category, setCategory] = useState('');
+  const [status, setStatus] = useState('');
   const products = useProducts();
   const [buying, setBuying] = useState<Order | null>(null);
 
@@ -32,11 +39,13 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
   const term = query.trim().toLowerCase();
   const matches = (o: Order) => !term || [o.id, ...o.items.flatMap(i => [i.name, i.sku])].some(t => t.toLowerCase().includes(term));
   const inDates = (o: Order) => !days || Date.now() - new Date(o.createdAt).getTime() <= Number(days) * 864e5;
+  const inStatus = (o: Order) => !status || (status === 'devolucion' ? !!o.returnRequest : o.status === status);
   const inCategory = (o: Order) => !category || o.items.some(i => products.find(p => p.id === i.id)?.category === category);
   const shown = orders
-    .filter(o => matches(o) && inDates(o) && inCategory(o))
+    .filter(o => matches(o) && inDates(o) && inCategory(o) && inStatus(o))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  const clear = () => { setQuery(''); setDays(''); setCategory(''); };
+  const clear = () => { setQuery(''); setDays(''); setCategory(''); setStatus(''); };
+  
 
   return (
     <>
@@ -53,22 +62,34 @@ export function AccountOrders({orders, orderId}: {orders: Order[]; orderId?: str
               <span className="au-sr">Buscar en mis compras</span>
               <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Busca por compra, producto o referencia…"/>
             </label>
-            <label className="pa-plain-select">
-              <span className="au-sr">Fecha de compra</span>
-              <select value={days} onChange={e => setDays(e.target.value)}>
-                <option value="">Fecha de compra</option>
-                <option value="30">Últimos 30 días</option>
-                <option value="90">Últimos 3 meses</option>
-                <option value="365">Último año</option>
-              </select>
-            </label>
-            <label className="pa-plain-select">
-              <span className="au-sr">Categorías</span>
-              <select value={category} onChange={e => setCategory(e.target.value)}>
-                <option value="">Categorías</option>
-                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
-            </label>
+            <PlainSelect
+              label="Fecha de compra"
+              value={days}
+              onChange={setDays}
+              options={[
+                {value: '', label: 'Fecha de compra'},
+                {value: '30', label: 'Últimos 30 días'},
+                {value: '90', label: 'Últimos 3 meses'},
+                {value: '365', label: 'Último año'},
+              ]}
+            />
+            <PlainSelect
+              label="Categorías"
+              value={category}
+              onChange={setCategory}
+              options={[{value: '', label: 'Categorías'}, ...categories.map(c => ({value: c.id as string, label: c.name}))]}
+            />
+            <PlainSelect
+              label="Estado"
+              value={status}
+              onChange={setStatus}
+              options={[
+                {value: '', label: 'Estado'},
+                ...statusFlow.map(v => ({value: v as string, label: statusLabel[v]})),
+                {value: 'cancelado', label: statusLabel.cancelado},
+                {value: 'devolucion', label: 'Con devolución'},
+              ]}
+            />
           </div>
 
           <p className="au-sr" role="status">{shown.length} {shown.length === 1 ? 'compra' : 'compras'}</p>
@@ -97,7 +118,7 @@ function PurchaseRow({order, onBuy}: {order: Order; onBuy: () => void}) {
       <span className="pa-buy-img"><ProductImage src={first.image} alt="" sizes="80px"/></span>
       <div className="pa-buy-info">
         <h2><Link href={href}>{first.name}{others > 0 && ` y ${others} ${others === 1 ? 'producto' : 'productos'} más`}</Link></h2>
-        <p>Comprado el {date(order.createdAt)} | {money(order.total)} | {statusLabel[order.status]}</p>
+        <p>Comprado el {date(order.createdAt)} | {money(order.total)} | {order.returnRequest ? returnLabel[order.returnRequest.status] : statusLabel[order.status]}</p>
       </div>
       <div className="pa-buy-actions">
         <button type="button" className="pa-text-btn" onClick={onBuy}>Volver a comprar<span className="au-sr"> {order.id}</span></button>
@@ -109,6 +130,10 @@ function PurchaseRow({order, onBuy}: {order: Order; onBuy: () => void}) {
 
 function OrderDetail({order, id}: {order?: Order; id: string}) {
   const [buying, setBuying] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [returning, setReturning] = useState(false);
+  const [rating, setRating] = useState<Order['items'][number] | null>(null);
+  const reviews = useReviews();
   const back = <Link className="pa-back" href="/tienda/cuenta?tab=pedidos"><Icon name="chevron"/> Volver a mis compras</Link>;
 
   if (!order) {
@@ -135,7 +160,16 @@ function OrderDetail({order, id}: {order?: Order; id: string}) {
       <section className="pa-section" aria-labelledby="pa-seguimiento">
         <h2 id="pa-seguimiento">Seguimiento</h2>
         <OrderTimeline order={order}/>
+        {order.tracking && isDispatched(order) && <Tracking order={order}/>}
       </section>
+
+      {order.returnRequest && <ReturnStatus order={order}/>}
+
+      <div className="pa-order-actions">
+        <a className="pa-text-btn" href={`/tienda/comprobante/${order.id}`} target="_blank" rel="noopener">Ver comprobante de compra</a>
+        {canRequestReturn(order) && <button type="button" className="pa-text-btn" onClick={() => setReturning(true)}>Solicitar devolución</button>}
+        {canCancelOrder(order) && <button type="button" className="pa-text-btn danger" onClick={() => setCancelling(true)}>Cancelar pedido</button>}
+      </div>
 
       <section className="pa-section" aria-labelledby="pa-productos">
         <h2 id="pa-productos">Productos</h2>
@@ -143,15 +177,19 @@ function OrderDetail({order, id}: {order?: Order; id: string}) {
           {order.items.map(i => (
             <li key={i.id}>
               <span className="pa-thumb"><Image src={i.image} alt="" fill sizes="56px" unoptimized={i.image.startsWith('data:')}/></span>
-              <div><Link href={`/tienda/producto/${i.id}`}>{i.name}</Link><small>Ref. {i.sku}</small></div>
+              <div>
+                <Link href={`/tienda/producto/${i.id}`}>{i.name}</Link>
+                <small>Ref. {i.sku}</small>
+                {order.status === 'entregado' && !reviews.some(r => r.id === `${order.id}-${i.id}`) && <button type="button" className="pa-text-btn" onClick={() => setRating(i)}>Opinar</button>}
+              </div>
               <span>{i.qty} × {money(i.price)}</span>
               <b>{money(i.price * i.qty)}</b>
             </li>
           ))}
         </ul>
         <dl className="pa-totals">
-          <div><dt>Subtotal</dt><dd>{money(order.total)}</dd></div>
-          <div><dt>Envío</dt><dd>Se coordina al despachar</dd></div>
+          <div><dt>Subtotal</dt><dd>{money(order.total - (order.shipping ?? 0))}</dd></div>
+          <div><dt>Envío</dt><dd>{shippingText(order.shipping ?? null, money)}</dd></div>
           <div className="total"><dt>Total pagado</dt><dd>{money(order.total)}</dd></div>
         </dl>
       </section>
@@ -173,12 +211,173 @@ function OrderDetail({order, id}: {order?: Order; id: string}) {
             <div><dt>Medio de pago</dt><dd>{paymentLabel[order.payment.method]}</dd></div>
             <div><dt>Referencia</dt><dd>{order.payment.reference}</dd></div>
             <div><dt>Fecha</dt><dd>{dateTime(order.createdAt)}</dd></div>
-            {order.tracking && <div><dt>Guía de envío</dt><dd>{order.tracking}</dd></div>}
           </dl>
         </section>
       </div>
 
       {buying && <ReorderDialog order={order} onClose={() => setBuying(false)}/>}
+      {cancelling && <CancelDialog order={order} onClose={() => setCancelling(false)}/>}
+      {returning && <ReturnDialog order={order} onClose={() => setReturning(false)}/>}
+      {rating && <ReviewDialog order={order} item={rating} user={c.name} onClose={() => setRating(null)}/>}
     </>
+  );
+}
+
+function Tracking({order}: {order: Order}) {
+  const carrier = carriers.find(c => c.name === order.carrier);
+  const copy = async () => {
+    await navigator.clipboard.writeText(order.tracking ?? '');
+    toast('Número de guía copiado');
+  };
+  return (
+    <div className="pa-tracking">
+      <div>
+        <small>{order.carrier ?? 'Guía de envío'}</small>
+        <b>{order.tracking}</b>
+      </div>
+      <button type="button" className="pa-text-btn" onClick={copy}>Copiar guía</button>
+      {carrier?.url && <a className="pa-buy-detail" href={carrier.url} target="_blank" rel="noopener">Rastrear en {carrier.name}</a>}
+    </div>
+  );
+}
+
+function ReturnStatus({order}: {order: Order}) {
+  const r = order.returnRequest!;
+  return (
+    <section className="pa-section" aria-labelledby="pa-devolucion">
+      <h2 id="pa-devolucion">{returnLabel[r.status]}</h2>
+      <dl className="pa-facts">
+        <div><dt>Motivo</dt><dd>{r.reason}</dd></div>
+        {r.items?.map(i => <div key={i.id}><dt>Devuelves</dt><dd>{i.qty} × {i.name}</dd></div>)}
+        {r.detail && <div><dt>Detalle</dt><dd>{r.detail}</dd></div>}
+        <div><dt>Fecha</dt><dd>{dateTime(r.at)}</dd></div>
+        {r.answer && <div><dt>Respuesta de MARWA</dt><dd>{r.answer}</dd></div>}
+      </dl>
+    </section>
+  );
+}
+
+function CancelDialog({order, onClose}: {order: Order; onClose: () => void}) {
+  const [reason, setReason] = useState(cancelReasons[0]);
+  const confirm = () => {
+    cancelOrderByBuyer(order.id, reason);
+    toast(`Cancelaste el pedido ${order.id}`);
+    onClose();
+  };
+  return (
+    <Dialog
+      title={`¿Cancelar el pedido ${order.id}?`}
+      onClose={onClose}
+      actions={<>
+        <button type="button" className="button danger" onClick={confirm}>Sí, cancelar</button>
+        <button type="button" className="button ghost" data-autofocus onClick={onClose}>Conservar pedido</button>
+      </>}
+    >
+      <p>El equipo MARWA recibirá el aviso y gestionará la devolución de tu dinero.</p>
+      <PlainSelect field caption="¿Por qué lo cancelas?" label="Motivo de la cancelación" value={reason} onChange={setReason} options={cancelReasons.map(r => ({value: r, label: r}))}/>
+    </Dialog>
+  );
+}
+
+const MAX_RETURN_PHOTOS = 3;
+
+function ReturnDialog({order, onClose}: {order: Order; onClose: () => void}) {
+  const [reason, setReason] = useState(returnReasons[0]);
+  const [detail, setDetail] = useState('');
+  const [qty, setQty] = useState<Record<string, number>>(() => Object.fromEntries(order.items.map(i => [i.id, i.qty])));
+  const [picked, setPicked] = useState<string[]>(order.items.length === 1 ? [order.items[0].id] : []);
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [error, setError] = useState('');
+
+  const addPhotos = async (files: File[]) => {
+    try {
+      const added = await Promise.all(files.slice(0, MAX_RETURN_PHOTOS - photos.length).map(f => compressPhoto(f, 700)));
+      setPhotos(list => [...list, ...added]);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+  const send = () => {
+    if (!picked.length) return setError('Elige al menos un producto.');
+    const items = order.items.filter(i => picked.includes(i.id)).map(i => ({id: i.id, name: i.name, qty: qty[i.id]}));
+    const ok = requestReturn(order.id, {reason, detail: detail.trim(), items, photos});
+    if (!ok) return setError('No hay espacio para guardar las fotos. Quita alguna e intenta de nuevo.');
+    toast('Enviamos tu solicitud de devolución');
+    onClose();
+  };
+
+  return (
+    <Dialog
+      title={`Devolución del pedido ${order.id}`}
+      onClose={onClose}
+      actions={<>
+        <button type="button" className="button primary" onClick={send}>Enviar solicitud</button>
+        <button type="button" className="button ghost" onClick={onClose}>Cancelar</button>
+      </>}
+    >
+      <p>¿Qué productos quieres devolver?</p>
+      <ul className="pa-return-items">
+        {order.items.map(i => (
+          <li key={i.id}>
+            <label className="shop-check">
+              <input type="checkbox" checked={picked.includes(i.id)} onChange={e => { setError(''); setPicked(list => (e.target.checked ? [...list, i.id] : list.filter(x => x !== i.id))); }}/>
+              {i.name}
+            </label>
+            {i.qty > 1 && (
+              <input
+                type="number" min={1} max={i.qty} aria-label={`Unidades de ${i.name}`} disabled={!picked.includes(i.id)}
+                value={qty[i.id]} onChange={e => setQty(q => ({...q, [i.id]: Math.min(i.qty, Math.max(1, Number(e.target.value) || 1))}))}
+              />
+            )}
+          </li>
+        ))}
+      </ul>
+      <PlainSelect field caption="Motivo" label="Motivo de la devolución" value={reason} onChange={setReason} options={returnReasons.map(r => ({value: r, label: r}))}/>
+      <label className="pa-field">Cuéntanos qué pasó <em>(opcional)</em>
+        <textarea rows={3} value={detail} onChange={e => setDetail(e.target.value)}/>
+      </label>
+      <div className="pa-return-photos">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {photos.map((src, i) => <span key={i}><img src={src} alt={`Foto ${i + 1}`}/><button type="button" aria-label={`Quitar foto ${i + 1}`} onClick={() => setPhotos(list => list.filter((_, n) => n !== i))}>×</button></span>)}
+        {photos.length < MAX_RETURN_PHOTOS && (
+          <label className="pa-text-btn">
+            Adjuntar fotos del producto
+            <input type="file" accept="image/*" multiple hidden onChange={e => { addPhotos(Array.from(e.target.files ?? [])); e.target.value = ''; }}/>
+          </label>
+        )}
+      </div>
+      {error && <p className="form-error" role="alert">{error}</p>}
+    </Dialog>
+  );
+}
+
+function ReviewDialog({order, item, user, onClose}: {order: Order; item: Order['items'][number]; user: string; onClose: () => void}) {
+  const [rating, setRating] = useState(0);
+  const [text, setText] = useState('');
+  const send = () => {
+    if (!rating) return toast('Elige de 1 a 5 estrellas');
+    saveReview({productId: item.id, productName: item.name, orderId: order.id, email: order.email, name: user, rating, text: text.trim()});
+    toast('Gracias por tu opinión');
+    onClose();
+  };
+  return (
+    <Dialog
+      title="Opina sobre tu compra"
+      onClose={onClose}
+      actions={<>
+        <button type="button" className="button primary" onClick={send}>Publicar opinión</button>
+        <button type="button" className="button ghost" onClick={onClose}>Cancelar</button>
+      </>}
+    >
+      <p>{item.name}</p>
+      <div className="pa-rate" role="radiogroup" aria-label="Calificación">
+        {[1, 2, 3, 4, 5].map(n => (
+          <button key={n} type="button" role="radio" aria-checked={rating === n} aria-label={`${n} de 5`} className={n <= rating ? 'on' : ''} onClick={() => setRating(n)}><Icon name="star"/></button>
+        ))}
+      </div>
+      <label className="pa-field">Tu comentario <em>(opcional)</em>
+        <textarea rows={3} value={text} onChange={e => setText(e.target.value)}/>
+      </label>
+    </Dialog>
   );
 }

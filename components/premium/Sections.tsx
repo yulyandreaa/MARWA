@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import {useEffect, useMemo, useRef, useState, type ReactNode} from 'react';
 import {categories, type Product} from '@/data/shopSeed';
-import {addToCart, useProducts} from '@/lib/shop';
+import {addToCart, useProducts, isOnOffer} from '@/lib/shop';
 import {money} from '@/lib/format';
 import {Icon} from './Icons';
 import {catImages, waLink} from './SiteChrome';
@@ -154,7 +154,7 @@ export function PmMoments({title, items, id}: {title: string; items: Moment[]; i
 }
 
 /* ---------- carrusel de productos con pestañas ---------- */
-function ProductTile({p, newTab}: {p: Product; newTab?: boolean}) {
+export function ProductTile({p, newTab}: {p: Product; newTab?: boolean}) {
   const [added, setAdded] = useState(false);
   useEffect(() => {
     if (!added) return;
@@ -171,7 +171,7 @@ function ProductTile({p, newTab}: {p: Product; newTab?: boolean}) {
       </a>
       <h3><a href={href} {...tab(!!newTab)}>{p.name}</a></h3>
       <p>{p.description}</p>
-      <div className="pm-product-price"><b>{money(p.price)}</b><span>/ {p.unit}</span></div>
+      <div className="pm-product-price"><b>{money(p.price)}</b>{isOnOffer(p) && <s className="old-price">{money(p.listPrice!)}</s>}<span>/ {p.unit}</span></div>
       <div className="pm-product-actions">
         <button className="pm-btn ghost sm" disabled={out} onClick={() => { if (addToCart(p.id, 1)) setAdded(true); }}>
           {out ? 'Agotado' : added ? 'Agregado ✓' : 'Agregar'}

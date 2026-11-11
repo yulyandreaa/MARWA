@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import {useOrders, useProducts, useUsers} from '@/lib/shop';
+import {LOW_STOCK} from '@/lib/notifications';
 import {date, money} from '@/lib/format';
 import {StatusPill} from '../OrderTimeline';
-
-export const LOW_STOCK = 5;
+import {SectionHead} from '../account/AccountUI';
 
 export function AdminSummary() {
   const orders = useOrders();
@@ -19,10 +19,7 @@ export function AdminSummary() {
 
   return (
     <>
-      <div className="account-head">
-        <h2>Resumen de la tienda</h2>
-        <p>Todo lo que pasa en la tienda en línea, en tiempo real.</p>
-      </div>
+      <SectionHead title="Resumen de la tienda" text="Todo lo que pasa en la tienda en línea, en tiempo real."/>
 
       <div className="kpis">
         <div><small>Ventas</small><b>{money(sales)}</b><span>{valid.length} pedidos no cancelados</span></div>
@@ -32,7 +29,7 @@ export function AdminSummary() {
       </div>
 
       <div className="admin-two">
-        <section className="panel">
+        <section className="pa-section">
           <div className="panel-head"><h3>Pedidos por atender</h3><Link href="/tienda/admin?tab=pedidos">Ver todos →</Link></div>
           {todo.length ? (
             <ul className="mini-list">
@@ -49,7 +46,7 @@ export function AdminSummary() {
           ) : <p className="muted">No hay pedidos pendientes. 🎉</p>}
         </section>
 
-        <section className="panel">
+        <section className="pa-section">
           <div className="panel-head"><h3>Alertas de inventario</h3><Link href="/tienda/admin?tab=productos">Inventario →</Link></div>
           {alerts.length ? (
             <ul className="mini-list">

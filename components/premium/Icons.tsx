@@ -42,6 +42,10 @@ const paths: Record<string, ReactNode> = {
   star: <path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1.1 6.3L12 17.4l-5.6 3 1.1-6.3L3 9.7l6.2-.9z"/>,
   help: <><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.8 2.1c-.8.5-1.3 1.1-1.3 2M12 17h.01"/></>,
   login: <><path d="M14 4h5v16h-5"/><path d="M4 12h11M11 8l4 4-4 4"/></>,
+  bell: <><path d="M6 9a6 6 0 1 1 12 0c0 6 3 7 3 8H3c0-1 3-2 3-8Z"/><path d="M10 20a2 2 0 0 0 4 0"/></>,
+  download: <><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/></>,
+  file: <><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></>,
+  zoom: <><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></>,
   repeat: <><path d="M4 11V9a3 3 0 0 1 3-3h12M16 3l3 3-3 3"/><path d="M20 13v2a3 3 0 0 1-3 3H5M8 21l-3-3 3-3"/></>,
 };
 

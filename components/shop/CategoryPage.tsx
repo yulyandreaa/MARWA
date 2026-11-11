@@ -20,7 +20,7 @@ import {sideAd} from '@/data/ads';
  */
 const sorts = {recomendados: 'Recomendados', 'precio-asc': 'Precio: menor a mayor', 'precio-desc': 'Precio: mayor a menor', nombre: 'Nombre A–Z'} as const;
 type Sort = keyof typeof sorts;
-const PAGE = 12;
+const PAGE = 20; // 5 filas de 4 productos antes de "Ver más productos"
 
 
 type Scope = CategoryId | 'todos';

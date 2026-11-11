@@ -14,13 +14,14 @@ import {openCart} from '@/lib/cartDrawer';
 import {useHydrated} from '@/lib/persist';
 import {useSettings} from '@/lib/settings';
 import {WhatsAppButton} from '@/components/WhatsAppButton';
-import {money} from '@/lib/format';
+import {money, priceText} from '@/lib/format';
 
 export function ProductImage({src, alt, sizes, quality, priority}: {src: string; alt: string; sizes: string; quality?: number; priority?: boolean}) {
   return <Image src={src} alt={alt} fill sizes={sizes} quality={quality} priority={priority} unoptimized={src.startsWith('data:')}/>;
 }
 
-export function StockTag({stock}: {stock: number}) {
+export function StockTag({stock, price}: {stock: number; price?: number}) {
+  if (price !== undefined && price <= 0) return <span className="stock-tag low">Por cotizar</span>;
   if (stock <= 0) return <span className="stock-tag out">Agotado</span>;
   if (stock <= 5) return <span className="stock-tag low">Últimas {stock} unidades</span>;
   return <span className="stock-tag ok">Disponible</span>;
@@ -43,7 +44,8 @@ export function Toaster() {
 }
 
 export function AddButton({product, qty = 1, block = false}: {product: Product; qty?: number; block?: boolean}) {
-  const out = product.stock <= 0;
+  const pending = product.price <= 0;
+  const out = pending || product.stock <= 0;
   return (
     <button
       className={`button primary${block ? ' block' : ''}`}
@@ -53,7 +55,7 @@ export function AddButton({product, qty = 1, block = false}: {product: Product; 
         toast(n ? `${product.name} · ${n} en el carrito` : 'Producto agotado');
       }}
     >
-      {out ? 'Agotado' : <>Agregar al carrito <span>＋</span></>}
+      {pending ? 'Precio por confirmar' : out ? 'Agotado' : <>Agregar al carrito <span>＋</span></>}
     </button>
   );
 }
@@ -89,7 +91,7 @@ export function FavoriteButton({product, className = ''}: {product: Product; cla
 }
 
 export function ProductCard({product}: {product: Product}) {
-  const out = product.stock <= 0;
+  const out = product.stock <= 0 || product.price <= 0;
   return (
     <article className={`shop-card${out ? ' is-out' : ''}`}>
       <div className="shop-card-img">
@@ -110,12 +112,12 @@ export function ProductCard({product}: {product: Product}) {
       <div className="shop-card-body">
         <div className="shop-card-meta">
           <span>{categoryName(product.category)}</span>
-          <StockTag stock={product.stock}/>
+          <StockTag stock={product.stock} price={product.price}/>
         </div>
         <h3><Link href={`/tienda/producto/${product.id}`}>{product.name}</Link></h3>
         <div className="shop-card-price">
-          <b>{money(product.price)}</b>{isOnOffer(product) && <s className="old-price">{money(product.listPrice!)}</s>}
-          <small>/ {product.unit}</small>
+          <b>{priceText(product.price)}</b>{isOnOffer(product) && <s className="old-price">{money(product.listPrice!)}</s>}
+          {product.price > 0 && <small>/ {product.unit}</small>}
         </div>
       </div>
     </article>
@@ -125,7 +127,8 @@ export function ProductCard({product}: {product: Product}) {
 /** Wholesale list row: quantity + add without leaving the catalog. */
 export function ProductRow({product}: {product: Product}) {
   const [qty, setQty] = useState(1);
-  const out = product.stock <= 0;
+  const pending = product.price <= 0;
+  const out = pending || product.stock <= 0;
   const max = Math.max(1, product.stock);
   return (
     <li className={`shop-row${out ? ' is-out' : ''}`}>
@@ -134,9 +137,9 @@ export function ProductRow({product}: {product: Product}) {
         <Link href={`/tienda/producto/${product.id}`}><b>{product.name}</b></Link>
         <small>Ref. {product.sku} · {product.unit} · {categoryName(product.category)}</small>
       </div>
-      <StockTag stock={product.stock}/>
-      <b className="shop-row-price">{money(product.price)}</b>
-      {out ? <span className="shop-row-out">Agotado</span> : (
+      <StockTag stock={product.stock} price={product.price}/>
+      <b className="shop-row-price">{priceText(product.price)}</b>
+      {out ? <span className="shop-row-out">{pending ? 'Por cotizar' : 'Agotado'}</span> : (
         <div className="shop-row-buy">
           <QtyStepper value={qty} max={max} onChange={n => setQty(Math.max(1, Math.min(max, n || 1)))}/>
           <button className="add-round" onClick={() => { quickAdd(product, qty); setQty(1); }} aria-label={`Agregar ${qty} de ${product.name}`}>
@@ -316,7 +319,9 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
     return () => clearTimeout(t);
   }, [added]);
   const href = `/tienda/producto/${p.id}`;
-  const out = p.stock <= 0;
+  const pending = p.price <= 0;
+  const out = pending || p.stock <= 0;
+  const outLabel = pending ? 'Por cotizar' : 'Agotado';
   const isNew = p.badge === 'Nuevo';
   const label = badge ? (isNew ? 'Nuevo' : 'Más vendido') : (p.badge ?? '');
   const unit = p.unit.charAt(0).toUpperCase() + p.unit.slice(1);
@@ -334,12 +339,14 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
       )}
       <h3><a href={href}>{p.name}</a></h3>
       <p>{p.description}</p>
-      <div className="lx-best-price"><b>{money(p.price)}</b>{isOnOffer(p) && <s>{money(p.listPrice!)}</s>}<i aria-hidden="true"/><span>{unit}</span></div>
+      {pending
+        ? <div className="lx-best-price is-pending"><b>Precio por confirmar</b></div>
+        : <div className="lx-best-price"><b>{money(p.price)}</b>{isOnOffer(p) && <s>{money(p.listPrice!)}</s>}<i aria-hidden="true"/><span>{unit}</span></div>}
       <div className="lx-best-actions">
-        <button type="button" className="lx-best-add" disabled={out} title={out ? 'Agotado' : 'Agregar al carrito'} aria-label={out ? 'Agotado' : added ? 'Agregado al carrito' : `Agregar ${p.name} al carrito`} onClick={() => { if (addToCart(p.id, 1)) setAdded(true); }}>
-          <Icon name="cart"/>{out ? 'Agotado' : added ? 'Agregado' : 'Agregar'}
+        <button type="button" className="lx-best-add" disabled={out} title={out ? outLabel : 'Agregar al carrito'} aria-label={out ? outLabel : added ? 'Agregado al carrito' : `Agregar ${p.name} al carrito`} onClick={() => { if (addToCart(p.id, 1)) setAdded(true); }}>
+          <Icon name="cart"/>{out ? outLabel : added ? 'Agregado' : 'Agregar'}
         </button>
-        <a className="lx-best-buy" href={href}>Comprar <Icon name="arrow"/></a>
+        <a className="lx-best-buy" href={href}>{pending ? 'Cotizar' : 'Comprar'} <Icon name="arrow"/></a>
       </div>
     </article>
   );

@@ -1,5 +1,7 @@
 const cop = new Intl.NumberFormat('es-CO', {style: 'currency', currency: 'COP', maximumFractionDigits: 0});
 export const money = (n: number) => cop.format(n);
+/** Precio para el cliente: 0 significa que el precio está pendiente. */
+export const priceText = (n: number) => (n > 0 ? cop.format(n) : 'Precio por confirmar');
 
 const dt = new Intl.DateTimeFormat('es-CO', {day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit'});
 const d = new Intl.DateTimeFormat('es-CO', {day: 'numeric', month: 'short', year: 'numeric'});

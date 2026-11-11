@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import {toggleFavorite, useFavorites, useProducts} from '@/lib/shop';
-import {money} from '@/lib/format';
+import {money, priceText} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {AddButton, ProductImage, StockTag, toast} from '@/components/shop/ShopUI';
 import {EmptyState, SectionHead} from './AccountUI';
@@ -37,8 +37,8 @@ export function AccountFavorites({email}: {email: string}) {
               <div className="pa-fav-body">
                 <Link href={`/tienda/producto/${p.id}`}><b>{p.name}</b></Link>
                 <small>Ref. {p.sku}</small>
-                <strong>{money(p.price)}</strong>
-                {p.visible ? <StockTag stock={p.stock}/> : <span className="stock-tag out">No disponible</span>}
+                <strong>{priceText(p.price)}</strong>
+                {p.visible ? <StockTag stock={p.stock} price={p.price}/> : <span className="stock-tag out">No disponible</span>}
               </div>
               <div className="pa-fav-actions">
                 {p.visible ? <AddButton product={p} block/> : <button type="button" className="button primary block" disabled>No disponible</button>}

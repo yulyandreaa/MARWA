@@ -139,6 +139,20 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
+/* Una sola vez por navegador (11-nov-2026): el inventario de ejemplo guardado se reemplaza por el
+   inventario real del Excel, y se vacían el carrito y los favoritos que apuntaban a los productos viejos. */
+const RESET_FLAG = 'marwa.catalog-excel-real.v1';
+if (typeof window !== 'undefined') {
+  try {
+    if (!localStorage.getItem(RESET_FLAG)) {
+      localStorage.setItem(K.products, JSON.stringify(seedProducts));
+      localStorage.removeItem(K.cart);
+      localStorage.removeItem(K.favorites);
+      localStorage.setItem(RESET_FLAG, '1');
+    }
+  } catch {}
+}
+
 export const useProducts = () => usePersisted<Product[]>(K.products, seedProducts);
 export const readProducts = () => read<Product[]>(K.products, seedProducts);
 
@@ -191,8 +205,10 @@ const EMPTY_CART: CartLine[] = [];
 export const useCart = () => usePersisted<CartLine[]>(K.cart, EMPTY_CART);
 const readCart = () => read<CartLine[]>(K.cart, EMPTY_CART);
 
+/* Sin precio (0 = por confirmar) no se puede comprar: se cotiza con un asesor. */
 function stockOf(id: string) {
-  return readProducts().find(p => p.id === id)?.stock ?? 0;
+  const p = readProducts().find(p => p.id === id);
+  return p && p.price > 0 ? p.stock : 0;
 }
 /** Returns the quantity actually in the cart after adding. */
 export function addToCart(id: string, qty = 1) {

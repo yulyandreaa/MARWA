@@ -7,7 +7,7 @@ import {ProductTile} from '@/components/premium/Sections';
 import {MarwaCard} from '@/components/shop/ShopUI';
 import {addToCart, isOnOffer, useProducts} from '@/lib/shop';
 import {useSettings} from '@/lib/settings';
-import {money} from '@/lib/format';
+import {money, priceText} from '@/lib/format';
 import {categories} from '@/data/shopSeed';
 
 /**
@@ -130,9 +130,11 @@ function LineTabs() {
 /* 3 · Productos destacados: carrusel de banners en la línea gráfica del banner del usuario (Cat. 5E).
    Fotos sin texto (Magnific) con el logo oficial compuesto en el producto; el texto va en HTML.
    Precio, unidad, descripción y enlace salen del producto real, así el banner sigue al admin. */
+/* Solo se muestran los banners cuyo producto existe en el inventario (11-nov-2026: Cat. 5E interior y rack
+   no están en el Excel, quedan guardados por si vuelven). */
 const featured = [
   {id: 'cable-cat5e', image: '/assets/destacado-cable-cat5e-v1.jpg', title: ['Cable UTP flexible', 'Cat. ', '5E'], alt: 'Carrete de cable UTP Cat. 5E sobre ondas azules y rojas'},
-  {id: 'fibra-drop', image: '/assets/destacado-fibra-drop-v2.jpg', title: ['Cable de fibra óptica', '', 'Drop-Core'], alt: 'Bobina de fibra óptica Drop-Core MARWA sobre ondas azules y rojas'},
+  {id: 'cable-drop-1-hilo-1-km', image: '/assets/destacado-fibra-drop-v2.jpg', title: ['Cable de fibra óptica', '', 'DROP'], alt: 'Bobina de fibra óptica Drop-Core MARWA sobre ondas azules y rojas'},
   {id: 'rack-piso', image: '/assets/destacado-rack-piso-v3.jpg', title: ['Rack de piso para', '', 'comunicaciones'], alt: 'Rack de piso negro MARWA sobre ondas azules y rojas'},
 ];
 
@@ -159,7 +161,7 @@ function FeaturedBand() {
         <span className="lx-feat-pill">Producto destacado · {cat?.name}</span>
         <h2>{s.title[0]} <span>{s.title[1]}<em>{s.title[2]}</em></span></h2>
         <p>{p.description}</p>
-        <div className="lx-feat-price"><b>{money(p.price)}</b><i aria-hidden="true"/><small>/ {p.unit}</small></div>
+        <div className="lx-feat-price"><b>{priceText(p.price)}</b>{p.price > 0 && <><i aria-hidden="true"/><small>/ {p.unit}</small></>}</div>
         <a className="lx-feat-btn" href={`/tienda/producto/${p.id}`}>Ver producto <i aria-hidden="true"/><Icon name="arrow"/></a>
       </div>
     </section>

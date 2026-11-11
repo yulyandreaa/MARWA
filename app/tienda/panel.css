@@ -2086,3 +2086,9 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .mh-home, .mh-home svg { color: var(--blue); }
 .mh-home:hover, .mh-home:hover svg, .mh-home:focus-visible, .mh-home:focus-visible svg { color: var(--red); }
 .mh-home svg { transition: color .15s; }
+/* Producto sin precio todavía (precio 0): texto más pequeño y en azul, sin unidad */
+.lx-best-price.is-pending b { font-size: 16px; font-weight: 600; color: var(--blue); }
+.shop-card-price b:only-child, .pp-related-card em { white-space: nowrap; }
+.pp-price.is-pending p b { font-size: 26px; line-height: 1.2; color: var(--blue); }
+.pp-stock.pending b { color: var(--blue); }
+.pp-stock.pending span { color: #4a5872; }

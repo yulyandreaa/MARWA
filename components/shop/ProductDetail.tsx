@@ -8,7 +8,7 @@ import {categories, categoryName, type Product} from '@/data/shopSeed';
 import {categoryPages} from '@/data/catalogRefs';
 import {addToCart, isOnOffer, useProducts, useSessionUser} from '@/lib/shop';
 import {useReviews} from '@/lib/reviews';
-import {date, fileSize, money, openFile} from '@/lib/format';
+import {date, fileSize, money, openFile, priceText} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
 import {Stars} from './Stars';
@@ -32,7 +32,9 @@ export function ProductDetail({product}: {product: Product}) {
   const top = useRef<HTMLElement>(null);
   const cta = useRef<HTMLDivElement>(null);
   const page = categoryPages[product.category];
-  const out = product.stock <= 0;
+  /* Precio 0 = precio por confirmar: no se vende en línea, se cotiza con un asesor. */
+  const pending = product.price <= 0;
+  const out = pending || product.stock <= 0;
   const low = !out && product.stock <= 5;
   const max = Math.max(1, product.stock);
   const offer = isOnOffer(product);
@@ -65,7 +67,7 @@ export function ProductDetail({product}: {product: Product}) {
     ['Referencia', product.sku],
     ['Línea', categoryName(product.category)],
     ...attributes,
-    ['Disponibilidad', out ? 'Agotado' : low ? `Últimas ${product.stock} unidades` : 'Disponible'],
+    ['Disponibilidad', pending ? 'Por cotizar' : out ? 'Agotado' : low ? `Últimas ${product.stock} unidades` : 'Disponible'],
   ];
   /* "Lo que tienes que saber": datos clave + características, como en Mercado Libre. */
   const mentioned = (v: string) => product.features.some(f => f.toLowerCase().includes(v.toLowerCase()));
@@ -144,12 +146,12 @@ export function ProductDetail({product}: {product: Product}) {
             <button className="pp-rating" onClick={() => go('opiniones')}>{average.toFixed(1)} <Stars value={average}/> ({reviews.length})</button>
           )}
 
-          <div className="pp-price">
+          <div className={`pp-price${pending ? ' is-pending' : ''}`}>
             {offer && <s>{money(product.listPrice!)}</s>}
-            <p><b>{money(product.price)}</b>{offer && <em>{Math.round((1 - product.price / product.listPrice!) * 100)}% OFF</em>}</p>
-            <small>IVA incluido</small>
+            <p><b>{priceText(product.price)}</b>{offer && <em>{Math.round((1 - product.price / product.listPrice!) * 100)}% OFF</em>}</p>
+            <small>{pending ? 'Escríbenos y un asesor te cotiza' : 'IVA incluido'}</small>
           </div>
-          <button className="pp-link" aria-expanded={payOpen} onClick={() => setPayOpen(o => !o)}>Ver los medios de pago</button>
+          {!pending && <button className="pp-link" aria-expanded={payOpen} onClick={() => setPayOpen(o => !o)}>Ver los medios de pago</button>}
           {payOpen && (
             <ul className="pp-pay">
               <li>PSE</li><li>Nequi</li><li>Tarjeta débito</li><li>Tarjeta crédito</li>
@@ -171,8 +173,9 @@ export function ProductDetail({product}: {product: Product}) {
           <div className="pp-box">
             <p className="pp-ship"><b><Icon name="truck"/>Envío a todo Colombia</b><span>Despachamos desde nuestra bodega y ves la guía en Mi cuenta.</span></p>
 
-            <p className={`pp-stock${out ? ' out' : ''}`}>
-              <b>{out ? 'Sin stock por ahora' : 'Stock disponible'}</b>
+            <p className={`pp-stock${pending ? ' pending' : out ? ' out' : ''}`}>
+              <b>{pending ? 'Precio por confirmar' : out ? 'Sin stock por ahora' : 'Stock disponible'}</b>
+              {pending && <span>Un asesor te cotiza este producto.</span>}
               {low && <span>¡Últimas {product.stock} unidades!</span>}
             </p>
 
@@ -272,7 +275,7 @@ export function ProductDetail({product}: {product: Product}) {
 
       <div className={`pp-bar${bar ? ' show' : ''}`} aria-hidden={!bar}>
         <div className="pc-wrap">
-          <b>{money(product.price * qty)}</b>
+          <b>{pending ? priceText(0) : money(product.price * qty)}</b>
           <button className="pm-btn soft" disabled={out} onClick={add} tabIndex={bar ? 0 : -1}>Agregar al carrito</button>
           <button className="pm-btn" disabled={out} onClick={buy} tabIndex={bar ? 0 : -1}>Comprar ahora</button>
         </div>
@@ -375,7 +378,7 @@ function Related({items}: {items: Product[]}) {
             <Link key={p.id} href={`/tienda/producto/${p.id}`} className="pp-related-card">
               <span className="pp-related-img"><ProductImage src={p.image} alt="" sizes="220px"/></span>
               <b>{p.name}</b>
-              <em>{money(p.price)}</em>
+              <em>{priceText(p.price)}</em>
               {p.badge && <small>{p.badge}</small>}
             </Link>
           ))}

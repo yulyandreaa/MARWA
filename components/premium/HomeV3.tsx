@@ -45,7 +45,7 @@ export function HvBrandVideo() {
         <h2 id="hv-video-title" data-split>Conectamos la infraestructura <em>que mueve a Colombia</em></h2>
         <p>Importamos y distribuimos cableado, fibra óptica, canalización y más, para que cada proyecto quede conectado de punta a punta. Calidad garantizada y despacho a todo el país.</p>
         <div className="hv-actions">
-          <a className="hv-btn light" href="/tienda">Explorar la tienda <Icon name="arrow"/></a>
+          <a className="hv-btn light" href="/tienda" target="_blank" rel="noopener">Explorar la tienda <Icon name="arrow"/></a>
           <a className="hv-btn outline-light" href="#nosotros">Conoce MARWA</a>
         </div>
       </div>
@@ -182,7 +182,7 @@ export function HvSolutions() {
       </header>
       <div className="hv-sol-grid">
         {items.map(s => (
-          <a key={s.t} href={s.href} className="hv-sol" data-fx data-glow>
+          <a key={s.t} href={s.href} target="_blank" rel="noopener" className="hv-sol" data-fx data-glow>
             <Image data-speed=".06" src={s.image} alt="" fill sizes="(max-width: 767px) 100vw, (max-width: 1100px) 50vw, 25vw"/>
             <span className="hv-sol-shade" aria-hidden="true"/>
             <span className="hv-sol-copy">
@@ -257,7 +257,7 @@ export function HvCharacter() {
       <div className="hv-wrap hv-char-copy" data-fx>
         <h2 id="hv-char-title" data-split>La energía de MARWA <em>tiene cara</em></h2>
         <p>Conectado a cada una de nuestras líneas, nuestro personaje representa lo que hacemos todos los días: unir redes, personas y proyectos.</p>
-        <a className="hv-btn red" href="/tienda">Conoce nuestro portafolio <Icon name="arrow"/></a>
+        <a className="hv-btn red" href="/tienda" target="_blank" rel="noopener">Conoce nuestro portafolio <Icon name="arrow"/></a>
       </div>
     </section>
   );
@@ -305,7 +305,7 @@ export function HvStoreBridge() {
           <Eyebrow>Tienda en línea</Eyebrow>
           <h2 id="hv-bridge-title" data-split>Compra MARWA <em>en línea</em></h2>
         </div>
-        <a className="hv-btn" href="/tienda">Ver toda la tienda <Icon name="arrow"/></a>
+        <a className="hv-btn" href="/tienda" target="_blank" rel="noopener">Ver toda la tienda <Icon name="arrow"/></a>
       </header>
       <div className="hv-bridge-grid">{list.map(p => <MarwaCard key={p.id} p={p} badge sizes="(max-width: 767px) 46vw, 300px"/>)}</div>
     </section>
@@ -328,7 +328,7 @@ export function HvContact() {
           <p>Cuéntanos qué necesitas y un asesor MARWA te ayuda a elegir las referencias y a armar la lista completa de materiales.</p>
           <div className="hv-actions">
             <a className="hv-btn red" href={wa('Hola MARWA, quiero cotizar un proyecto.')} target="_blank" rel="noopener">Escríbenos por WhatsApp <Icon name="arrow"/></a>
-            <a className="hv-btn ghost" href="/tienda">Ir a la tienda</a>
+            <a className="hv-btn ghost" href="/tienda" target="_blank" rel="noopener">Ir a la tienda</a>
           </div>
         </header>
         <ul className="hc4-grid">

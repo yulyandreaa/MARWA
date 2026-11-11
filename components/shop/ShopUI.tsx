@@ -162,6 +162,17 @@ export function QtyStepper({value, max, onChange}: {value: number; max: number; 
 }
 
 /* ---------- header (mismo lenguaje del sitio premium) ---------- */
+/* Volver al home de MARWA. El home y la tienda van en dominios distintos, por eso abre en una pestaña nueva.
+   Está en el menú (no en la barra azul) para que siga visible al hacer scroll. */
+const HOME_URL = process.env.NEXT_PUBLIC_HOME_URL || '/';
+function HomeLink({full = false}: {full?: boolean}) {
+  return (
+    <a className="mh-home" href={HOME_URL} target="_blank" rel="noopener" aria-label="Volver a MARWA, página principal (abre en una pestaña nueva)" title="Volver a la página principal de MARWA">
+      <Icon name="home"/>{full ? 'Volver a MARWA' : 'MARWA'}
+    </a>
+  );
+}
+
 export function ShopHeader() {
   const cart = useCart();
   const user = useSessionUser();
@@ -201,8 +212,8 @@ export function ShopHeader() {
           <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
         </Link>
 
-        {/* Escritorio ancho: Categorías, Ofertas y Novedades van en la misma fila del buscador */}
-        <div className="mh-inline-cats"><CategoryMega/></div>
+        {/* Escritorio ancho: MARWA, Categorías, Ofertas y Novedades van en la misma fila del buscador */}
+        <div className="mh-inline-cats"><HomeLink/><CategoryMega/></div>
 
         <div className="mh-ship">
           {buyer && (
@@ -218,7 +229,7 @@ export function ShopHeader() {
 
         <form className="mh-search" onSubmit={search} role="search">
           {guest && <Icon name="search" className="mh-search-ico"/>}
-          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar productos, referencias o códigos…" aria-label="Buscar productos"/>
+          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar productos o referencias…" aria-label="Buscar productos"/>
           <button aria-label="Buscar"><Icon name="search"/></button>
         </form>
 
@@ -260,6 +271,7 @@ export function ShopHeader() {
 
       <div className="mh-sub">
         <div className="pm-wrap mh-sub-in">
+          <HomeLink full/>
           <CategoryMega onNavigate={() => setMenu(false)}/>
           <nav aria-label="Principal">
             <i className="mh-sep" aria-hidden="true"/>

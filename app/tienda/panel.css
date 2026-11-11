@@ -728,6 +728,7 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .pc-filters { top: 158px; max-height: calc(100vh - 168px); }
 .pp-gallery { top: 158px; }
 
+
 @media (max-width: 1240px) {
   .mh-bar li:nth-child(3) { display: none; }
   .mh-top { gap: 18px; }
@@ -2047,3 +2048,41 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .au:not(.au-register) .au-intro h1::after { margin-bottom: 0; }
 }
 @media (min-width: 1001px) { .au:not(.au-register) .au-intro::after { background-image: url('/assets/ingreso-personaje-v4.webp'); background-position: 0 100%; } }
+
+/* ===== "Volver a MARWA" dentro del menú, antes de Categorías (sigue visible al hacer scroll) ===== */
+.mh-home { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; transition: color .15s; }
+.mh-home svg { flex: none; width: 20px; height: 20px; color: var(--blue); }
+.mh-home:hover { color: var(--blue); }
+@media (min-width: 1200px) {
+  .mh-inline-cats { display: flex; align-items: center; gap: 22px; }
+}
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .mh-inline-cats { gap: 16px; }
+}
+@media (max-width: 760px) {
+  .mh-home { width: 100%; }
+  .mh-home svg { width: 22px; height: 22px; }
+}
+.shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-home,
+.shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-home svg { color: #fff; }
+/* Más espacio para el buscador desde que MARWA va en el menú: espacios un poco más cortos */
+@media (min-width: 1200px) {
+  .mh-top { gap: 18px; }
+  .mh-inline-cats { gap: 18px; padding-left: 18px; }
+  .mh-inline-nav { gap: 16px; }
+  .mh-search { min-width: 260px; }
+}
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .mh-top { gap: 14px; }
+  .mh-inline-cats { gap: 14px; padding-left: 14px; }
+  .mh-inline-nav { gap: 12px; }
+  .mh-search { min-width: 220px; }
+}
+/* Sin sesión no hay "Enviar a": se quita su columna para que no quede un espacio doble antes del buscador */
+@media (min-width: 1200px) {
+  .mh.guest .mh-top { grid-template-columns: auto auto minmax(0, 1fr) auto auto; grid-template-areas: "logo cats search nav account"; }
+}
+/* "MARWA" del menú: texto del mismo azul de la casita; al pasar el cursor, todo en rojo MARWA */
+.mh-home, .mh-home svg { color: var(--blue); }
+.mh-home:hover, .mh-home:hover svg, .mh-home:focus-visible, .mh-home:focus-visible svg { color: var(--red); }
+.mh-home svg { transition: color .15s; }

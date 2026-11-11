@@ -32,7 +32,7 @@ export function PmAnnouncement({shop = false}: {shop?: boolean}) {
   return (
     <div className="pm-announce">
       <div className="pm-wrap">
-        <p>Compra en línea con despacho a todo Colombia. <a href="/tienda">Ir a la tienda &gt;&gt;</a></p>
+        <p>Compra en línea con despacho a todo Colombia. <a href="/tienda" target="_blank" rel="noopener">Ir a la tienda &gt;&gt;</a></p>
       </div>
     </div>
   );
@@ -184,7 +184,7 @@ export function PmSiteHeader() {
         </nav>
         <div className="lh-actions">
           <a className="lh-quote" href="https://wa.me/573102569469?text=Hola%20MARWA%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">Cotizar</a>
-          <a className="lh-shop" href="/tienda">Ir a la tienda <Icon name="arrow"/></a>
+          <a className="lh-shop" href="/tienda" target="_blank" rel="noopener">Ir a la tienda <Icon name="arrow"/></a>
           <button className="lh-burger" onClick={() => setMenu(!menu)} aria-label={menu ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={menu}><Icon name={menu ? 'close' : 'menu'}/></button>
         </div>
       </div>
@@ -194,7 +194,7 @@ export function PmSiteHeader() {
             <a key={id} href={`/#${id}`} style={{transitionDelay: `${menu ? 80 + i * 60 : 0}ms`}} onClick={() => setMenu(false)}>{label}</a>
           ))}
         </nav>
-        <a className="lh-shop big" href="/tienda" onClick={() => setMenu(false)}>Ir a la tienda <Icon name="arrow"/></a>
+        <a className="lh-shop big" href="/tienda" target="_blank" rel="noopener" onClick={() => setMenu(false)}>Ir a la tienda <Icon name="arrow"/></a>
       </div>
     </header>
   );
@@ -204,7 +204,7 @@ export function PmSiteHeader() {
 /* Footer compacto adaptado del de LUMINA: marca (logo, frase, descriptor) · 4 columnas · legales.
    En celular las columnas se pliegan (una abierta a la vez) para que no quede tan alto. */
 export function PmFooter({shop = false}: {shop?: boolean}) {
-  const extra = {};
+  const extra = shop ? {} : newTab;
   const [openCol, setOpenCol] = useState<string | null>(null);
   const cols: {title: string; links: [string, string, boolean?][]}[] = [
     {title: 'Productos', links: [...categories.map(c => [c.name, `/tienda?categoria=${c.id}`, true] as [string, string, boolean]), ['Todo el catálogo', '/tienda?vista=todos', true]]},
@@ -232,7 +232,7 @@ export function PmFooter({shop = false}: {shop?: boolean}) {
               <ul id={`mf-col-${i}`}>
                 {c.links.map(([label, href, store]) => {
                   const ext = href.startsWith('http');
-                  return <li key={label}><a href={href} {...(ext ? newTab : store ? extra : {})}>{label}</a></li>;
+                  return <li key={label}><a href={href} {...(ext ? newTab : store ? extra : shop && href.startsWith('/#') ? newTab : {})}>{label}</a></li>;
                 })}
               </ul>
             </nav>

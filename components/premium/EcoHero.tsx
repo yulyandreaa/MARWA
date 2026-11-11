@@ -75,14 +75,14 @@ export function EcoHero() {
             onBlur: () => setOn(null),
           };
           return z.href
-            ? <a key={z.id} href={z.href} aria-label={`${name}: ver productos en la tienda`} {...common}>{inner}</a>
+            ? <a key={z.id} href={z.href} target="_blank" rel="noopener" aria-label={`${name}: ver productos en la tienda`} {...common}>{inner}</a>
             : <div key={z.id} tabIndex={0} aria-label={`${name}: ${z.text}`} {...common}>{inner}</div>;
         })}
       </div>
 
       {/* En celular: las líneas como botones debajo de la imagen */}
       <nav className="eh-list pm-wrap" aria-label="Líneas MARWA">
-        {zones.filter(z => z.href).map(z => <a key={z.id} href={z.href}>{z.title.filter(Boolean).join(' ')}</a>)}
+        {zones.filter(z => z.href).map(z => <a key={z.id} href={z.href} target="_blank" rel="noopener">{z.title.filter(Boolean).join(' ')}</a>)}
       </nav>
     </section>
   );

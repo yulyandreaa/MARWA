@@ -4,7 +4,7 @@ import Image from 'next/image';
 import {useEffect, useRef, useState} from 'react';
 
 const videos=[
-  {src:'/assets/marwa-hero-motion.mp4',label:'Identidad MARWA'},
+  {src:'/assets/marwa-hero-motion-v2.mp4',label:'Identidad MARWA'},
   {src:'/assets/marwa-hero-motion-2.mp4',label:'Conectividad'},
   {src:'/assets/marwa-hero-motion-3.mp4',label:'Infraestructura'},
   {src:'/assets/marwa-hero-motion-4.mp4',label:'Innovación MARWA'},

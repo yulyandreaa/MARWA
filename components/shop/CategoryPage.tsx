@@ -179,7 +179,6 @@ function Listing({cat, list, search, sub}: {cat: Scope; list: Product[]; search:
       if (vals.length > 1) out.push({key: f.key, label: f.label, options: vals.map(v => ({value: v, label: v}))});
     }
     const extra = [];
-    if (base.some(p => isOnOffer(p))) extra.push({value: 'oferta', label: 'En oferta'});
     if (base.some(p => p.stock <= 0) && base.some(p => p.stock > 0)) extra.push({value: 'stock', label: 'Solo disponibles'});
     if (extra.length) out.push({key: 'estado', label: 'Disponibilidad', options: extra});
     return out;

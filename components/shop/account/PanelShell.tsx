@@ -64,7 +64,7 @@ export function PanelShell({title, tabs, active, onSignOut, extra, helpHref, chi
 
       <footer className="pa-foot">
         <div className="pa-wrap">
-          <Link href="/tienda" aria-label="MARWA, ir a la tienda"><Image src="/assets/marwa-logo-oficial.png" alt="" width={900} height={445}/></Link>
+          <Link href="/tienda" aria-label="MARWA, ir a la tienda"><Image src="/assets/marwa-logo-oficial.png" alt="" width={1200} height={602}/></Link>
           <nav aria-label="Información">
             <a href="/tienda/terminos-y-condiciones">Términos y condiciones</a>
             <a href="/tienda/tratamiento-de-datos">Política de privacidad</a>

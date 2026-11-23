@@ -3,12 +3,14 @@
 import Image from 'next/image';
 import {useEffect, useRef, useState} from 'react';
 import {Icon} from '@/components/premium/Icons';
+import {waLink} from '@/components/premium/SiteChrome';
 import {ProductTile} from '@/components/premium/Sections';
 import {MarwaCard} from '@/components/shop/ShopUI';
-import {addToCart, isOnOffer, useProducts} from '@/lib/shop';
+import {addToCart, useProducts} from '@/lib/shop';
 import {useSettings} from '@/lib/settings';
 import {money, priceText} from '@/lib/format';
 import {categories} from '@/data/shopSeed';
+import {BEST_SELLER_IDS} from '@/data/bestSellers';
 
 /**
  * Portada de la tienda con la estructura del home de LUMINA (11 secciones, mismo orden y medidas):
@@ -19,16 +21,19 @@ import {categories} from '@/data/shopSeed';
 export function StoreLanding() {
   return (
     <>
+      {/* 20-nov-2026: orden nuevo con jerarquía de tamaños (estilo Homecenter):
+          muy grande → pequeño → mediano → delgado → carril → 4 pequeñas → grande → 2 medianas → grande → 3 pequeñas → grande */}
       <HeroSlides/>
       <LineTabs/>
-      <FeaturedBand/>
-      <Marquee/>
       <PromoGrid/>
-      <BrandQuote/>
+      {/* 20-nov: franja móvil retirada a pedido de la usuaria */}
       <BestSellers/>
-      <Offers/>
-      <WideBand/>
+      <ProjectTiles/>
+      <BrandQuote/>
+      <DuoBanners/>
+      <FeaturedBand/>
       <ShopCards/>
+      <ServiceTiles/>
       <Advisor/>
       <Faq/>
     </>
@@ -133,9 +138,11 @@ function LineTabs() {
 /* Solo se muestran los banners cuyo producto existe en el inventario (11-nov-2026: Cat. 5E interior y rack
    no están en el Excel, quedan guardados por si vuelven). */
 const featured = [
-  {id: 'cable-cat5e', image: '/assets/destacado-cable-cat5e-v1.jpg', title: ['Cable UTP flexible', 'Cat. ', '5E'], alt: 'Carrete de cable UTP Cat. 5E sobre ondas azules y rojas'},
+  {id: 'cable-utp-flexible-cat-6-multifilamento', image: '/assets/destacado-utp-flex-cat6-v4.jpg', title: ['Cable UTP flexible', 'Cat. ', '6'], alt: 'Carrete de cable UTP flexible Cat. 6 multifilamento MARWA de 305 m sobre ondas azules y rojas'},
+  /* 20-nov: el Cat. 5E interior (destacado-cable-cat5e-v1.jpg) no está en el inventario; se reemplazó por el UTP flexible Cat. 6 */
+/* 20-nov: la usuaria pidió dejar solo el UTP flexible Cat. 6. DROP y rack quedan guardados:
   {id: 'cable-drop-1-hilo-1-km', image: '/assets/destacado-fibra-drop-v2.jpg', title: ['Cable de fibra óptica', '', 'DROP'], alt: 'Bobina de fibra óptica Drop-Core MARWA sobre ondas azules y rojas'},
-  {id: 'rack-piso', image: '/assets/destacado-rack-piso-v3.jpg', title: ['Rack de piso para', '', 'comunicaciones'], alt: 'Rack de piso negro MARWA sobre ondas azules y rojas'},
+  {id: 'rack-piso', image: '/assets/destacado-rack-piso-v3.jpg', title: ['Rack de piso para', '', 'comunicaciones'], alt: 'Rack de piso negro MARWA sobre ondas azules y rojas'}, */
 ];
 
 function FeaturedBand() {
@@ -178,7 +185,7 @@ function FeaturedBand() {
 
 /* 7 · Lo más vendido: uno por línea, los productos del inventario elegidos con varias vistas (fotos).
    Título con el mismo estilo de "Explora los mejores productos MARWA por categoría". */
-const bestSellers = ['jack-keystone-cat6-azul', 'patch-cord-fibra-sc-apc-3m', 'espiral-cables-3-4-negro', 'tuberia-pvc-sch40-1', 'gabinete-12ru'];
+const bestSellers = BEST_SELLER_IDS; // lista compartida con la página de inicio (data/bestSellers.ts)
 
 function BestSellers() {
   const products = useProducts();
@@ -213,21 +220,24 @@ function Marquee() {
   );
 }
 
-/* 5 · Cuatro banners 2x2 (fotos Magnific con logo MARWA en los productos)
+/* 5 · Cuatro banners 2x2 (fotos Magnific con productos REALES del inventario; 20-nov-2026 Networking y Energía
+   se cambiaron por Canalización y Metalmecánica porque MARWA no tiene productos reales de esas líneas)
    tone: color del texto sobre la foto · btn: estilo del botón */
 const promos = [
-  {title: 'Cableado estructurado', text: 'La base de una red estable, segura y de alto rendimiento.', cta: 'Ver soluciones', image: '/assets/promo-cableado-v3.jpg', href: '/tienda?categoria=cableado', tone: 'dark', btn: 'white'},
-  {title: 'Fibra óptica', text: 'Conexiones de alta velocidad para grandes distancias y mayor capacidad.', cta: 'Explorar fibra', image: '/assets/promo-fibra-v3.jpg', href: '/tienda?categoria=fibra', tone: 'light', btn: 'navy'},
-  {title: 'Networking', text: 'Conectividad inteligente para empresas más productivas.', cta: 'Ver equipos', image: '/assets/promo-networking-v3.jpg', href: '/tienda?vista=todos', tone: 'light', btn: 'blue'},
-  {title: 'Energía', text: 'Respaldo, protección y continuidad para tus operaciones.', cta: 'Conoce la línea', image: '/assets/promo-energia-v3.jpg', href: '/tienda?vista=todos', tone: 'dark', btn: 'white'},
+  {title: 'Cableado estructurado', text: 'Conectividad estable y de alto rendimiento para tus proyectos.', cta: 'Explorar productos', image: '/assets/promo-cableado-v10.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
+  {title: 'Fibra óptica', text: 'Alta velocidad, mayor alcance y transmisión sin interferencias.', cta: 'Explorar productos', image: '/assets/promo-fibra-v9.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
+  {title: 'Canalización y ductería', text: 'Tubería, ductos y accesorios para llevar y proteger cada cable.', cta: 'Explorar productos', image: '/assets/promo-canalizacion-v5.jpg', href: '/tienda?categoria=canalizacion', tone: 'dark', btn: 'white', size: 'lg'},
+  {title: 'Metalmecánica', text: 'Gabinetes y racks para organizar y proteger tus equipos.', cta: 'Explorar productos', image: '/assets/promo-metalmecanica-v7.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
+  {title: 'Línea plástica', text: 'Amarres, espirales, cajas de paso y face plates.', cta: 'Explorar productos', image: '/assets/promo-plastica-v1.jpg', href: '/tienda?categoria=plastica', tone: 'dark', btn: 'white', size: 'sm'},
+  {title: 'HDTV', text: 'Splitters y extensores para llevar tu señal de video.', cta: 'Explorar productos', image: '/assets/promo-hdtv-v1.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
 ];
 
 function PromoGrid() {
   return (
     <section className="pm-wrap pm-section lx-promos" aria-label="Líneas destacadas">
       {promos.map(p => (
-        <a key={p.title} href={p.href} className={`is-${p.tone}`}>
-          <Image src={p.image} alt="" fill quality={92} sizes="(max-width: 767px) 100vw, 50vw"/>
+        <a key={p.title} href={p.href} className={`is-${p.tone} is-${p.size}`}>
+          <Image src={p.image} alt="" fill quality={92} sizes={p.size === 'lg' ? '(max-width: 767px) 100vw, 650px' : '(max-width: 767px) 50vw, 330px'}/>
           <span>
             <b>{p.title}</b>
             <small>{p.text}</small>
@@ -239,29 +249,18 @@ function PromoGrid() {
   );
 }
 
-/* 6 · Banner del personaje MARWA (robot de cables): "Promoción especial · Hasta 40 % DTO."
+/* 6 · Banner del personaje MARWA (robot de cables). Antes decía "Promoción especial · Hasta 40 % DTO.";
+   se cambió el 19-nov-2026 porque MARWA no maneja ofertas ni promociones (pedido del cliente).
    Foto = banner del usuario sin texto (Magnific erase + upscale); el texto va en HTML */
 function BrandQuote() {
   return (
-    <section className="lx-mascot" aria-label="Promoción especial: hasta 40 % de descuento">
+    <section className="lx-mascot" aria-label="Respaldo de más de 12 años conectando proyectos en Colombia">
       <Image className="lx-mascot-img" src="/assets/banner-personaje-seis-lineas-v3.jpg" alt="Personaje MARWA, un robot con cabello de cables, señalando hacia el texto" fill quality={92} sizes="100vw"/>
       <div className="lx-mascot-text is-deal">
-        <span className="lx-mascot-pill">Promoción especial</span>
-        <h2 className="lx-mascot-deal"><small>Hasta</small><span><b>40</b><i><em>%</em><em>DTO.</em></i></span></h2>
-        <p>En productos seleccionados.</p>
+        <span className="lx-mascot-pill">Asesoría experta</span>
+        <h2 className="lx-mascot-deal"><small>Respaldo de</small><span><b>12</b><i><em>+</em><em>AÑOS</em></i></span></h2>
+        <p>Conectando proyectos<br/>en todo Colombia.</p>
       </div>
-    </section>
-  );
-}
-
-/* 7b · Ofertas: solo si hay productos con precio de oferta */
-function Offers() {
-  const offers = useProducts().filter(p => p.visible && isOnOffer(p));
-  if (!offers.length) return null;
-  return (
-    <section className="pm-wrap pm-section">
-      <div className="pm-title"><h2>Ofertas</h2></div>
-      <div className="pm-products">{offers.map(p => <ProductTile key={p.id} p={p}/>)}</div>
     </section>
   );
 }
@@ -293,7 +292,7 @@ function WideBand() {
 function ShopCards() {
   return (
     <section className="lx-port" aria-label="Un portafolio. Infinitas conexiones.">
-      <Image className="lx-port-img" src="/assets/portafolio-marwa-v3.jpg" alt="Rack, cable UTP, switch, bobina de fibra y canaletas MARWA rodeados por las seis líneas: cableado estructurado, fibra óptica, HDTV, networking, línea plástica y energía" fill quality={92} sizes="(max-width: 767px) 100vw, 1312px"/>
+      <Image className="lx-port-img" src="/assets/portafolio-marwa-v10.jpg" alt="Productos MARWA: gabinete 12U, carretes de fibra óptica, cable DROP y cable F/UTP Cat 6A con su marca, tubería PVC SCH40, patch panel, patch cords, amarres, espiral, caja de paso, faceplate y jacks" fill quality={92} sizes="(max-width: 767px) 100vw, 1312px"/>
       <div className="lx-port-text">
         <h2>Un portafolio<i>.</i> <em>Infinitas <span>conexiones<i>.</i></span></em></h2>
         <p>Soluciones en conectividad, infraestructura y energía para proyectos que no se detienen.</p>
@@ -309,9 +308,8 @@ function Advisor() {
   const wa = (text: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   return (
     <section className="lx-advice" id="asesoria" aria-label="Asesoría experta">
-      <Image className="lx-advice-img" src="/assets/asesoria-ciudad-v2.jpg" alt="Ciudad de noche conectada por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 100vw, 1312px"/>
+      <Image className="lx-advice-img" src="/assets/asesoria-bogota-panoramica-v1.jpg" alt="Panorámica de Bogotá de noche con Monserrate y la Torre Colpatria conectadas por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 100vw, 1312px"/>
       <div className="lx-advice-text">
-        <span className="lx-advice-eyebrow">Asesoría experta</span>
         <h2>¿No sabes qué referencia <em>elegir?</em></h2>
         <p>Cuéntanos tu proyecto y un asesor te ayuda a encontrar la solución correcta.</p>
         <div className="lx-advice-actions">
@@ -339,17 +337,10 @@ function Faq() {
   return (
     <section className="pm-wrap pm-section lx-faq" aria-labelledby="faq-title">
       <div className="lx-faq-side">
-        <span className="lx-faq-eyebrow">Centro de ayuda</span>
-        <h2 id="faq-title">Preguntas <em>frecuentes</em></h2>
-        <p>Resolvemos las dudas más comunes sobre pagos, envíos y pedidos en la tienda MARWA.</p>
-        <div className="lx-faq-contact">
-          <span className="lx-faq-contact-icon"><Icon name="chat"/></span>
-          <div>
-            <b>¿No encuentras tu respuesta?</b>
-            <small>Un asesor te responde por WhatsApp.</small>
-          </div>
-          <a href={wa} target="_blank" rel="noopener">Escríbenos <Icon name="arrow"/></a>
-        </div>
+        {/* 20-nov: versión sobria (sin etiqueta roja con línea, sin título bicolor, sin tarjeta con ícono) */}
+        <h2 id="faq-title">Preguntas frecuentes</h2>
+        <p>Pagos, envíos y pedidos en la tienda MARWA.</p>
+        <p className="lx-faq-more">¿No encuentras tu respuesta?<br/><a href={wa} target="_blank" rel="noopener">Escríbenos por WhatsApp <Icon name="arrow"/></a></p>
       </div>
       <div className="lx-faq-list">
         {faqs.map((f, i) => {
@@ -368,6 +359,75 @@ function Faq() {
           );
         })}
       </div>
+    </section>
+  );
+}
+
+/* ── Bloques nuevos del 20-nov-2026 (jerarquía de tamaños). Sin ofertas ni descuentos: MARWA no maneja promos ── */
+
+/* 4 piezas pequeñas: soluciones por tipo de proyecto */
+const projects = [
+  {title: 'Edificios y conjuntos', text: 'Cableado, fibra y canalización por pisos.', image: '/assets/proyecto-edificios-v1.jpg', msg: 'Hola MARWA, tengo un proyecto de edificio o conjunto residencial.'},
+  {title: 'Oficinas', text: 'Puestos de trabajo conectados y ordenados.', image: '/assets/proyecto-oficinas-v1.jpg', msg: 'Hola MARWA, tengo un proyecto de red para oficinas.'},
+  {title: 'Hogar', text: 'Internet estable y televisión en cada cuarto.', image: '/assets/proyecto-hogar-v1.jpg', msg: 'Hola MARWA, quiero mejorar la red de mi casa.'},
+  {title: 'Cuarto de equipos', text: 'Gabinetes, patch panels y organización.', image: '/assets/proyecto-cuarto-equipos-v1.jpg', msg: 'Hola MARWA, necesito armar un cuarto de equipos.'},
+];
+
+function ProjectTiles() {
+  return (
+    <section className="pm-wrap pm-section lx-projects" aria-labelledby="proyectos-title">
+      <h2 id="proyectos-title" className="lx-blk-title">Soluciones por tipo de proyecto</h2>
+      <div className="lx-projects-grid">
+        {projects.map(p => (
+          <a key={p.title} href={waLink(p.msg)} target="_blank" rel="noopener" className="lx-tile">
+            <Image src={p.image} alt="" fill quality={90} sizes="(max-width: 767px) 50vw, 330px"/>
+            <span><b>{p.title}</b><small>{p.text}</small></span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* 2 piezas medianas lado a lado: distribuidores y compras por volumen */
+const duo = [
+  {eyebrow: 'Distribuidores', title: 'Hazte distribuidor MARWA', text: 'Lleva nuestro portafolio a tu ciudad con respaldo de marca y acompañamiento comercial.', cta: 'Quiero ser distribuidor', image: '/assets/duo-distribuidor-v1.jpg', msg: 'Hola MARWA, quiero ser distribuidor.'},
+  {eyebrow: 'Contratistas e instaladores', title: 'Compras por volumen para tu obra', text: 'Cotizamos tu lista completa de materiales y la despachamos a todo Colombia.', cta: 'Cotizar mi lista', image: '/assets/duo-volumen-v1.jpg', msg: 'Hola MARWA, quiero cotizar materiales por volumen para una obra.'},
+];
+
+function DuoBanners() {
+  return (
+    <section className="pm-wrap pm-section lx-duo" aria-label="Distribuidores y compras por volumen">
+      {duo.map(d => (
+        <a key={d.title} href={waLink(d.msg)} target="_blank" rel="noopener">
+          <Image src={d.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+          <span>
+            <b>{d.title}</b>
+            <small>{d.text}</small>
+            <em>{d.cta} <Icon name="arrow"/></em>
+          </span>
+        </a>
+      ))}
+    </section>
+  );
+}
+
+/* 3 piezas pequeñas: servicios */
+const services = [
+  {title: 'Fichas técnicas', text: 'Medidas, normas y especificaciones de cada producto.', image: '/assets/servicio-fichas-v1.jpg', href: '/tienda?vista=todos', ext: false},
+  {title: 'Asesoría por WhatsApp', text: 'Un asesor te ayuda a elegir la referencia correcta.', image: '/assets/servicio-whatsapp-v1.jpg', href: waLink('Hola MARWA, necesito asesoría con un producto.'), ext: true},
+  {title: 'Despacho a todo Colombia', text: 'Enviamos tu pedido a los 32 departamentos.', image: '/assets/servicio-despacho-v1.jpg', href: '/tienda?vista=todos', ext: false},
+];
+
+function ServiceTiles() {
+  return (
+    <section className="pm-wrap pm-section lx-services" aria-label="Servicios MARWA">
+      {services.map(s => (
+        <a key={s.title} href={s.href} {...(s.ext ? {target: '_blank', rel: 'noopener'} : {})} className="lx-tile">
+          <Image src={s.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 430px"/>
+          <span><b>{s.title}</b><small>{s.text}</small></span>
+        </a>
+      ))}
     </section>
   );
 }

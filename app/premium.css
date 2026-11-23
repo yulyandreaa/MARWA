@@ -52,7 +52,8 @@
 /* ---------- encabezado ---------- */
 .pm-header { position: sticky; top: 0; z-index: 60; background: #fff; border-bottom: 1px solid var(--line); }
 .pm-header-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 66px; }
-.pm-logo img { width: auto; height: 52px; display: block; }
+.pm-logo :is(img, svg) { width: auto; height: 52px; display: block; }
+.pm-logo svg { aspect-ratio: 699.4 / 363.8; }
 .pm-icons { display: flex; align-items: center; gap: 22px; }
 .pm-icons > * { display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 0; background: none; color: var(--ink); cursor: pointer; position: relative; }
 .pm-icons svg { width: 22px; height: 22px; }
@@ -1404,4 +1405,4 @@ footer.mf { padding: 0; background: #10233f; color: #c3c9e0; }
 .eh { background: radial-gradient(120% 90% at 50% 45%, #eef1fd 0%, #e8ecfd 55%, #e3e8fb 100%); }
 .eh-zone.on, .eh-zone:focus-visible { z-index: 8; }
 .eh-img { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%), linear-gradient(180deg, transparent 0, #000 3%, #000 97%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%), linear-gradient(180deg, transparent 0, #000 3%, #000 97%, transparent 100%); }
-.pm-logo img { height: 44px; }
+.pm-logo :is(img, svg) { height: 44px; }

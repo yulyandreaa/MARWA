@@ -1,0 +1,63 @@
+/* Tarjetas "Lo más vendido" (MarwaCard) para la página de inicio: COPIA de los estilos de app/tienda/panel.css
+   (líneas de .lx-best y .lx-lines-title). Si cambian allá, cambiarlos aquí también. 19-nov-2026 */
+.pm .lx-lines-title { margin: 0 0 32px; text-align: center; font-size: clamp(26px, 2.6vw, 38px); font-weight: 700; color: #10233f; }
+.lx-lines-title em { font-style: normal; color: #003cff; }
+.lx-lines-title span { color: #003cff; }
+.lx-lines-title::after { content: ""; display: block; width: 64px; height: 4px; margin: 18px auto 0; border-radius: 2px; background: #e52332; }
+/* 7 · Lo más vendido: tarjetas según la referencia del usuario (Poppins, redondeadas, etiqueta con ícono) */
+.lx-best .pm-products { grid-auto-columns: calc((100% - 3 * 20px) / 4); gap: 20px; padding-block: 6px 14px; }
+.lx-best-card { position: relative; flex: 0 0 calc((100% - 60px) / 4); display: flex; flex-direction: column; min-width: 0; padding: 14px 14px 18px; border: 1px solid #e3e8f2; border-radius: 18px; background: linear-gradient(180deg, #fbfcfe 0%, #f1f4fa 100%); box-shadow: 0 8px 22px rgba(16, 35, 63, .06); font-family: Poppins, sans-serif; scroll-snap-align: start; transition: box-shadow .2s, transform .2s; }
+.lx-best-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(16, 35, 63, .1); }
+.lx-best-img { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; background: #fff; }
+.lx-best-img img { object-fit: contain; padding: 6%; transition: transform .4s; }
+.lx-best-card:hover .lx-best-img img { transform: scale(1.04); }
+.lx-best-img small { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px 5px 9px; border-radius: 999px; background: #e52332; color: #fff; font-size: 12px; font-weight: 600; line-height: 1; }
+.lx-best-img small.is-new { background: #10233f; }
+.lx-best-img small svg { width: 13px; height: 13px; fill: currentColor; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.lx-best-img small.is-new svg { fill: currentColor; stroke: none; }
+.pm .lx-best-card h3 { margin: 16px 2px 0; font-family: Poppins, sans-serif; font-size: 17px; font-weight: 600; line-height: 1.25; color: #10233f; letter-spacing: -.01em; }
+.pm .lx-best-card p { display: -webkit-box; margin: 6px 2px 0; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 13.5px; line-height: 1.45; color: #4a5872; }
+.lx-best-price { display: flex; align-items: center; gap: 12px; margin: auto 2px 0; padding-top: 16px; }
+.lx-best-price b { font-size: 20px; font-weight: 700; color: #10233f; }
+.lx-best-price s { font-size: 13px; color: #8a94a8; }
+.lx-best-price i { width: 1px; height: 18px; background: #c8d0de; }
+.lx-best-price span { font-size: 13px; color: #4a5872; }
+.lx-best-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.lx-best-add, .lx-best-buy { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; padding: 0 10px; border-radius: 10px; font-family: Poppins, sans-serif; font-size: 13.5px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.lx-best-add { border: 1.5px solid #2447e8; background: #fff; color: #2447e8; }
+.lx-best-add:hover:not(:disabled) { background: #eef2ff; }
+.lx-best-add:disabled { border-color: #c8d0de; color: #8a94a8; cursor: not-allowed; }
+.lx-best-buy { border: 1.5px solid #2447e8; background: #2447e8; color: #fff; }
+.lx-best-buy:hover { background: #1733c4; border-color: #1733c4; }
+.lx-best-add svg, .lx-best-buy svg { width: 17px; height: 17px; }
+@media (max-width: 1199px) { .lx-best .pm-products { grid-auto-columns: calc((100% - 2 * 20px) / 3); } }
+@media (max-width: 767px) { .lx-best .pm-products { grid-auto-columns: 78%; gap: 14px; } }
+
+/* Flechas de carrusel FUERA de los productos (pedido del usuario): el carril deja un canal a cada lado
+   y la flecha vive en ese canal. Aplica a "Compra por categoría" y "Lo más vendido". */
+@media (min-width: 768px) {
+  .lx-lines-car, .lx-best .pm-carousel { padding-inline: 62px; }
+  .lx-lines-arrow.prev, .lx-best .pm-arrow.prev { left: 0; }
+  .lx-lines-arrow.next, .lx-best .pm-arrow.next { right: 0; }
+  .lx-best .pm-arrow { top: 50%; z-index: 2; width: 46px; height: 46px; border: 1px solid #d9e0e9; background: #fff; color: #10233f; box-shadow: 0 6px 18px rgba(16, 35, 63, .12); transform: translateY(-50%); transition: background .2s; }
+  .lx-best .pm-arrow:hover { background: #003cff; border-color: #003cff; color: #fff; }
+}
+/* Botones de la tarjeta: mismo margen interno que el resto del contenido, sin pegarse al borde */
+.lx-best-card { padding: 16px 16px 20px; }
+.lx-best-actions { margin-inline: 2px; }
+.lx-best-add, .lx-best-buy { min-width: 0; }
+
+/* 9 · "Un portafolio. Infinitas conexiones." (reemplaza "Más para tu proyecto"): banner del usuario dentro de los márgenes */
+/* MarwaCard (2026-11-10): la etiqueta y el favorito van sobre la foto, fuera del enlace */
+.lx-best-card .lx-best-tag { position: absolute; z-index: 2; top: 24px; left: 24px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px 5px 9px; border-radius: 999px; background: #e52332; color: #fff; font-size: 12px; font-weight: 600; line-height: 1; pointer-events: none; }
+.lx-best-card .lx-best-tag.is-new { background: #10233f; }
+.lx-best-card .lx-best-tag svg { width: 13px; height: 13px; fill: currentColor; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.lx-best-card .lx-best-tag.is-new svg { stroke: none; }
+.lx-best-card .lx-best-fav { position: absolute; z-index: 2; top: 24px; right: 24px; }
+.lx-best-img img { object-fit: contain; }
+/* Etiquetas suaves de la tarjeta MARWA (2026-11-10): fondo translúcido, texto e ícono del color */
+.lx-best-card .lx-best-tag, .cx-grid .lx-best-card .lx-best-tag { gap: 5px; padding: 5px 10px 5px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 1; backdrop-filter: blur(4px); }
+.lx-best-card .lx-best-tag.is-red { background: rgba(229, 35, 50, .1); color: #e52332; }
+.lx-best-card .lx-best-tag.is-blue { background: rgba(36, 71, 232, .1); color: #2447e8; }
+.lx-best-card .lx-best-tag svg, .cx-grid .lx-best-card .lx-best-tag svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.lx-best-price.is-pending b { font-size: 16px; font-weight: 600; color: var(--blue); }

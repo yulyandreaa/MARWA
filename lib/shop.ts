@@ -169,7 +169,8 @@ export function saveProduct(p: Product) {
 export const bulkUpdateProducts = (ids: string[], change: (p: Product) => Product) =>
   write(K.products, readProducts().map(p => (ids.includes(p.id) ? change(p) : p)));
 
-export const isOnOffer = (p: Product) => !!p.listPrice && p.listPrice > p.price;
+/* MARWA no maneja ofertas ni promociones (pedido del cliente, 19-nov-2026): ningún producto se muestra en oferta. */
+export const isOnOffer = (_p: Product) => false;
 
 /* Historial de inventario: cada venta, cancelación, devolución y ajuste manual. */
 export type StockMove = {id: string; at: string; productId: string; delta: number; reason: string; ref?: string};

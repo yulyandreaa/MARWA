@@ -66,7 +66,6 @@
 .hv-sol-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
 .hv-sol { position: relative; display: block; min-height: 460px; overflow: hidden; border-radius: 22px; background: #10233f; isolation: isolate; }
 .hv-sol img { object-fit: cover; transition: transform .7s cubic-bezier(.2, .7, .2, 1); z-index: -2; }
-.hv-sol:hover img { transform: scale(1.06); }
 .hv-sol-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11, 26, 51, 0) 25%, rgba(11, 26, 51, .55) 55%, rgba(11, 26, 51, .94) 100%); }
 .hv-sol-copy { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 8px; padding: 24px; color: #fff; }
 .hv-sol-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -110,7 +109,6 @@
 .hv-ph { position: relative; overflow: hidden; border-radius: 18px; background: #e3e8f2; }
 .hv-ph.big { grid-row: span 2; }
 .hv-ph img { object-fit: cover; transition: transform .6s; }
-.hv-ph:hover img { transform: scale(1.05); }
 
 /* 9 · puente a la tienda + contacto */
 .hv-bridge-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
@@ -169,8 +167,8 @@ html { scroll-behavior: smooth; }
 .pm-header.lh.is-scrolled { background: rgba(255, 255, 255, .82); -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px); border-bottom-color: rgba(16, 35, 63, .08); box-shadow: 0 10px 30px rgba(16, 35, 63, .06); }
 .lh-row { display: flex; align-items: center; gap: 40px; height: 84px; transition: height .35s; }
 .lh.is-scrolled .lh-row { height: 66px; }
-.lh .pm-logo img { height: 46px; transition: height .35s; }
-.lh.is-scrolled .pm-logo img { height: 38px; }
+.lh .pm-logo :is(img, svg) { height: 54px; transition: height .35s; }
+.lh.is-scrolled .pm-logo :is(img, svg) { height: 44px; }
 .lh-menu { display: flex; align-items: center; gap: 6px; margin: 0 auto; padding: 5px; border-radius: 999px; background: rgba(255, 255, 255, .55); border: 1px solid rgba(16, 35, 63, .06); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .lh.is-scrolled .lh-menu { background: rgba(240, 243, 250, .7); }
 .lh-menu a { position: relative; padding: 9px 18px; border-radius: 999px; font-family: Poppins, sans-serif; font-size: 14.5px; font-weight: 500; color: #4a5872; transition: color .25s, background .25s; }
@@ -190,7 +188,7 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 1000px) {
   .lh-row { gap: 16px; height: 68px; }
-  .lh .pm-logo img { height: 38px; }
+  .lh .pm-logo :is(img, svg) { height: 42px; }
   .lh-menu, .lh-quote, .lh-actions > .lh-shop { display: none; }
   .lh-actions { margin-left: auto; }
   .lh-burger { display: grid; }
@@ -308,9 +306,9 @@ html.lenis, html.lenis body { height: auto; }
 .hv .eh-stage.has-on .eh-img { filter: none; }
 
 /* ===== Portada v4: imagen 4K panorámica (6336x2688) con títulos en código ===== */
-.hv .eh-stage { aspect-ratio: 6336 / 2688; width: min(1600px, calc(100% - 32px), calc((100vh - 170px) * 2.357)); }
-.hv .eh { background: radial-gradient(120% 90% at 50% 45%, #e9ecf9 0%, #dfe4f6 60%, #dce2f5 100%); }
-.hv .eh-img { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%), linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%), linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent 100%); }
+.hv .eh-stage { aspect-ratio: 4310 / 1893; width: min(1720px, calc(100% - 32px), calc((100svh - 130px) * 2.277)); }
+.hv .eh { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(70% 70% at 50% 50%, #e6ebfd 0%, #dde5fc 70%, #dce4fc 100%); }
+.hv .eh-img { -webkit-mask-image: radial-gradient(closest-side, #000 82%, transparent 100%); mask-image: radial-gradient(closest-side, #000 82%, transparent 100%); }
 /* títulos */
 .eh-label { position: absolute; z-index: 2; display: flex; flex-direction: column; gap: 2px; padding-left: 14px; font-family: Poppins, sans-serif; pointer-events: none; transform: translateY(-50%); transition: transform .3s cubic-bezier(.2, .7, .2, 1); }
 .eh-label::before { content: ''; position: absolute; left: 0; top: .2em; bottom: .2em; width: 4px; border-radius: 4px; background: var(--bar); }
@@ -328,9 +326,28 @@ html.lenis, html.lenis body { height: auto; }
   .eh-label { display: none; }
   .hv .eh-stage { width: 100%; }
 }
-/* logo oficial sobre el disco central de la portada */
-.eh-logo { position: absolute; z-index: 2; left: 50.03%; top: 47.6%; width: 10.2%; transform: translate(-50%, -50%); pointer-events: none; }
-.eh-logo img { display: block; width: 100%; height: auto; }
+/* logo oficial sobre la plataforma hexagonal 3D del ecosistema (19-nov-2026, imagen v12: referencia del usuario, agrandada en Magnific, sin el logo dibujado) */
+/* sin transform ni perspectiva: el logo en vector se pinta nítido (también en pantallas normales) */
+.eh-hex { position: absolute; z-index: 2; left: 44.09%; top: 40.86%; width: 11.91%; }
+.hv .eh { perspective: none; }
+.eh-hex svg { display: block; width: 100%; height: auto; overflow: visible; }
+.eh-hex-bar, .eh-hex-word { transform-box: fill-box; transform-origin: center; }
+.eh-hex-shine { transform: translateX(0); }
+
+/* animación de entrada (una sola vez): barras una a una → palabra → brillo; el brillo se repite al pasar el cursor */
+@media (prefers-reduced-motion: no-preference) {
+  .eh-hex-bar { animation: ehBarIn .6s cubic-bezier(.2, .9, .25, 1.15) both; }
+  .eh-hex-bar.b1 { animation-delay: .5s; }
+  .eh-hex-bar.b2 { animation-delay: .68s; }
+  .eh-hex-bar.b3 { animation-delay: .86s; }
+  .eh-hex-word { animation: ehWordIn .7s 1.05s cubic-bezier(.2, .8, .2, 1) both; }
+  .eh-hex-shine { animation: ehShine 1.2s 1.8s ease-in-out both; }
+  .eh-hex:hover .eh-hex-shine { animation: ehShine2 1s ease-in-out both; }
+}
+@keyframes ehBarIn { from { opacity: 0; transform: translate(-45%, 45%); } to { opacity: 1; transform: none; } }
+@keyframes ehWordIn { from { opacity: 0; transform: translateY(12%); } to { opacity: 1; transform: none; } }
+@keyframes ehShine { from { transform: translateX(0); } to { transform: translateX(1100px); } }
+@keyframes ehShine2 { from { transform: translateX(0); } to { transform: translateX(1100px); } }
 
 /* fundido suave cuando el video vuelve a empezar */
 .hv-video video { transition: opacity .6s ease; }
@@ -347,7 +364,8 @@ html.lenis, html.lenis body { height: auto; }
 /* sección 2 en versión clara: foto premium en vez de video */
 .hv-video.is-light { background: #eef1f6; }
 .hv-video-img { position: absolute; inset: -6% 0; }
-.hv-video-img img { object-fit: cover; object-position: 70% 50%; }
+.hv-video-img img, .hv-video-img video { object-fit: cover; object-position: 70% 50%; }
+.hv-video-img video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .hv-video.is-light .hv-video-shade { background: linear-gradient(90deg, rgba(240, 243, 248, .85) 0%, rgba(240, 243, 248, .45) 34%, rgba(240, 243, 248, 0) 55%); }
 .pm.hv .hv-video.is-light h2 { color: #10233f; text-shadow: none; }
 .hv-video.is-light .hv-video-copy p { color: #3b4660; text-shadow: none; }
@@ -355,17 +373,17 @@ html.lenis, html.lenis body { height: auto; }
 .hv-btn.ghost:hover { background: rgba(16, 35, 63, .05); border-color: #10233f; }
 @media (max-width: 767px) {
   .hv-video.is-light { align-items: flex-end; }
-  .hv-video-img img { object-position: 78% 30%; }
+  .hv-video-img img, .hv-video-img video { object-position: 78% 30%; }
   .hv-video.is-light .hv-video-shade { background: linear-gradient(180deg, rgba(240, 243, 248, 0) 25%, rgba(240, 243, 248, .92) 62%); }
 }
 .pm.hv .hv-video.is-light h2 em { color: #2447e8; }
 
 /* sección 2: foto de Bogotá conectada (4K), sombra solo detrás del texto */
-.hv-video.is-photo .hv-video-img img { object-position: 60% 50%; }
+.hv-video.is-photo .hv-video-img img, .hv-video.is-photo .hv-video-img video { object-position: 60% 50%; }
 .hv-video.is-photo .hv-video-shade { background: linear-gradient(90deg, rgba(6, 16, 38, .55) 0%, rgba(6, 16, 38, .22) 36%, rgba(6, 16, 38, 0) 58%); }
 .pm.hv .hv-video.is-photo h2 em { color: #fff; }
 @media (max-width: 767px) {
-  .hv-video.is-photo .hv-video-img img { object-position: 62% 50%; }
+  .hv-video.is-photo .hv-video-img img, .hv-video.is-photo .hv-video-img video { object-position: 62% 50%; }
   .hv-video.is-photo .hv-video-shade { background: linear-gradient(180deg, rgba(6, 16, 38, .1) 0%, rgba(6, 16, 38, .72) 100%); }
 }
 .hv-video.is-photo .hv-video-copy p { max-width: 520px; }
@@ -845,3 +863,459 @@ html.lenis, html.lenis body { height: auto; }
 .hs-svg { top: 5%; right: 50%; transform: translateX(50%); height: 90%; max-width: 92%; }
 .pm.hv .hv-stats2 h2 em { color: #e52332; }
 .hs-lead strong::after { display: none; }
+
+/* 13-nov-2026: video de Bogotá a pantalla completa (llena la pantalla, se recorta lo justo por los bordes) */
+.hv-video.is-photo { min-height: 100vh; min-height: 100svh; }
+.hv-video.is-photo .hv-video-img { inset: 0; }
+.hv-video.is-photo .hv-video-img video { object-fit: cover; object-position: 50% 50%; }
+@media (max-width: 767px) {
+  .hv-video.is-photo .hv-video-img video { object-position: 62% 50%; }
+}
+
+/* 13-nov-2026: mapa con la identidad MARWA (hexágonos del logo, cables azul y rojo con luz que viaja, rayas inclinadas) */
+.hs-map { background: radial-gradient(90% 70% at 50% 46%, #143276 0%, #0b1a3a 55%, #070f24 100%); }
+.hs-beam { position: absolute; z-index: 0; width: 46px; height: 140%; top: -20%; border-radius: 30px; transform: skewX(-41deg); filter: blur(28px); opacity: .32; pointer-events: none; }
+.hs-beam.blue { left: 8%; background: #2447e8; }
+.hs-beam.red { right: 4%; background: #e52332; opacity: .22; }
+.hs-svg { z-index: 1; overflow: visible; }
+.hs-dots { stroke: rgba(150, 180, 255, .22); }
+.hs-dots.lit { stroke: #8fa9ff; }
+.hs-halo { opacity: 0; transition: opacity 1.2s ease .3s; }
+.hv-stats2.seen .hs-halo { opacity: 1; }
+.hs-link { stroke-width: 1.8; opacity: .9; filter: drop-shadow(0 0 3px rgba(79, 123, 255, .7)); }
+.hs-pulse { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: .035 .965; stroke-dashoffset: .035; opacity: 0; filter: drop-shadow(0 0 4px #6f97ff) drop-shadow(0 0 8px #2447e8); }
+.hs-pulse.red { filter: drop-shadow(0 0 4px #ff6b77) drop-shadow(0 0 8px #e52332); }
+.hv-stats2.seen .hs-pulse { animation: hs-run 3.2s cubic-bezier(.45, 0, .55, 1) infinite; }
+@keyframes hs-run { 0% { stroke-dashoffset: .035; opacity: 0; } 8% { opacity: 1; } 85% { opacity: 1; } 100% { stroke-dashoffset: -.965; opacity: 0; } }
+.hs-node { fill: #fff; stroke: #3d6bff; stroke-width: 2.6; stroke-linejoin: round; filter: drop-shadow(0 0 5px rgba(61, 107, 255, .9)); }
+.hs-node.red { stroke: #ff3b4a; filter: drop-shadow(0 0 5px rgba(255, 59, 74, .9)); }
+.hs-hub { fill: #2447e8; stroke: #fff; stroke-width: 3; stroke-linejoin: round; filter: drop-shadow(0 0 12px rgba(36, 71, 232, .95)); }
+.hs-hub-core { fill: #e52332; }
+.hs-hub-ring { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; }
+.hs-city { font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: .01em; fill: rgba(255, 255, 255, .7); paint-order: stroke; stroke: #0b1a3a; stroke-width: 4px; stroke-linejoin: round; opacity: 0; transition: opacity .6s ease 1.6s; }
+.hs-city.hub { font-size: 16px; font-weight: 700; fill: #fff; }
+.hv-stats2.seen .hs-city { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hv-stats2.seen .hs-pulse { animation: none; }
+  .hs-city, .hs-halo { transition: none; }
+}
+
+/* 13-nov-2026 · Opción 1: mapa de puntos claros sobre el blanco de la sección, que se encienden desde Bogotá */
+.hs-map { background: none; box-shadow: none; border-radius: 0; overflow: visible; }
+.hs-map::before, .hs-map::after { display: none; }
+.hs-dots { stroke: #dbe2f0; stroke-width: 4.4; }
+.hs-dots.lit { stroke: #2447e8; opacity: .55; }
+.hs-reveal { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 2.4s cubic-bezier(.25, .7, .2, 1) .2s; }
+.hv-stats2.seen .hs-reveal { transform: scale(1); }
+.hs-link { stroke-width: 1.4; opacity: .75; filter: none; }
+.hs-pulse { stroke: #2447e8; stroke-width: 3; filter: drop-shadow(0 0 3px rgba(36, 71, 232, .55)); }
+.hs-pulse.red { stroke: #e52332; filter: drop-shadow(0 0 3px rgba(229, 35, 50, .55)); }
+.hs-node { fill: #fff; stroke: #2447e8; stroke-width: 2.4; filter: drop-shadow(0 2px 4px rgba(16, 35, 63, .18)); }
+.hs-node.red { stroke: #e52332; filter: drop-shadow(0 2px 4px rgba(16, 35, 63, .18)); }
+.hs-hub { fill: #2447e8; stroke: #fff; stroke-width: 3; filter: drop-shadow(0 4px 10px rgba(36, 71, 232, .45)); }
+.hs-hub-core { fill: #e52332; }
+.hs-hub-ring { stroke: #2447e8; stroke-width: 1.6; }
+.hs-city { fill: #4a5872; stroke: #fff; stroke-width: 5px; }
+.hs-city.hub { fill: #10233f; }
+@media (prefers-reduced-motion: reduce) { .hs-reveal { transition: none; transform: scale(1); } }
+
+.eh-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Quiénes somos: palabras clave resaltadas en el párrafo (propuesta A, 19-nov-2026) */
+.hv-about-copy .kw-para strong { font-weight: 600; color: #2447e8; }
+/* título en rojo MARWA para equilibrar con el azul de las palabras clave */
+.hv-about-copy h2 em, .hv-about-copy h2[data-split] em .w > span { color: #e52332; }
+
+/* ===== Quiénes somos + Compra con respaldo, reestructurado (19-nov-2026) =====
+   Orden: encabezado editorial (título | texto) → franja de fotos → 3 pilares → franja de respaldo con fondo propio. */
+.hv-ab2 { padding: 130px 0 90px; background: #fff; }
+.hv-ab2-head { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 32px 72px; align-items: end; }
+.hv-ab2-eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #e52332; }
+.hv-ab2-eyebrow::before { content: ''; width: 26px; height: 2px; border-radius: 2px; background: #e52332; }
+.pm .hv-ab2-head h2 { margin: 0; font-family: Poppins, sans-serif; font-size: clamp(32px, 3.6vw, 54px); font-weight: 700; line-height: 1.04; letter-spacing: -.03em; color: #10233f; }
+.hv-ab2-head h2 em, .hv-ab2-head h2[data-split] em .w > span { font-style: normal; color: #e52332; }
+.pm .hv-ab2-copy p { margin: 0 0 22px; font-size: 15.5px; line-height: 1.7; color: #4a5872; }
+.hv-ab2-copy .kw-para strong { font-weight: 600; color: #2447e8; }
+.hv-ab2-photos { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr 1fr; grid-auto-rows: clamp(220px, 24vw, 340px); gap: 12px; margin-top: 56px; }
+.hv-ab2-photos .hv-ph { position: relative; overflow: hidden; border-radius: 18px; }
+.hv-ab2-photos .hv-ph img { object-fit: cover; }
+.hv-ab2-photos .hv-ph, .hv-ab2-photos .hv-ph.big { grid-row: auto; grid-column: auto; height: auto; min-height: 0; aspect-ratio: auto; }
+.hv-ab2-pillars { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin: 56px 0 0; padding: 0; }
+.hv-ab2-pillars li { padding-top: 20px; border-top: 1px solid #10233f; }
+.hv-ab2-n { display: block; margin-bottom: 14px; font-size: 12px; font-weight: 600; color: #9aa6bd; }
+.hv-ab2-pillars b { display: block; font-size: 18px; font-weight: 700; color: #10233f; }
+.pm .hv-ab2-pillars p { margin: 6px 0 0; font-size: 14.5px; line-height: 1.6; color: #5b6880; }
+
+.hv-pol2 { padding: 90px 0 100px; background: #f3f5fb; }
+.hv-pol2-in { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 40px 80px; align-items: start; }
+.pm .hv-pol-title { margin: 0; font-family: Poppins, sans-serif; font-size: clamp(28px, 2.8vw, 42px); font-weight: 700; line-height: 1.06; letter-spacing: -.025em; color: #10233f; }
+.hv-pol-title em { display: block; font-style: normal; color: #2447e8; }
+.hv-pol2-certs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 28px; }
+.hv-cert { display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; background: #fff; box-shadow: 0 6px 18px rgba(16, 35, 63, .07); font-size: 15px; font-weight: 700; letter-spacing: .02em; color: #10233f; }
+.hv-cert svg { width: 17px; height: 17px; color: #e52332; }
+.hv-cert.is-logo { padding: 0 14px; }
+.hv-cert.is-logo img { width: auto; height: 34px; }
+.hv-pol2-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-size: 14px; font-weight: 600; color: #2447e8; text-decoration: none; }
+.hv-pol2-link svg { width: 14px; height: 14px; }
+.hv-pol-rows { list-style: none; margin: 0; padding: 0; }
+/* solo la línea que separa las filas (sin línea arriba ni abajo) */
+.hv-pol-rows li + li { border-top: 1px solid #d9dfec; }
+.hv-pol-rows a { display: grid; grid-template-columns: 36px 130px minmax(0, 1fr) 40px; grid-template-areas: 'n k big go' 'n k text go'; column-gap: 20px; row-gap: 6px; align-items: baseline; padding: 26px 4px 26px 0; color: inherit; text-decoration: none; }
+.hv-pol-n { grid-area: n; font-size: 12px; font-weight: 600; color: #9aa6bd; }
+.hv-pol-k { grid-area: k; font-size: 14px; font-weight: 600; color: #10233f; }
+.hv-pol-big { grid-area: big; font-size: clamp(24px, 2.2vw, 32px); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; color: #10233f; transition: color .2s; }
+.hv-pol-text { grid-area: text; max-width: 52ch; font-size: 14px; line-height: 1.55; color: #5b6880; }
+.hv-pol-go { grid-area: go; align-self: center; justify-self: end; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid #cfd6e6; border-radius: 50%; color: #10233f; background: #fff; transition: background .2s, color .2s, border-color .2s, transform .2s; }
+.hv-pol-go svg { width: 14px; height: 14px; }
+.hv-pol-rows a:hover .hv-pol-big { color: #2447e8; }
+.hv-pol-rows a:hover .hv-pol-go { background: #2447e8; border-color: #2447e8; color: #fff; transform: translateX(3px); }
+@media (max-width: 1000px) {
+  .hv-ab2-head, .hv-pol2-in { grid-template-columns: 1fr; }
+  .hv-ab2-photos { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; }
+  .hv-ab2-photos .hv-ph.big { grid-column: 1 / -1; }
+  .hv-ab2-pillars { grid-template-columns: 1fr; gap: 24px; }
+  .hv-ab2 { padding: 80px 0 64px; } .hv-pol2 { padding: 64px 0 72px; }
+  .hv-pol-rows a { grid-template-columns: 28px minmax(0, 1fr) 36px; grid-template-areas: 'n k go' 'n big go' 'n text go'; }
+}
+
+/* Quiénes somos v3 (19-nov-2026): imagen | contenido. La v2 (franja de 5 fotos) no gustó. */
+.hv-ab3 { padding: 130px 0 120px; background: #fff; }
+.hv-ab3-in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 88px; align-items: center; }
+.hv-ab3-media { position: relative; padding: 0 0 56px 0; }
+.hv-ab3-main { position: relative; width: 86%; aspect-ratio: 4 / 4.6; overflow: hidden; border-radius: 26px; background: #e3e8f2; }
+.hv-ab3-main img, .hv-ab3-inset img { object-fit: cover; }
+.hv-ab3-inset { position: absolute; right: 0; bottom: 0; width: 46%; aspect-ratio: 1; overflow: hidden; border: 8px solid #fff; border-radius: 24px; background: #e3e8f2; box-shadow: 0 24px 50px rgba(16, 35, 63, .16); }
+.hv-ab3-badge { position: absolute; left: 24px; top: 24px; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 18px; background: #10233f; color: #fff; box-shadow: 0 16px 36px rgba(16, 35, 63, .25); }
+.hv-ab3-badge b { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.hv-ab3-badge span { font-size: 12.5px; line-height: 1.3; color: #c9d3ee; }
+.pm .hv-ab3-copy h2 { margin: 0; font-family: Poppins, sans-serif; font-size: clamp(30px, 3.2vw, 48px); font-weight: 700; line-height: 1.06; letter-spacing: -.03em; color: #10233f; }
+.hv-ab3-copy h2 em, .hv-ab3-copy h2[data-split] em .w > span { font-style: normal; color: #e52332; }
+.pm .hv-ab3-copy .kw-para { margin: 22px 0 0; font-size: 15.5px; line-height: 1.7; color: #4a5872; }
+.hv-ab3-copy .kw-para strong { font-weight: 600; color: #2447e8; }
+.hv-ab3-list { list-style: none; margin: 28px 0 34px; padding: 0; display: grid; gap: 0; border-top: 1px solid #e4e8f4; }
+.hv-ab3-list li { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid #e4e8f4; font-size: 14.5px; line-height: 1.5; color: #5b6880; }
+.hv-ab3-list b { display: block; font-size: 15.5px; font-weight: 700; color: #10233f; }
+.hv-ab3-ic { flex: 0 0 auto; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #eef1fb; color: #2447e8; }
+.hv-ab3-ic svg { width: 16px; height: 16px; }
+@media (max-width: 900px) {
+  .hv-ab3 { padding: 80px 0 72px; }
+  .hv-ab3-in { grid-template-columns: 1fr; gap: 48px; }
+}
+
+/* Galería de Quiénes somos (19-nov-2026) */
+.hv-gal { display: flex; flex-direction: column; gap: 12px; }
+.hv-gal-main { position: relative; aspect-ratio: 4 / 3.6; overflow: hidden; border-radius: 26px; background: #e3e8f2; }
+.hv-gal-main img { object-fit: cover; opacity: 0; transition: opacity .5s ease; }
+.hv-gal-main img.on { opacity: 1; }
+.hv-gal-count { position: absolute; right: 18px; bottom: 16px; z-index: 2; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; background: rgba(16, 35, 63, .55); backdrop-filter: blur(6px); }
+.hv-gal-thumbs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.hv-gal-thumbs button { position: relative; aspect-ratio: 1.25; overflow: hidden; padding: 0; border: 2px solid transparent; border-radius: 14px; background: #e3e8f2; cursor: pointer; opacity: .65; transition: opacity .2s, border-color .2s, transform .2s; }
+.hv-gal-thumbs button img { object-fit: cover; }
+.hv-gal-thumbs button:hover { opacity: 1; transform: translateY(-2px); }
+.hv-gal-thumbs button.on { opacity: 1; border-color: #2447e8; }
+@media (max-width: 600px) { .hv-gal-thumbs { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; } .hv-gal-thumbs button { flex: 0 0 26%; scroll-snap-align: start; } }
+
+/* selector temporal para comparar opciones (solo en el equipo local) */
+.kw-switch { display: flex; width: fit-content; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 18px; padding: 5px; border: 1px dashed #e52332; border-radius: 999px; font-size: 12px; color: #4a5872; background: #fff; }
+.kw-switch span { padding: 0 6px 0 8px; font-weight: 600; }
+.kw-switch button { border: 0; border-radius: 999px; padding: 6px 12px; font: inherit; font-weight: 600; color: #10233f; background: #eef1fb; cursor: pointer; }
+.kw-switch button.on { color: #fff; background: #2447e8; }
+
+/* Piezas tipo volante (19-nov-2026, v2): camión a todo el ancho con el texto sobre la calle,
+   y Servicio técnico como franja dividida (texto sobre azul noche | foto). */
+.hv-svc { display: grid; padding: 110px 0 0; }
+.hv-flyer { position: relative; display: flex; align-items: flex-end; overflow: hidden; border-radius: 26px; color: #fff; text-decoration: none; background: #10233f; }
+.hv-flyer.is-truck { aspect-ratio: 2.01 / 1; }
+.hv-flyer img, .hv-flyer2 img { object-fit: cover; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.hv-flyer-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 18, 40, .78) 0%, rgba(8, 18, 40, .35) 36%, rgba(8, 18, 40, 0) 52%), linear-gradient(0deg, rgba(8, 18, 40, .55) 0%, rgba(8, 18, 40, 0) 45%); }
+.hv-flyer-copy, .hv-flyer2-copy { position: relative; display: flex; flex-direction: column; gap: 12px; }
+.hv-flyer-copy { max-width: 34%; padding: 40px 0 40px 42px; }
+.hv-flyer.is-truck .hv-flyer-copy b { font-size: clamp(26px, 2.6vw, 38px); }
+.hv-flyer-copy b, .hv-flyer2-copy b { font-size: clamp(28px, 3vw, 44px); font-weight: 700; line-height: 1.05; letter-spacing: -.025em; }
+.hv-flyer-copy > span:not(.hv-flyer-cta), .hv-flyer2-copy > span:not(.hv-flyer-cta) { font-size: 15.5px; line-height: 1.55; color: #dfe6f8; }
+.hv-flyer-cta { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 8px; padding: 12px 20px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #10233f; background: #fff; transition: background .2s, color .2s; }
+.hv-flyer-cta svg { width: 14px; height: 14px; }
+.hv-flyer:hover .hv-flyer-cta, .hv-flyer2:hover .hv-flyer-cta { color: #fff; background: #e52332; }
+.hv-svc2 { padding: 110px 0 120px; }
+.hv-flyer2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); overflow: hidden; color: #fff; text-decoration: none; background: #e52332; }
+/* sobre rojo: texto blanco y botón blanco que pasa a azul noche */
+.hv-flyer2 .hv-flyer2-copy > span:not(.hv-flyer-cta) { color: #ffe3e5; }
+.hv-flyer2:hover .hv-flyer-cta { color: #fff; background: #10233f; }
+/* el texto arranca alineado con el borde del contenido de la página */
+.hv-flyer2-copy { justify-content: center; padding: 64px 56px 64px max(16px, calc((100vw - 1312px) / 2)); }
+.hv-flyer2-copy b { font-size: clamp(26px, 2.6vw, 38px); }
+.hv-flyer2-img { position: relative; min-height: 420px; }
+@media (max-width: 900px) {
+  .hv-svc { padding-top: 72px; } .hv-svc2 { padding: 72px 0 80px; }
+  .hv-flyer.is-truck { aspect-ratio: auto; min-height: 420px; }
+  .hv-flyer.is-truck img { object-position: 72% center; }
+  .hv-flyer-copy { padding: 30px 26px; }
+  .hv-flyer2 { grid-template-columns: 1fr; }
+  .hv-flyer2-img { min-height: 260px; order: -1; }
+  .hv-flyer2-copy { padding: 30px 24px; }
+}
+.hv-flyer2-copy b { max-width: 20ch; } .hv-flyer2-copy > span { max-width: 460px; }
+/* que el encuadre muestre la cabeza del asesor (la foto se recorta arriba y abajo) */
+.hv-flyer2-img img { object-position: 50% 0%; }
+.hv-flyer.is-truck img { object-position: 60% 55%; }
+/* camión: sombra solo detrás del texto (esquina inferior izquierda); el resto de la foto queda limpio */
+.hv-flyer.is-truck .hv-flyer-shade { background: radial-gradient(58% 80% at 0% 100%, rgba(8, 18, 40, .74) 0%, rgba(8, 18, 40, .42) 45%, rgba(8, 18, 40, 0) 78%); }
+.hv-flyer.is-truck .hv-flyer-copy b, .hv-flyer.is-truck .hv-flyer-copy > span:not(.hv-flyer-cta) { text-shadow: 0 2px 16px rgba(8, 18, 40, .55), 0 1px 3px rgba(8, 18, 40, .35); }
+
+/* Texto del camión en recuadro de vidrio (opción A, aprobada 19-nov-2026) */
+.truck-a .hv-flyer.is-truck .hv-flyer-shade { display: none; }
+.truck-a .hv-flyer.is-truck .hv-flyer-copy { max-width: 400px; margin: 0 0 28px 28px; padding: 26px 28px; border-radius: 20px; background: rgba(12, 26, 54, .58); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); border: 1px solid rgba(255, 255, 255, .14); }
+.truck-a .hv-flyer.is-truck .hv-flyer-copy b, .truck-a .hv-flyer.is-truck .hv-flyer-copy > span { text-shadow: none; }
+/* opción A aprobada: botón rojo MARWA */
+.truck-a .hv-flyer.is-truck .hv-flyer-cta { color: #fff; background: #e52332; }
+.truck-a .hv-flyer.is-truck:hover .hv-flyer-cta { color: #10233f; background: #fff; }
+
+/* sin zoom en las fotos al pasar el cursor en toda la página de inicio (al usuario le parece efecto "de IA", 19-nov-2026) */
+.pm.hv img, .pm.hv img:hover { transform: none !important; }
+
+/* Conviértete en distribuidor (19-nov-2026): franja roja + panel lateral con formulario */
+.pm .hv-dist-title { margin: 0; max-width: 16ch; font-family: Poppins, sans-serif; font-size: clamp(26px, 2.6vw, 38px); font-weight: 700; line-height: 1.06; letter-spacing: -.025em; color: #fff; }
+.hv-dist-perks { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 6px 0 4px; padding: 0; }
+.hv-dist-perks li { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: #fff; }
+.hv-dist-perks svg { width: 18px; height: 18px; }
+.hv-flyer2 button.hv-flyer-cta { border: 0; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.hv-flyer2 button.hv-flyer-cta:hover { color: #fff; background: #10233f; }
+/* ventana centrada como .pa-dialog de los paneles */
+.hv-drawer-bg { position: fixed; inset: 0; z-index: 210; display: grid; place-items: center; padding: 16px; background: rgba(16, 35, 63, .5); animation: hvLbIn2 .2s ease; }
+.hv-drawer { position: relative; width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 24px; border-radius: 16px; background: #fff; box-shadow: 0 24px 60px rgba(6, 30, 110, .25); animation: hvDlgIn .2s ease; }
+/* Formulario con el mismo estilo de los paneles de cliente y administrador (panel.css: .pa .form) */
+.hv-drawer { --blue: #003cff; --blue-hover: #0030cc; --navy-t: #0b1a4a; --txt: #414c6c; color: var(--navy-t); }
+.pm .hv-drawer h3 { margin: 0 0 10px; font-family: Poppins, sans-serif; font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: 0; color: var(--navy-t); }
+.hv-drawer-x { position: absolute; top: 22px; right: 22px; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; color: var(--navy-t); background: #f1f5fa; cursor: pointer; }
+.hv-drawer-x svg { width: 18px; height: 18px; }
+.hv-dist-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.hv-dist-form .full { grid-column: 1 / -1; }
+.pm .hv-dist-form > p { grid-column: 1 / -1; margin: 0 0 6px; font-size: 14px; line-height: 1.5; color: var(--txt); }
+.hv-dist-form label { display: flex; flex-direction: column; gap: 7px; min-width: 0; font-size: 13px; font-weight: 600; color: var(--navy-t); }
+.hv-dist-form input:not([type=checkbox]), .hv-dist-form textarea { width: 100%; min-width: 0; padding: 0 14px; border: 1.5px solid #d3daea; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 400; color: var(--navy-t); background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; }
+.hv-dist-form input:not([type=checkbox]) { height: 40px; }
+.hv-dist-form textarea { padding: 11px 14px; resize: vertical; }
+.hv-dist-form input:focus, .hv-dist-form textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 60, 255, .14); }
+.hv-dist-check { flex-direction: row !important; align-items: flex-start; gap: 10px !important; font-size: 13px; font-weight: 400 !important; line-height: 1.4; color: var(--navy-t) !important; }
+.hv-dist-check input { flex: 0 0 auto; width: 18px; height: 18px; margin: 0; accent-color: var(--blue); }
+.hv-dist-check a { color: var(--blue); font-weight: 600; text-decoration: underline; }
+.hv-dist-form small { font-size: 12px; color: #5b6585; }
+.pa-like-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.pa-like-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border-radius: 8px; font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background .2s, color .2s; }
+.pa-like-btn.primary { border: 0; color: #fff; background: var(--blue); }
+.pa-like-btn.primary:hover { background: var(--blue-hover); }
+.pa-like-btn.ghost { border: 1.5px solid var(--blue); color: var(--blue); background: #fff; }
+.pa-like-btn.ghost:hover { color: #fff; background: var(--blue); }
+.pm .hv-drawer-ok p { margin: 16px 0 20px; font-size: 14px; line-height: 1.6; color: var(--txt); }
+@keyframes hvDlgIn { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes hvLbIn2 { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 600px) { .hv-dist-form { grid-template-columns: 1fr; } }
+.pm.hv .hv-flyer2 h2.hv-dist-title { color: #fff; }
+
+/* Lo más vendido en la página de inicio (19-nov-2026): título a la izquierda y enlace al catálogo a la derecha */
+.hv-best { padding: 120px 0 0; }
+.hv-best-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 30px; }
+.pm .hv-best-head .lx-lines-title { margin: 0; text-align: left; font-size: clamp(28px, 2.8vw, 42px); letter-spacing: -.025em; }
+.hv-best-head .lx-lines-title::after { display: none; }
+.hv-best-head .lx-lines-title em { color: #2447e8; }
+.hv-best-head > a { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: #2447e8; text-decoration: none; }
+.hv-best-head > a svg { width: 15px; height: 15px; }
+/* la franja de distribuidores pasa directo a Contacto: sin hueco blanco */
+.hv-svc2 { padding-bottom: 0; }
+/* si los productos caben todos (4 o menos), sin flechas ni canal lateral en escritorio */
+@media (min-width: 1200px) { .hv-best.fits .pm-arrow { display: none; } .hv-best.fits .pm-carousel { padding-inline: 0; } }
+
+
+/* Compra con respaldo integrada a Quiénes somos (19-nov-2026): sin franja gris, mismo fondo blanco,
+   separada solo por una línea fina y con menos espacio arriba, como cierre de la sección. */
+.hv-ab3 { padding-bottom: 72px; }
+.hv-pol2 { padding: 0 0 120px; background: #fff; }
+.hv-pol2-in { padding-top: 64px; border-top: 1px solid #e3e8f2; align-items: center; }
+.pm .hv-pol-title { font-size: clamp(26px, 2.4vw, 36px); }
+.hv-pol-go { background: #fff; }
+@media (max-width: 1000px) { .hv-ab3 { padding-bottom: 48px; } .hv-pol2 { padding-bottom: 80px; } .hv-pol2-in { padding-top: 40px; } }
+
+/* Compra con respaldo: mejor jerarquía (19-nov-2026). Todo en una columna alineada:
+   tema arriba (pequeño, azul) → dato grande → explicación; flecha centrada a la derecha. */
+.hv-pol-rows a { grid-template-columns: minmax(0, 1fr) 40px; grid-template-areas: 'k go' 'big go' 'text go'; row-gap: 0; column-gap: 24px; align-items: center; padding: 28px 4px 28px 0; }
+.hv-pol-k { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; font-weight: 600; letter-spacing: .01em; color: #2447e8; }
+.hv-pol-k i { font-style: normal; font-size: 12px; font-weight: 600; color: #9aa6bd; }
+.hv-pol-k i::after { content: ''; display: inline-block; width: 14px; height: 1px; margin-left: 10px; vertical-align: middle; background: #c9d1e2; }
+.hv-pol-big { font-size: clamp(28px, 2.6vw, 38px); line-height: 1.05; }
+.hv-pol-text { margin-top: 8px; font-size: 14.5px; }
+.hv-pol-go { grid-row: 1 / -1; }
+@media (max-width: 1000px) { .hv-pol-rows a { grid-template-columns: minmax(0, 1fr) 36px; grid-template-areas: 'k go' 'big go' 'text go'; } }
+
+/* 19-nov-2026 · menos efectos "de plantilla": aparición de bloques más corta y discreta; sin brillo que sigue al mouse */
+/* sin aparición al bajar: todo visible desde el inicio (pedido del usuario) */
+[data-fx], [data-fx].in { opacity: 1 !important; transform: none !important; transition: none !important; }
+[data-glow]::after, [data-glow]::before { display: none !important; }
+.pm.hv .hv-ab3-copy h2 em { color: #e52332; }
+
+/* Todos los botones con la misma forma: esquinas de 12 px (19-nov-2026, pedido del usuario) */
+.pm.hv .hv-btn, .pm.hv .lh-shop, .pm.hv .hv-flyer-cta, .pm.hv .lx-best-add, .pm.hv .lx-best-buy, .pm.hv .pa-like-btn { border-radius: 12px !important; }
+
+/* ===== Tipografía a escala web y más aire (19-nov-2026) =====
+   Títulos: principales (sobre foto) 36–52 px · de sección 28–38 px · subtítulo 26–30 px.
+   Textos de lectura: 16–17 px con interlineado 1.65 (antes 12,5–15,5 px).
+   Aire: 150 px entre secciones y 44 px entre el título y su contenido. Solo tamaños y espacios. */
+.pm.hv #hv-video-title, .pm.hv #hv-stats-title, .pm.hv #hv-char-title { font-size: clamp(34px, 3.3vw, 52px) !important; line-height: 1.08 !important; }
+.pm.hv #hv-best-title, .pm.hv #hv-about-title, .pm.hv #hv-sol-title, .pm.hv #hv-dist-title, .pm.hv #hv-contact-title { font-size: clamp(28px, 2.5vw, 38px) !important; line-height: 1.12 !important; }
+/* Compra con respaldo: el título manda sobre los datos (12 meses / 6 días hábiles) */
+.pm.hv #hv-pol-title { font-size: clamp(30px, 2.7vw, 42px) !important; line-height: 1.08 !important; }
+.pm.hv .hv-pol-big { font-size: clamp(22px, 1.9vw, 28px) !important; }
+.pm.hv .hv-ab3-copy .kw-para, .pm.hv .hv-video-copy p, .pm.hv .hv-char p, .pm.hv .hc4-head p, .pm.hv .hv-head p, .pm.hv .hv-stats2 p { font-size: 17px !important; line-height: 1.65 !important; }
+.pm.hv .hv-ab3-list li { font-size: 15.5px; }
+.pm.hv .hv-ab3-list b { font-size: 16.5px; }
+.pm.hv .hv-pol-text, .pm.hv .hv-flyer-copy > span:not(.hv-flyer-cta), .pm.hv .hv-flyer2-copy > span:not(.hv-flyer-cta) { font-size: 16px !important; line-height: 1.6 !important; }
+.pm.hv .hv-sol-text { font-size: 15px; }
+.pm.hv .hv-flyer-copy b, .pm.hv .truck-a .hv-flyer.is-truck .hv-flyer-copy b { font-size: clamp(24px, 2.2vw, 32px) !important; }
+.pm.hv .lx-best-card h3 { font-size: 17px; }
+.pm.hv .lx-best-card p { font-size: 14.5px; }
+/* aire entre secciones y entre título y contenido */
+.pm.hv .hv-section, .pm.hv .hv-best, .pm.hv .hv-svc, .pm.hv .hv-svc2, .pm.hv .hv-ab3, .pm.hv .hv-contact.hc4 { padding-top: 130px; }
+.pm.hv .hv-pol2 { padding-bottom: 130px; }
+.pm.hv .hv-pol2-in { padding-top: 80px; }
+.pm.hv .hv-ab3 { padding-bottom: 90px; }
+.pm.hv .hv-contact.hc4 { padding-bottom: 130px; }
+.pm.hv .hv-head { margin-bottom: 48px; }
+.pm.hv .hv-best-head { margin-bottom: 44px; }
+.pm.hv .hv-ab3-copy .kw-para { margin-top: 26px; }
+.pm.hv .hv-ab3-list { margin: 34px 0 40px; }
+.pm.hv .hv-ab3-in { gap: 104px; }
+@media (max-width: 1000px) {
+  .pm.hv .hv-section, .pm.hv .hv-best, .pm.hv .hv-svc, .pm.hv .hv-svc2, .pm.hv .hv-ab3, .pm.hv .hv-contact.hc4 { padding-top: 96px; }
+  .pm.hv .hv-pol2, .pm.hv .hv-contact.hc4 { padding-bottom: 96px; }
+  .pm.hv .hv-ab3-in { gap: 48px; }
+  .pm.hv .hv-head { margin-bottom: 32px; }
+}
+/* Compra con respaldo: "Garantía" junto a "12 meses" en la misma línea, sin 01/02 (19-nov-2026) */
+.hv-pol-rows a { grid-template-areas: 'line go' 'text go' !important; }
+.hv-pol-line { grid-area: line; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+.hv-pol-line .hv-pol-k { margin: 0; font-size: 15px; }
+.hv-pol-line .hv-pol-k i { display: none; }
+/* "Garantía" / "Devoluciones" con el mismo tamaño y peso que "12 meses" / "6 días hábiles" (se mantiene el azul) */
+.pm.hv .hv-pol-line .hv-pol-k { font-size: clamp(22px, 1.9vw, 28px) !important; font-weight: 700 !important; line-height: 1.1; letter-spacing: -.015em; }
+.hv-pol-line { gap: 4px 10px; }
+.pm.hv #hv-pol-title em { color: #e52332 !important; }
+
+/* Lo más vendido · tarjeta liviana (19-nov-2026, referencia del usuario): fondo gris claro de la sección,
+   tarjetas blancas sin borde ni sombra, línea en rojo, nombre en mayúsculas, "Ver producto" gris; botón centrado debajo. */
+.hv-best2 { background: #f2f3f6; }
+.pm.hv .hv-best2 .hv-best { padding-top: 110px; padding-bottom: 110px; }
+.hv-pcard { display: flex; flex-direction: column; min-width: 0; padding: 26px 26px 24px; border-radius: 20px; background: #fff; color: inherit; text-decoration: none; scroll-snap-align: start; }
+.hv-pcard-line { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #e52332; }
+.hv-pcard-img { position: relative; display: block; aspect-ratio: 1 / 1; margin: 14px 0 18px; }
+.hv-pcard-img img { object-fit: contain; }
+.hv-pcard-name { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.5em; font-size: 15px; font-weight: 700; line-height: 1.25; text-transform: uppercase; color: #10233f; }
+.hv-pcard-go { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 24px; font-size: 14px; font-weight: 600; color: #6b7487; transition: color .2s, gap .2s; }
+.hv-pcard-go svg { width: 14px; height: 14px; }
+.hv-pcard:hover .hv-pcard-go { color: #2447e8; gap: 12px; }
+.hv-best-more { display: flex; justify-content: center; margin-top: 44px; }
+.pm.hv .hv-btn.ghost-blue { background: transparent; border: 1.5px solid #2447e8; color: #2447e8; padding: 0 30px; }
+.pm.hv .hv-btn.ghost-blue:hover { background: #2447e8; color: #fff; }
+@media (max-width: 1000px) { .pm.hv .hv-best2 .hv-best { padding-top: 72px; padding-bottom: 72px; } }
+/* Lo más vendido: sin mayúsculas forzadas, como el resto de la página (19-nov-2026) */
+.hv-pcard-line { text-transform: none; letter-spacing: 0; font-size: 13.5px; }
+.hv-pcard-name { text-transform: none; font-size: 16.5px; font-weight: 600; line-height: 1.3; }
+.hv-pcard-line { font-size: 15.5px !important; }
+/* Cifras + mapa (19-nov-2026): menos alto y mejor repartido; el mapa ocupa más ancho y menos pantalla */
+.pm.hv .hv-stats2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 64px; align-items: center; }
+.pm.hv .hv-stats2 .hs-map { min-height: 0; height: clamp(380px, 32vw, 500px); }
+.pm.hv .hv-stats2 .hs-svg { top: 2%; height: 96%; max-width: 100%; }
+.pm.hv .hv-stats2 .hs-lead { max-width: 560px; }
+@media (max-width: 1000px) { .pm.hv .hv-stats2 { grid-template-columns: 1fr; gap: 32px; } .pm.hv .hv-stats2 .hs-map { height: 420px; } }
+
+/* Mapa con la línea gráfica (19-nov-2026): panel lavanda como la portada; más espacio arriba y abajo de la sección */
+.pm.hv .hv-stats2 { padding-bottom: 130px; }
+.hs-map2, .hs-map3d { position: relative; height: clamp(420px, 36vw, 560px); border-radius: 20px; overflow: hidden; background: radial-gradient(80% 80% at 50% 45%, #eef1fd 0%, #e1e7fb 70%, #dce3fa 100%); }
+.hs-map2 svg { display: block; width: 100%; height: 100%; }
+.hs-map3d img { object-fit: cover; }
+.hm-city { font-family: Poppins, sans-serif; font-size: 13px; font-weight: 600; fill: #10233f; paint-order: stroke; stroke: #e6ebfc; stroke-width: 4px; stroke-linejoin: round; }
+.hm-city.hub { font-size: 16px; font-weight: 700; }
+.hv-stats2 .kw-switch { margin-bottom: 22px; }
+/* mapa v3: sin recuadro, sobre el fondo blanco */
+.hs-map2 { background: none !important; border-radius: 0; height: clamp(460px, 40vw, 620px); overflow: visible; }
+.hm-city { stroke: #fff; }
+/* video v2: un poco más de sombra solo detrás del texto (izquierda); el resto del video queda limpio */
+.pm.hv .hv-video.is-photo .hv-video-shade { background: radial-gradient(60% 75% at 18% 50%, rgba(6, 16, 38, .62) 0%, rgba(6, 16, 38, .38) 45%, rgba(6, 16, 38, 0) 75%); }
+@media (max-width: 767px) { .pm.hv .hv-video.is-photo .hv-video-shade { background: linear-gradient(180deg, rgba(6, 16, 38, .15) 0%, rgba(6, 16, 38, .72) 100%); } }
+
+/* ===== Revisión de línea gráfica (19-nov-2026) ===== */
+/* 1 · énfasis de los títulos: ROJO sobre fondo blanco, AZUL sobre fondo lavanda (productos y contacto) */
+.pm.hv #hv-about-title em, .pm.hv #hv-pol-title em, .pm.hv #hv-stats-title em, .pm.hv #hv-sol-title em { color: #e52332 !important; }
+.pm.hv #hv-best-title em, .pm.hv #hv-contact-title em { color: #2447e8 !important; }
+/* 2 · esquinas: 20 en tarjetas y fotos, 12 en botones y miniaturas; redondo solo en menú y sellos */
+.pm.hv .hv-sol, .pm.hv .hv-gal-main, .pm.hv .hv-flyer, .pm.hv .hv-pcard, .pm.hv .hv-drawer { border-radius: 20px !important; }
+.pm.hv .hv-gal-thumbs button, .pm.hv .truck-a .hv-flyer.is-truck .hv-flyer-copy, .pm.hv .hv-dist-form input, .pm.hv .hv-dist-form textarea { border-radius: 12px !important; }
+/* 3 · sin etiquetas en mayúsculas pequeñas; el título del personaje en minúsculas como los demás */
+.pm.hv #hv-char-title { text-transform: none !important; }
+.pm.hv .hc4-label { font-size: 13px; font-weight: 600; letter-spacing: 0; text-transform: none; color: #8a96a8; }
+.pm .mf-desc { letter-spacing: 0; text-transform: none; font-size: 13px; }
+.pm .mf-desc::before { display: none; }
+.pm .mf-col h2, .pm .mf-col h2 button { letter-spacing: 0 !important; text-transform: none !important; font-size: 14px !important; font-weight: 600 !important; color: #fff !important; }
+/* 4 · tres estilos de botón: azul sólido, rojo (WhatsApp/cotizar) y borde azul como secundario */
+.pm.hv .hv-btn.ghost { background: transparent; border: 1.5px solid #2447e8; color: #2447e8; }
+.pm.hv .hv-btn.ghost:hover { background: #2447e8; border-color: #2447e8; color: #fff; }
+/* 5 · fondos de la misma familia: lavanda claro en productos y un solo azul noche en video, personaje y pie */
+.pm.hv .hv-best2 { background: #f1f4fd; }
+.pm.hv .hv-video, .pm.hv .hv-char, .pm footer.mf { background-color: #10233f; }
+/* 6 · dos grises de texto: #4A5872 para leer y #8A96A8 para datos pequeños */
+.pm.hv .hs-lead, .pm.hv .kw-para, .pm.hv .hv-pol-text, .pm.hv .hc4-head p, .pm.hv .hv-head p, .pm.hv .hv-ab3-list li, .pm.hv .hv-pcard-go, .pm.hv .hc-val small { color: #4a5872; }
+.pm.hv .hv-ab3-list b, .pm.hv .hc-val { color: #10233f; }
+/* 7 · líneas de cada solución como texto simple (sin cápsulas), igual que en las tarjetas de productos */
+.pm.hv .hv-sol-tags { gap: 2px 0; }
+.pm.hv .hv-sol-tags small { padding: 0; border-radius: 0; background: none; backdrop-filter: none; font-size: 12.5px; font-weight: 600; color: #fff; opacity: .9; }
+.pm.hv .hv-sol-tags small + small::before { content: '·'; margin: 0 7px; }
+.pm.hv .eh-card { border-radius: 12px; }
+/* Personaje dentro de las márgenes del contenido (19-nov-2026), como la pieza del camión */
+.pm.hv .hv-char.is-boxed { border-radius: 20px; min-height: 0; height: clamp(440px, 36vw, 560px); }
+.pm.hv .hv-char.is-boxed .hv-char-copy { width: auto; max-width: 560px; margin: 0; padding: 0 0 0 64px; }
+@media (max-width: 767px) { .pm.hv .hv-char.is-boxed { height: 560px; } .pm.hv .hv-char.is-boxed .hv-char-copy { padding: 0 24px 32px; } }
+.pm.hv .hv-char.is-boxed .hv-char-copy { max-width: 660px; } .pm.hv .hv-char.is-boxed img { object-position: 85% 22%; }
+.pm.hv .hv-char.is-boxed img { object-position: 100% 22%; }
+/* "Cotizar un pedido" y "Quiero ser distribuidor" con el mismo tamaño y efecto que los demás botones:
+   el color se oscurece un poco y el botón sube 1 px (19-nov-2026) */
+.pm.hv .hv-flyer .hv-flyer-cta, .pm.hv .hv-flyer2 .hv-flyer-cta { min-height: 48px; padding: 0 26px; font-size: 15px; font-weight: 600; transition: background .2s, color .2s, transform .2s; }
+.pm.hv .truck-a .hv-flyer.is-truck .hv-flyer-cta { color: #fff; background: #e52332; }
+.pm.hv .truck-a .hv-flyer.is-truck .hv-flyer-cta:hover, .pm.hv .truck-a .hv-flyer.is-truck:hover .hv-flyer-cta { color: #fff; background: #c81a28; transform: translateY(-1px); }
+.pm.hv .hv-flyer2 button.hv-flyer-cta { color: #10233f; background: #fff; }
+.pm.hv .hv-flyer2 button.hv-flyer-cta:hover, .pm.hv .hv-flyer2:hover button.hv-flyer-cta { color: #10233f; background: #eef2ff; transform: translateY(-1px); }
+
+/* ── 20-nov-2026: "Conectamos cada rincón de Colombia" con texto centrado y carrusel de ciudades (sin mapa) ── */
+.hv-stats2 { display: flex !important; flex-direction: column; align-items: center; gap: clamp(36px, 4vw, 56px); }
+.hv-stats2 .hs-side { align-items: center; text-align: center; padding: 0; }
+.pm.hv .hv-stats2 .hs-lead { max-width: 640px; margin-inline: auto; }
+.hs-cities { width: 100vw; margin-inline: calc(50% - 50vw); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.hs-cities-track { display: flex; gap: 16px; width: max-content; margin: 0; padding: 0; list-style: none; animation: hsCities 60s linear infinite; }
+.hs-cities:hover .hs-cities-track { animation-play-state: paused; }
+.hs-cities-track li { position: relative; flex: 0 0 auto; width: clamp(280px, 36vw, 520px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: #10233f; }
+.hs-cities-track img { object-fit: cover; }
+@keyframes hsCities { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 8px)); } }
+@media (prefers-reduced-motion: reduce) { .hs-cities-track { animation: none; } .hs-cities { overflow-x: auto; } }
+@media (max-width: 767px) { .hs-cities-track li { width: 80vw; } .hs-cities-track { gap: 12px; animation-duration: 45s; } }
+.hv-stats2 .hs-side, .hv-stats2 .hv-stats-head { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pm.hv .hv-stats2 .hv-stats-head p.hs-lead { max-width: 640px; margin: 22px auto 0; }
+/* párrafo en 3 líneas parejas, sin palabras sueltas (viudas) */
+.pm.hv .hv-stats2 .hv-stats-head p.hs-lead { max-width: 760px; text-wrap: balance; }
+@media (max-width: 900px) { .hs-br { display: none; } }
+#hv-video-title + p { text-wrap: pretty; }
+
+/* ── 23-nov-2026: presentación de MARWOT en franja delgada (mismo criterio de tamaños que la tienda) ── */
+.pm.hv .hv-char.is-boxed.is-strip { height: clamp(290px, 23vw, 340px); }
+.pm.hv .hv-char.is-strip img { object-position: 100% 24%; }
+.pm.hv .hv-char.is-strip .hv-char-copy { max-width: 620px; padding: 0 0 0 clamp(32px, 4.5vw, 64px); }
+.hv-char-tag { display: block; margin-bottom: 10px; color: rgba(255, 255, 255, .75); font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.pm.hv .hv-char.is-strip #hv-char-title { font-size: clamp(30px, 2.8vw, 44px) !important; line-height: 1.05 !important; max-width: none; }
+.pm.hv .hv-char.is-strip h2 em { display: inline; color: #fff; }
+.pm.hv .hv-char.is-strip p { max-width: 440px; margin: 12px 0 20px; font-size: 15.5px !important; line-height: 1.55 !important; }
+.pm.hv .hv-char.is-strip .hv-btn { min-height: 46px; padding: 0 24px; font-size: 14.5px; }
+@media (max-width: 767px) {
+  .pm.hv .hv-char.is-boxed.is-strip { height: 520px; }
+  .pm.hv .hv-char.is-strip img { object-position: 78% 20%; }
+  .pm.hv .hv-char.is-strip .hv-char-copy { padding: 0 24px 28px; }
+}
+
+/* ── 23-nov-2026: piezas y banners del inicio con las mismas esquinas de la tienda (6px); botones siguen en 12px ── */
+.pm.hv .hv-char.is-boxed, .pm.hv .hv-sol, .pm.hv .hv-gal-main, .pm.hv .hv-flyer, .pm.hv .hv-pcard, .pm.hv .hs-map2, .pm.hv .hs-map3d { border-radius: 6px !important; }
+.pm.hv .hv-char.is-strip h2 em.is-break { display: block; }

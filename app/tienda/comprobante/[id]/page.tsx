@@ -25,7 +25,7 @@ export default function ReceiptPage() {
     <div className="cp">
       <div className="cp-sheet">
         <header>
-          <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={162} height={80}/>
+          <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={162} height={81}/>
           <div>
             <h1>Comprobante de compra</h1>
             <p>Pedido {order.id} · {dateTime(order.createdAt)}</p>

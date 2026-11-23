@@ -24,7 +24,7 @@ export function AuthShell({title, lead, children, heading = <>Bienvenido a <span
         <path className="au-line" d="M0 87c60-19 110-25 155-25 175 0 305 78 465 153 100 47 210 75 330 86" stroke="url(#au-r)" strokeWidth="3" vectorEffect="non-scaling-stroke"/>
       </svg>
       <div className="au-intro">
-        <Image className="au-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
+        <Image className="au-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={1200} height={602} priority/>
         <h1>{heading}</h1>
         <p>{intro}</p>
       </div>

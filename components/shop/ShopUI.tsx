@@ -212,7 +212,7 @@ export function ShopHeader() {
     <header className={`pm-header shop-pm-header mh${guest ? ' guest' : ''}${menu ? ' menu-open' : ''}${scrolled ? ' scrolled' : ''}`}>
       <div className="pm-wrap mh-top">
         <Link href="/tienda" className="mh-logo" aria-label="Tienda MARWA, inicio">
-          <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
+          <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={1200} height={602} priority/>
         </Link>
 
         {/* Escritorio ancho: MARWA, Categorías, Ofertas y Novedades van en la misma fila del buscador */}
@@ -237,7 +237,6 @@ export function ShopHeader() {
         </form>
 
         <nav className="mh-inline-nav" aria-label="Accesos">
-          <Link className={view === 'ofertas' ? 'active' : ''} href="/tienda?vista=ofertas"><Icon name="tag"/>Ofertas</Link>
           <Link className={view === 'novedades' ? 'active' : ''} href="/tienda?vista=novedades"><Icon name="star"/>Novedades</Link>
         </nav>
 
@@ -278,7 +277,6 @@ export function ShopHeader() {
           <CategoryMega onNavigate={() => setMenu(false)}/>
           <nav aria-label="Principal">
             <i className="mh-sep" aria-hidden="true"/>
-            <Link className={view === 'ofertas' ? 'active' : ''} href="/tienda?vista=ofertas"><Icon name="tag"/>Ofertas</Link>
             <Link className={view === 'novedades' ? 'active' : ''} href="/tienda?vista=novedades"><Icon name="star"/>Novedades</Link>
             <i aria-hidden="true"/>
             <Link href={buyer ? '/tienda/cuenta?tab=pqr' : hydrated && user ? '/tienda/admin?tab=pqr' : '/#contacto'}><Icon name="help"/>Ayuda / PQR</Link>
@@ -311,7 +309,8 @@ export function ShopWhatsApp({message}: {message: string}) {
 /* Tarjeta de producto MARWA (la de "Lo más vendido"): redondeada, etiqueta con ícono,
    precio con divisor y unidad, botones "Agregar" (carrito) y "Comprar →".
    `badge`: en "Lo más vendido" siempre hay etiqueta (por defecto "Más vendido"); en las categorías solo si el producto la tiene. */
-export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 760px) 70vw, 300px'}: {p: Product; badge?: boolean; fav?: boolean; sizes?: string}) {
+export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 760px) 70vw, 300px', newTab = false}: {p: Product; badge?: boolean; fav?: boolean; sizes?: string; newTab?: boolean}) {
+  const tab = newTab ? {target: '_blank', rel: 'noopener'} : {};
   const [added, setAdded] = useState(false);
   useEffect(() => {
     if (!added) return;
@@ -327,7 +326,7 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
   const unit = p.unit.charAt(0).toUpperCase() + p.unit.slice(1);
   return (
     <article className="lx-best-card">
-      <a href={href} className="lx-best-img" tabIndex={-1} aria-hidden="true">
+      <a href={href} className="lx-best-img" tabIndex={-1} aria-hidden="true" {...tab}>
         <ProductImage src={p.image} alt="" sizes={sizes}/>
       </a>
       {fav && <FavoriteButton product={p} className="lx-best-fav"/>}
@@ -337,7 +336,7 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
           {label}
         </small>
       )}
-      <h3><a href={href}>{p.name}</a></h3>
+      <h3><a href={href} {...tab}>{p.name}</a></h3>
       <p>{p.description}</p>
       {pending
         ? <div className="lx-best-price is-pending"><b>Precio por confirmar</b></div>
@@ -346,7 +345,7 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
         <button type="button" className="lx-best-add" disabled={out} title={out ? outLabel : 'Agregar al carrito'} aria-label={out ? outLabel : added ? 'Agregado al carrito' : `Agregar ${p.name} al carrito`} onClick={() => { if (addToCart(p.id, 1)) setAdded(true); }}>
           <Icon name="cart"/>{out ? outLabel : added ? 'Agregado' : 'Agregar'}
         </button>
-        <a className="lx-best-buy" href={href}>{pending ? 'Cotizar' : 'Comprar'} <Icon name="arrow"/></a>
+        <a className="lx-best-buy" href={href} {...tab}>{pending ? 'Cotizar' : 'Comprar'} <Icon name="arrow"/></a>
       </div>
     </article>
   );

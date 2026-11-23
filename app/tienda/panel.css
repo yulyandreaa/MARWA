@@ -1734,17 +1734,17 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 /* El banner se funde con el blanco de la página (sin bordes visibles) y lleva el rojo MARWA en los puntos */
 .lx-port::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0) 6%, rgba(255,255,255,0) 94%, #fff 100%),
-              linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 12%, rgba(255,255,255,0) 86%, #fff 100%); }
+              linear-gradient(180deg, #fff 0%, rgba(255,255,255,0) 5%, rgba(255,255,255,0) 95%, #fff 100%); }
 .lx-port h2 i { font-style: normal; color: #e52332; }
 .lx-port h2 em i { color: #10233f; }
 .lx-port-btn { position: relative; }
 .lx-port-btn::after { content: ""; position: absolute; left: 22px; right: 22px; bottom: -8px; height: 3px; border-radius: 2px; background: #e52332; opacity: 0; transition: opacity .2s; }
 .lx-port-btn:hover::after { opacity: 1; }
 @media (max-width: 767px) { .lx-port::after { display: none; } .lx-port { background: #f6f8fd; } }
-/* Portafolio: imagen 12 % más grande anclada a la derecha (el aire de arriba y abajo lo permite)
+/* Portafolio: imagen v10 a tamaño normal (los productos ya llenan el alto)
    y fundida a la izquierda para que el texto y la foto se integren */
 @media (min-width: 768px) {
-  .lx-port-img { transform: scale(1.12); transform-origin: 96% 55%; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%); mask-image: linear-gradient(90deg, transparent 0%, #000 30%); }
+  .lx-port-img { -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%); mask-image: linear-gradient(90deg, transparent 0%, #000 30%); }
   .lx-port { background: radial-gradient(120% 90% at 20% 50%, #f7f9fe 0%, #fff 70%); }
   .lx-port-text { width: 36%; }
 }
@@ -2092,3 +2092,208 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .pp-price.is-pending p b { font-size: 26px; line-height: 1.2; color: var(--blue); }
 .pp-stock.pending b { color: var(--blue); }
 .pp-stock.pending span { color: #4a5872; }
+/* Bodegón: la foto se desvanece suave hacia el blanco en los 4 bordes, sin línea visible (19-nov-2026) */
+.lx-port-img { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(180deg, transparent 0, #000 6%, #000 95%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%), linear-gradient(180deg, transparent 0, #000 6%, #000 95%, transparent 100%); mask-composite: intersect; }
+
+/* Tarjetas 2x2 · línea gráfica aprobada 20-nov-2026 (ejemplo del usuario "Soluciones MARWA de conectividad y energía"):
+   formato 4:3 como el resto de piezas (el ancho 2:1 fue rechazado), rayita roja sobre el título, título grande, botón "Explorar productos" */
+.lx-promos { gap: 14px; }
+.lx-promos a { aspect-ratio: 4 / 3; min-height: 300px; border-radius: 0; }
+.lx-promos a img { object-position: 80% center !important; }
+.lx-promos a::after { background: linear-gradient(90deg, rgba(8, 18, 38, .45), rgba(8, 18, 38, 0) 50%); }
+.lx-promos a.is-light::after { background: linear-gradient(90deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 50%); }
+.lx-promos a > span { max-width: min(46%, 20rem); margin-left: clamp(24px, 4.5%, 56px); }
+.lx-promos b { font-size: clamp(22px, 2vw, 30px); font-weight: 800; line-height: 1.08; letter-spacing: -.01em; }
+.lx-promos b::before { content: ""; display: block; width: 40px; height: 4px; margin-bottom: 14px; border-radius: 1px; background: #e52332; }
+.lx-promos small { max-width: 16rem; margin-top: 10px; font-size: clamp(13px, .95vw, 15px); line-height: 1.4; font-weight: 500; opacity: 1; }
+.lx-promos a.is-light small { color: #10233f; }
+.lx-promos em { margin-top: 20px; padding: 10px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+@media (max-width: 767px) {
+  .lx-promos a { aspect-ratio: 4 / 3; }
+  .lx-promos a > span { max-width: 62%; margin-left: 20px; }
+  .lx-promos b::before { width: 40px; height: 4px; margin-bottom: 12px; }
+}
+
+/* Banner del personaje DENTRO de las márgenes, esquinas 20px (regla de la landing) y personaje más cerca (20-nov-2026) */
+.lx-mascot { width: min(1312px, calc(100% - 80px)); margin-inline: auto; aspect-ratio: 3.5 / 1; min-height: 20rem; border-radius: 20px; }
+/* personaje más cerca (como la pieza de referencia del usuario): la foto se agranda anclada a la derecha */
+.lx-mascot-img { transform: scale(1.32); transform-origin: 82% 18%; }
+.lx-mascot-text { width: 48%; padding-left: clamp(28px, 5%, 72px); }
+.pm .lx-mascot p { max-width: 21rem; }
+@media (max-width: 767px) { .lx-mascot { width: calc(100% - 32px); aspect-ratio: auto; } .lx-mascot-img { transform: none; } .lx-mascot-text { width: 100%; padding: 28px 20px 36px; } }
+
+/* Mismos bordes que la landing MARWA (20-nov-2026): piezas y fotos con esquinas 20px, botones con esquinas 12px (sin píldoras),
+   y todas las piezas dentro de las márgenes de 1312px */
+.lx-feat, .lx-wide, .lx-wide.lx-wide2, .lx-advice, .lx-mascot, .lx-promos a { border-radius: 20px; overflow: hidden; }
+.lx-advice { width: min(1312px, calc(100% - 80px)); margin-inline: auto; }
+.lx-advice-text { padding-left: clamp(28px, 5%, 72px); }
+.lx-feat-btn, .lx-advice-btn, .lx-port-btn, .lw-btn, .lx-promos em { border-radius: 12px; }
+@media (max-width: 767px) { .lx-advice { width: calc(100% - 32px); } }
+
+/* Banner del personaje · copy tipográfico grande (como la pieza de referencia) sin promociones */
+.lx-mascot-text.is-deal { --F: clamp(84px, 9vw, 150px); }
+.lx-mascot .is-deal .lx-mascot-pill { color: #10233f; font-size: clamp(12px, 1.05vw, 17px); padding: .45em 1.1em; margin-bottom: calc(var(--F) * .1); }
+.lx-mascot-deal i em:first-child { font-size: .62em; }
+.lx-mascot-deal i em:last-child { font-size: .26em; }
+.pm .lx-mascot .is-deal p { max-width: none; white-space: nowrap; }
+@media (max-width: 767px) { .pm .lx-mascot .is-deal p { white-space: normal; } }
+/* 20-nov: sin capa oscura sobre la foto del personaje; "AÑOS" alineado con la base del 12; frase más abajo */
+.lx-mascot::before { display: none; }
+.lx-mascot-deal i { padding-bottom: .06em; }
+.pm .lx-mascot .is-deal p { margin-top: calc(var(--F) * .26); }
+/* 20-nov: texto del personaje corrido a la derecha para no dejar espacio muerto antes de la mano */
+.lx-mascot .lx-mascot-text.is-deal { padding-left: clamp(40px, 11.5%, 160px); }
+@media (max-width: 767px) { .lx-mascot .lx-mascot-text.is-deal { padding-left: 20px; } }
+/* 20-nov: aire vertical parejo en el bloque 12+ años (etiqueta, "Respaldo de", número y frase) */
+.lx-mascot .is-deal .lx-mascot-pill { margin-bottom: calc(var(--F) * .17); }
+.lx-mascot-deal small { margin-bottom: .1em; }
+.pm .lx-mascot .is-deal p { margin-top: calc(var(--F) * .17); }
+/* 20-nov: foto nueva de Bogotá (Monserrate + Colpatria). Degradado azul suave a la izquierda para leer el texto */
+.lx-advice-img { object-position: center 15%; }
+.lx-advice::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 22, 70, .92) 0%, rgba(10, 22, 70, .8) 28%, rgba(10, 22, 70, .35) 40%, rgba(10, 22, 70, 0) 50%); }
+.lx-advice-text { z-index: 2; }
+@media (max-width: 767px) { .lx-advice::before { display: none; } .lx-advice-img { object-position: 30% center; } }
+.pm .lx-advice h2 { margin-top: 0; }
+
+/* ── 20-nov: bloques nuevos con jerarquía de tamaños (proyectos 4, dúo 2, servicios 3) ──
+   Fotos con texto encima, bordes 20px / botones 12px, dentro de los márgenes de 1312px */
+.lx-blk-title { margin: 0 0 22px; color: #10233f; font-family: Poppins, sans-serif; font-size: clamp(22px, 2vw, 30px); font-weight: 700; letter-spacing: -.01em; }
+.lx-blk-title::before { content: ""; display: block; width: 40px; height: 4px; margin-bottom: 12px; background: #e52332; }
+.lx-tile { position: relative; display: flex; align-items: flex-end; overflow: hidden; border-radius: 20px; background: #10233f; color: #fff; font-family: Poppins, sans-serif; }
+.lx-tile img { object-fit: cover; transition: transform .6s ease; }
+.lx-tile:hover img { transform: scale(1.04); }
+.lx-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8, 18, 38, .85) 0%, rgba(8, 18, 38, .35) 45%, rgba(8, 18, 38, 0) 70%); }
+.lx-tile > span { position: relative; z-index: 1; display: flex; flex-direction: column; padding: clamp(18px, 1.8vw, 26px); }
+.lx-tile b { font-size: clamp(17px, 1.35vw, 21px); font-weight: 700; line-height: 1.15; }
+.lx-tile small { margin-top: 6px; font-size: 13px; line-height: 1.4; opacity: .9; }
+
+.lx-projects-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.lx-projects .lx-tile { aspect-ratio: 3 / 4; }
+
+.lx-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.lx-duo a { position: relative; display: flex; align-items: center; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 20px; background: #10233f; color: #fff; font-family: Poppins, sans-serif; }
+.lx-duo img { object-fit: cover; object-position: right center; transition: transform .6s ease; }
+.lx-duo a:hover img { transform: scale(1.03); }
+.lx-duo a::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 18, 38, .88) 0%, rgba(8, 18, 38, .6) 40%, rgba(8, 18, 38, 0) 70%); }
+.lx-duo a > span { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; max-width: 52%; margin-left: clamp(22px, 5%, 48px); }
+.lx-duo i { color: #ff5a64; font-style: normal; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.lx-duo b { margin-top: 8px; font-size: clamp(20px, 1.8vw, 28px); font-weight: 700; line-height: 1.1; }
+.lx-duo small { margin-top: 10px; font-size: clamp(13px, .95vw, 15px); line-height: 1.4; opacity: .92; }
+.lx-duo em { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 10px 16px; border-radius: 12px; background: #fff; color: #10233f; font-style: normal; font-size: 13px; font-weight: 700; transition: transform .2s ease; }
+.lx-duo a:hover em { transform: translateX(3px); }
+.lx-duo em svg { width: 16px; height: 16px; }
+
+.lx-services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.lx-services .lx-tile { aspect-ratio: 4 / 3; }
+
+@media (max-width: 1023px) {
+  .lx-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lx-duo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  .lx-projects-grid { gap: 12px; }
+  .lx-projects .lx-tile { aspect-ratio: 4 / 5; }
+  .lx-duo a { aspect-ratio: 4 / 3; }
+  .lx-duo a > span { max-width: 78%; }
+  .lx-services { grid-template-columns: minmax(0, 1fr); }
+  .lx-services .lx-tile { aspect-ratio: 16 / 9; }
+}
+
+/* ── 20-nov (b): ritmo de alturas tipo Homecenter. Solo escritorio/tableta; en celular sigue igual ──
+   alto: proyectos (verticales) y DROP · medio: dúo y servicios · franja delgada: personaje y Bogotá */
+@media (min-width: 768px) {
+  /* Personaje 12+ años → franja delgada, texto en horizontal (número a la izquierda, frase a la derecha) */
+  .lx-mascot { aspect-ratio: 5.2 / 1; min-height: 15rem; max-height: 17rem; }
+  .lx-mascot-text.is-deal { --F: clamp(80px, 7.2vw, 112px); display: grid; grid-template-columns: auto auto; column-gap: clamp(24px, 3vw, 44px); align-items: end; justify-content: start; width: auto; }
+  .lx-mascot .is-deal .lx-mascot-pill { grid-column: 1 / -1; justify-self: start; margin-bottom: calc(var(--F) * .14); }
+  .pm .lx-mascot .is-deal p { margin: 0 0 .1em; }
+
+  /* Dúo → más bajito */
+  .lx-duo a { aspect-ratio: 2.4 / 1; }
+  .lx-duo small { max-width: 19rem; }
+
+  /* Servicios → un poco más bajos que antes */
+  .lx-services .lx-tile { aspect-ratio: 16 / 10; }
+
+  /* Bogotá → franja delgada de cierre, título en una línea */
+  .lx-advice { aspect-ratio: 6 / 1; min-height: 13.5rem; max-height: 15rem; }
+  .lx-advice-img { object-position: center 14%; }
+  .lx-advice-text { width: 60%; }
+  .pm .lx-advice h2 { max-width: none; font-size: clamp(22px, 2vw, 30px); white-space: nowrap; }
+  .pm .lx-advice p { max-width: none; margin-top: .45em; }
+  .lx-advice-actions { margin-top: 16px; }
+  .lx-advice-btn { min-height: 40px; }
+  .lx-advice::before { background: linear-gradient(90deg, rgba(10, 22, 70, .92) 0%, rgba(10, 22, 70, .8) 34%, rgba(10, 22, 70, .3) 48%, rgba(10, 22, 70, 0) 58%); }
+}
+@media (min-width: 768px) {
+  .lx-mascot-img { transform: none; object-position: 75% 22%; }
+  .lx-mascot .lx-mascot-text.is-deal { padding-left: clamp(32px, 6.5%, 90px); }
+}
+
+/* ── 20-nov (c): líneas en cuadrícula tipo Homecenter (4 columnas):
+   fila 1 = pequeña · pequeña · ancha   |   fila 2 = ancha · pequeña · pequeña ── */
+.lx-promos { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.lx-promos a { aspect-ratio: auto; min-height: 0; }
+.lx-promos a.is-sm { aspect-ratio: 4 / 5; align-items: flex-start; }
+.lx-promos a.is-lg { grid-column: span 2; }
+.lx-promos a.is-sm img { object-position: center bottom !important; }
+.lx-promos a.is-sm > span { max-width: calc(100% - 48px); margin: clamp(22px, 2.2vw, 30px) 0 0 clamp(20px, 2vw, 28px); }
+.lx-promos a.is-sm b { font-size: clamp(20px, 1.6vw, 25px); }
+.lx-promos a.is-sm small { max-width: 15rem; }
+.lx-promos a.is-sm em { margin-top: 16px; }
+.lx-promos a.is-sm::after { background: linear-gradient(180deg, rgba(8, 18, 38, .55), rgba(8, 18, 38, 0) 50%); }
+.lx-promos a.is-sm.is-light::after { background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 50%); }
+@media (max-width: 1023px) {
+  .lx-promos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lx-promos a.is-lg { aspect-ratio: 16 / 9; }
+}
+@media (max-width: 767px) {
+  .lx-promos { gap: 12px; }
+  .lx-promos a.is-lg { aspect-ratio: 4 / 3; }
+  .lx-promos a.is-sm > span { max-width: calc(100% - 28px); margin: 16px 0 0 14px; }
+  .lx-promos a.is-sm b { font-size: 17px; }
+  .lx-promos a.is-sm small { display: none; }
+  .lx-promos a.is-sm em { margin-top: 10px; padding: 8px 12px; font-size: 12px; }
+}
+
+/* ── 20-nov (c): esquinas menos redondas en todas las piezas (como Homecenter): 20px → 6px ── */
+.lx-feat, .lx-wide, .lx-wide.lx-wide2, .lx-advice, .lx-mascot, .lx-promos a, .lx-tile, .lx-duo a, .lx-port { border-radius: 6px; }
+
+/* 20-nov (d): títulos de sección a la izquierda y sin línea roja (Lo más vendido y Soluciones por proyecto) */
+.pm .lx-best .lx-lines-title { text-align: left; font-size: clamp(22px, 2vw, 30px); margin-bottom: 22px; }
+.lx-best .lx-lines-title::before, .lx-best .lx-lines-title::after { display: none !important; }
+.lx-blk-title::before { display: none; }
+
+/* 20-nov (e): banner destacado con texto más pequeño (pedido de la usuaria) */
+.lx-feat-pill { font-size: clamp(10px, .72vw, 12px); }
+.pm .lx-feat h2 { font-size: clamp(22px, 2vw, 32px); }
+.pm .lx-feat p { max-width: 24rem; font-size: clamp(13px, .88vw, 14.5px); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lx-feat-price { padding: .45em 1em; }
+.lx-feat-price b { font-size: clamp(15px, 1.15vw, 19px); }
+.lx-feat-price small { font-size: clamp(12px, .8vw, 13.5px); }
+.lx-feat-btn { font-size: 13px; padding: .5em 1em .5em 1.3em; }
+
+/* 20-nov (f): preguntas frecuentes sobrias — título igual a las demás secciones, enlace de texto en vez de tarjeta */
+.pm .lx-faq h2 { margin: 0; font-size: clamp(22px, 2vw, 30px); }
+.pm .lx-faq-side > p.lx-faq-more { margin-top: 28px; padding-top: 20px; border-top: 1px solid #e3e8f2; font-size: 14px; color: #10233f; }
+.lx-faq-more a { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; color: #2447e8; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.lx-faq-more a svg { width: 16px; height: 16px; transition: transform .2s; }
+.lx-faq-more a:hover svg { transform: translateX(3px); }
+
+/* 20-nov (g): personaje — la frase vuelve debajo del número (como estaba diagramado), franja un poco más alta */
+@media (min-width: 768px) {
+  .lx-mascot { aspect-ratio: 4.6 / 1; max-height: 19rem; }
+  .lx-mascot-text.is-deal { --F: clamp(72px, 6.4vw, 100px); display: flex; flex-direction: column; align-items: flex-start; }
+  .lx-mascot .is-deal .lx-mascot-pill { margin-bottom: calc(var(--F) * .17); }
+  .pm .lx-mascot .is-deal p { margin: calc(var(--F) * .17) 0 0; font-size: clamp(14px, 1.1vw, 17px); }
+}
+/* 20-nov (h): menos aire rojo entre el texto y el personaje: texto más a la derecha y número un poco más grande */
+@media (min-width: 768px) {
+  .lx-mascot .lx-mascot-text.is-deal { padding-left: clamp(48px, 17%, 230px); --F: clamp(80px, 7.6vw, 118px); }
+  .lx-mascot-deal small { margin-bottom: .2em; }
+}
+.lx-duo b { margin-top: 0; }
+/* 20-nov (i): Bogotá en panorámica 6:1 hecha a la medida de la franja: ya no se corta */
+@media (min-width: 768px) { .lx-advice-img { object-position: center center; } }
+@media (max-width: 767px) { .lx-advice-img { object-position: 76% center; } }

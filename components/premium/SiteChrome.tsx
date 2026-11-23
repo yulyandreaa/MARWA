@@ -7,6 +7,7 @@ import {categories, type CategoryId, type Product} from '@/data/shopSeed';
 import {useProducts} from '@/lib/shop';
 import {Icon} from './Icons';
 import {ShipToBar} from '@/components/shop/ShipTo';
+import {LOGO_BARS, LOGO_VB, LOGO_WORD} from '@/data/logoMarwa';
 
 export const WA = 'https://wa.me/573102569469';
 export const waLink = (text: string) => `${WA}?text=${encodeURIComponent(text)}`;
@@ -41,7 +42,10 @@ export function PmAnnouncement({shop = false}: {shop?: boolean}) {
 export function PmLogo({href = '/'}: {href?: string}) {
   return (
     <Link href={href} className="pm-logo" aria-label="MARWA Redes y Energía — inicio">
-      <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445} priority/>
+      {/* logo oficial en vector (LOGO MARWA.ai): nítido en cualquier pantalla */}
+      <svg viewBox={LOGO_VB} role="img" aria-label="MARWA Redes y Energía">
+        {[...LOGO_BARS, ...LOGO_WORD].map((p, i) => <path key={i} d={p.d} fill={p.fill}/>)}
+      </svg>
     </Link>
   );
 }
@@ -147,10 +151,13 @@ export function CatalogMenu({newTab: open = false, active, onNavigate}: {newTab?
    transparente sobre la portada; al bajar se vuelve blanco translúcido, más bajo y con sombra.
    Enlaces a las secciones de la página con el activo resaltado según la sección visible.
    En celular abre un menú a pantalla completa. */
+/* en el mismo orden de la página (19-nov-2026): se agregaron Productos (Lo más vendido) y Distribuidores */
 const landingLinks: [string, string][] = [
   ['ecosistema', 'Ecosistema'],
+  ['productos', 'Productos'],
   ['nosotros', 'Quiénes somos'],
   ['soluciones', 'Soluciones'],
+  ['distribuidores', 'Distribuidores'],
   ['contacto', 'Contacto'],
 ];
 export function PmSiteHeader() {
@@ -210,13 +217,13 @@ export function PmFooter({shop = false}: {shop?: boolean}) {
     {title: 'Productos', links: [...categories.map(c => [c.name, `/tienda?categoria=${c.id}`, true] as [string, string, boolean]), ['Todo el catálogo', '/tienda?vista=todos', true]]},
     {title: 'MARWA', links: [['Quiénes somos', '/#nosotros'], ['Ecosistema MARWA', '/#ecosistema'], ['Soluciones', '/#soluciones']]},
     {title: 'Soporte', links: [['Mi cuenta', '/tienda/cuenta', true], ['Seguimiento de pedidos', '/tienda/cuenta', true], ['Devoluciones y garantía', '/tienda/devoluciones', true], ['PQRS', '/tienda/pqrs', true]]},
-    {title: 'Contacto', links: [['310 256 9469', 'tel:+573102569469'], ['info@marwa.com.co', 'mailto:info@marwa.com.co'], ['Av. 70 #49-39, Bogotá', '#contacto']]},
+    {title: 'Contacto', links: [['310 256 9469', 'tel:+573102569469'], ['info@marwa.com.co', 'mailto:info@marwa.com.co'], ['Av. 70 #49-39, Bogotá', '/#contacto']]},
   ];
   return (
-    <footer className="mf" id="contacto">
+    <footer className="mf">
       <div className="pm-wrap mf-grid">
         <div className="mf-brand">
-          <Image className="mf-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={900} height={445}/>
+          <svg className="mf-logo" viewBox={LOGO_VB} role="img" aria-label="MARWA Redes y Energía">{[...LOGO_BARS, ...LOGO_WORD].map((p, i) => <path key={i} d={p.d} fill={p.fill}/>)}</svg>
           <p className="mf-quote">“Calidad que no admite fallas.”</p>
           <span className="mf-desc">Redes y energía · Colombia</span>
         </div>
@@ -241,9 +248,12 @@ export function PmFooter({shop = false}: {shop?: boolean}) {
       </div>
       <div className="pm-wrap mf-bottom">
         <p>© {new Date().getFullYear()} MARWA · Redes y Energía · Colombia (COP)</p>
-        <ul>
-          <li><a href="/tienda/terminos-y-condiciones" {...extra}>Términos y condiciones</a></li>
-          <li><a href="/tienda/tratamiento-de-datos" {...extra}>Tratamiento de datos</a></li>
+        {/* enlaces legales (punto 13 del cliente, 19-nov-2026): todos llevan a páginas que ya existen */}
+        <ul aria-label="Información legal">
+          <li><a href="/tienda/tratamiento-de-datos" {...extra}>Protección de datos personales (habeas data)</a></li>
+          <li><a href="/tienda/pqrs" {...extra}>PQRS</a></li>
+          <li><a href="/tienda/devoluciones" {...extra}>Devoluciones y garantía</a></li>
+          <li><a href="/tienda/terminos-y-condiciones" {...extra}>Términos y avisos legales</a></li>
         </ul>
       </div>
     </footer>

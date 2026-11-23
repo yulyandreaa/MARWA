@@ -199,7 +199,7 @@ export function ProductDetail({product}: {product: Product}) {
             </div>
 
             <div className="pp-seller">
-              <span className="pp-seller-logo"><Image src="/assets/marwa-hex-logo.svg" alt="" width={30} height={30}/></span>
+              <span className="pp-seller-logo"><Image src="/assets/marwa-logo-hex.png" alt="" width={30} height={34}/></span>
               <p><span>Tienda oficial <b>MARWA</b> <Icon name="check"/></span><small>Redes y energía · Colombia</small></p>
             </div>
 

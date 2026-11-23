@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import {useState} from 'react';
+import {LOGO_BARS, LOGO_VB, LOGO_WORD} from '@/data/logoMarwa';
 
 /**
  * Portada de la página de inicio: el ecosistema MARWA (10-nov-2026, v4).
@@ -17,31 +18,57 @@ type Zone = {
 };
 
 const zones: Zone[] = [
-  {id: 'cableado', title: ['Cableado', 'estructurado'], text: 'Cables UTP, FTP, LSZH, accesorios y conectividad.', href: '/tienda?categoria=cableado', color: '#1f6bff', box: [16.5, 8, 28.5, 23.5], label: [29.3, 15.5, 'right']},
-  {id: 'fibra', title: ['Fibra', 'óptica'], text: 'Monomodo ADSS y DROP, multimodo OM3 y herrajería.', href: '/tienda?categoria=fibra', color: '#13b5c8', box: [55, 6.5, 32, 25], label: [71, 14.5, 'left']},
-  {id: 'metalmecanica', title: ['Metalmecánica'], text: 'Racks y gabinetes para telecomunicaciones.', href: '/tienda?categoria=metalmecanica', color: '#e52332', box: [1, 32.5, 28.5, 26], label: [14.2, 41.5, 'right']},
-  {id: 'plastica', title: ['Línea', 'plástica'], text: 'Amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores.', href: '/tienda?categoria=plastica', color: '#3b4660', box: [69.5, 35, 30, 23.5], label: [85.6, 41.5, 'left']},
-  {id: 'canalizacion', title: ['Canalización', 'y ductería'], text: 'Canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.', href: '/tienda?categoria=canalizacion', color: '#1f6bff', box: [8.5, 62, 28.5, 21.5], label: [21.6, 69, 'right']},
-  {id: 'hdtv', title: ['HDTV'], text: 'Cables, extender y splitter.', href: '/tienda?categoria=hdtv', color: '#e52332', box: [63, 61, 30, 21.5], label: [79, 70.5, 'left']},
-  {id: 'proximo', title: ['Próximo lanzamiento'], text: 'Energía y Networking: nuevas líneas con soluciones integrales.', color: '#10233f', box: [42.5, 66, 15, 34], label: [50, 93.5, 'center'], soon: true},
+  {id: 'cableado', title: ['Cableado', 'estructurado'], text: 'Cables UTP, FTP, LSZH, accesorios y conectividad.', href: '/tienda?categoria=cableado', color: '#1f6bff', box: [27.7, 6.8, 15.6, 25.9], label: [27.1, 18.0, 'right']},
+  {id: 'fibra', title: ['Fibra', 'óptica'], text: 'Monomodo ADSS y DROP, multimodo OM3 y herrajería.', href: '/tienda?categoria=fibra', color: '#13b5c8', box: [55.4, 6.8, 15.2, 25.9], label: [70.5, 16.3, 'left']},
+  {id: 'metalmecanica', title: ['Metalmecánica'], text: 'Racks y gabinetes para telecomunicaciones.', href: '/tienda?categoria=metalmecanica', color: '#e52332', box: [14.7, 35.1, 16.5, 27.6], label: [14.7, 48.9, 'right']},
+  {id: 'plastica', title: ['Línea', 'plástica'], text: 'Amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores.', href: '/tienda?categoria=plastica', color: '#3b4660', box: [68.1, 38.6, 15.2, 24.1], label: [83.4, 52.4, 'left']},
+  {id: 'canalizacion', title: ['Canalización', 'y ductería'], text: 'Canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.', href: '/tienda?categoria=canalizacion', color: '#1f6bff', box: [23.2, 63.3, 15.2, 24.1], label: [23.1, 75.4, 'right']},
+  {id: 'hdtv', title: ['HDTV'], text: 'Cables, extender y splitter.', href: '/tienda?categoria=hdtv', color: '#e52332', box: [61.6, 64.2, 15.2, 24.1], label: [76.6, 77.1, 'left']},
 ];
+
+/* Logo del manual (LOGO MARWA.ai) en VECTOR, encima de la plataforma hexagonal de la imagen:
+   se ve nítido en cualquier pantalla. Las 3 barras y la palabra entran por separado;
+   el brillo usa la silueta del logo como máscara. */
+function HexLogo() {
+  const shapes = (white?: boolean) => (
+    <>
+      {LOGO_BARS.map((p, i) => <path key={`b${i}`} className={white ? undefined : `eh-hex-bar b${i + 1}`} d={p.d} fill={white ? '#fff' : p.fill}/>)}
+      <g className={white ? undefined : 'eh-hex-word'}>{LOGO_WORD.map((p, i) => <path key={`w${i}`} d={p.d} fill={white ? '#fff' : p.fill}/>)}</g>
+    </>
+  );
+  const [x, y, w, h] = LOGO_VB.split(' ').map(Number);
+  return (
+    <span className="eh-hex" role="img" aria-label="MARWA Redes y Energía">
+      <svg viewBox={LOGO_VB} aria-hidden="true" shapeRendering="geometricPrecision">
+        <defs>
+          <mask id="eh-logo-mask" maskUnits="userSpaceOnUse" x={x} y={y} width={w} height={h}>{shapes(true)}</mask>
+          <linearGradient id="eh-hex-shine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#fff" stopOpacity="0"/><stop offset=".5" stopColor="#fff" stopOpacity=".75"/><stop offset="1" stopColor="#fff" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+        {shapes()}
+        <g mask="url(#eh-logo-mask)">
+          <rect className="eh-hex-shine" x={x - 170} y={y - 50} width="160" height={h + 100} fill="url(#eh-hex-shine)"/>
+        </g>
+      </svg>
+    </span>
+  );
+}
 
 export function EcoHero() {
   const [on, setOn] = useState<string | null>(null);
   return (
     <section className="eh" id="ecosistema" aria-labelledby="eh-title">
-      <header className="eh-head pm-wrap">
-        <span className="eh-eyebrow">Ecosistema MARWA</span>
-        <h1 id="eh-title" data-split>Seis líneas. <em>Una sola conexión.</em></h1>
-      </header>
+      {/* título solo para lectores de pantalla y buscadores: en pantalla se quitó para no saturar (19-nov-2026) */}
+      <h1 id="eh-title" className="eh-sr">MARWA Redes y Energía: seis líneas de producto, una sola conexión</h1>
 
       <div className={`eh-stage${on ? ' has-on' : ''}`}>
         <div className="eh-img">
-          <Image src="/assets/ecosistema-marwa-v6.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA al centro conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería, HDTV y un próximo lanzamiento" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px"/>
+          <Image src="/assets/ecosistema-marwa-v17.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA sobre una plataforma hexagonal al centro, conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería y HDTV" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px"/>
         </div>
 
-        {/* logo oficial del manual sobre el disco central (no lo dibuja la IA) */}
-        <span className="eh-logo"><Image src="/assets/marwa-logo-manual.png" alt="MARWA Redes y Energía" width={1600} height={767} sizes="200px" priority/></span>
+        {/* logo oficial del manual dentro del hexágono (no lo dibuja la IA); entra animado una sola vez */}
+        <HexLogo/>
 
         {/* títulos de cada línea, escritos en código */}
         {zones.map(z => (

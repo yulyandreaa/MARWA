@@ -108,7 +108,7 @@ export default function CheckoutPage() {
       <div className="co-bar">
         <div className="co-bar-in">
           <Link href="/tienda" className="co-logo" aria-label="MARWA, volver a la tienda">
-            <Image src="/assets/marwa-logo-oficial.png" alt="" width={900} height={445} priority/>
+            <Image src="/assets/marwa-logo-oficial.png" alt="" width={1200} height={602} priority/>
           </Link>
           <Link href="/tienda/carrito" className="co-back"><Icon name="cart"/>Volver al carrito</Link>
         </div>

@@ -119,9 +119,10 @@ function Results({q, cat}: {q: string; cat: string | null}) {
 
 /** Ofertas: productos con precio anterior. Novedades: etiqueta o productos subidos. */
 function StoreView({view}: {view: 'novedades' | 'ofertas'}) {
+  /* sin ofertas: cualquier enlace viejo a 'ofertas' muestra Novedades */
   const products = useProducts();
   const hydrated = useHydrated();
-  const offers = view === 'ofertas';
+  const offers = false; void view;
   const list = products.filter(p => p.visible && (offers ? isOnOffer(p) || p.badge === 'Oferta' : p.badge === 'Nuevo' || p.custom));
   if (!hydrated) return <Loading/>;
   return (

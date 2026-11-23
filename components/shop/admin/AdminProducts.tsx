@@ -85,8 +85,8 @@ export function AdminProducts() {
   };
   const exportAll = () => downloadCsv(
     'inventario-marwa',
-    ['Referencia', 'Producto', 'Categoría', 'Subcategoría', 'Precio', 'Precio antes', 'Presentación', 'Stock', 'Visible'],
-    shown.map(p => [p.sku, p.name, categoryName(p.category), p.specs?.tipo ?? '', p.price, p.listPrice ?? '', p.unit, p.stock, p.visible ? 'Sí' : 'No']),
+    ['Referencia', 'Producto', 'Categoría', 'Subcategoría', 'Precio', 'Presentación', 'Stock', 'Visible'],
+    shown.map(p => [p.sku, p.name, categoryName(p.category), p.specs?.tipo ?? '', p.price, p.unit, p.stock, p.visible ? 'Sí' : 'No']),
   );
 
   const setEdit = (id: string | null) => router.replace(`/tienda/admin?tab=productos${id ? `&producto=${id}` : ''}`, {scroll: false});
@@ -247,7 +247,6 @@ function ProductEditor({product, onClose, existingIds}: {product: Product | null
     e.preventDefault();
     if (!photos.length) return setError('Sube al menos una foto del producto.');
     if (!p.specs?.tipo) return setError('Elige la subcategoría del producto.');
-    if (p.listPrice && p.listPrice <= p.price) return setError('El precio antes de la oferta debe ser mayor que el precio actual.');
     let id = p.id;
     if (isNew) {
       const base = slug(p.name) || 'producto';
@@ -311,7 +310,6 @@ function ProductEditor({product, onClose, existingIds}: {product: Product | null
             <h3>Precio e inventario</h3>
             <div className="form-grid">
               <label>Precio (COP, IVA incluido)<input required type="number" min={0} step={100} value={p.price || ''} onChange={e => set('price', Number(e.target.value))}/></label>
-              <label><span>Precio antes de la oferta <em>(opcional)</em></span><input type="number" min={0} step={100} value={p.listPrice || ''} onChange={e => set('listPrice', Number(e.target.value) || undefined)}/></label>
               <label>Stock disponible (unidades)<input required type="number" min={0} step={1} value={p.stock} onChange={e => set('stock', Math.max(0, Math.floor(Number(e.target.value))))}/></label>
               <label>Presentación<input required value={p.unit} onChange={e => set('unit', e.target.value)} placeholder="unidad, caja x 305 m, bobina…"/></label>
             </div>

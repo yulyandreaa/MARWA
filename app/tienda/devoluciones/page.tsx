@@ -17,7 +17,7 @@ export default function DevolucionesPage() {
         <p>MARWA · Redes y Energía no tiene participación ni responsabilidad en el desarrollo de los proyectos del cliente. La selección de los productos y la validación de las especificaciones es responsabilidad del cliente.</p>
       </section>
       <section>
-        <h2>2. Política de devolución</h2>
+        <h2 id="devoluciones">2. Política de devolución</h2>
         <p>Estimado cliente: para aplicar a una devolución o cambio de producto, debe tener en cuenta lo siguiente.</p>
         <ol className="lg-steps">
           <li>Deberá presentar el producto en perfecto estado (sin uso, sin armar, en el empaque original, con catálogos, manuales y todas sus piezas completas). Tiene un plazo máximo de 6 días hábiles, una vez facturado el producto, para acercarse a nuestras instalaciones o, en dado caso, hacer llegar el producto a nuestro domicilio. Allí se revisará el estado del producto y se realizará el debido proceso para finalizar su solicitud.</li>
@@ -29,7 +29,7 @@ export default function DevolucionesPage() {
         </ol>
       </section>
       <section>
-        <h2>3. Garantía legal</h2>
+        <h2 id="garantia">3. Garantía legal</h2>
         <p>Todos los productos comercializados por MARWA · Redes y Energía cuentan con garantía legal mínima conforme al artículo 11 de la Ley 1480 de 2011. El plazo de garantía es de doce (12) meses desde la fecha de entrega al comprador, o el plazo indicado por el fabricante, el que resulte mayor.</p>
         <div className="lg-cols">
           <div className="lg-card ok">

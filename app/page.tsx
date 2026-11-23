@@ -1,10 +1,11 @@
 import './home.css';
 import './premium.css';
 import './home-v3.css';
+import './best-sellers.css';
 import {PmFooter, PmSiteHeader} from '@/components/premium/SiteChrome';
 import {EcoHero} from '@/components/premium/EcoHero';
-import {HvAbout, HvBigType, HvBrandVideo, HvCable, HvCharacter, HvContact, HvDivider, HvQuality, HvSolutions, HvStats} from '@/components/premium/HomeV3';
-import {HomeFX, HomeIntro} from '@/components/premium/HomeFX';
+import {HvAbout, HvBestSellers, HvPolicies, HvBrandVideo, HvCharacter, HvContact, HvService, HvSolutions, HvStats} from '@/components/premium/HomeV3';
+import {HomeFX} from '@/components/premium/HomeFX';
 import {WhatsAppButton} from '@/components/WhatsAppButton';
 import {RevealOnScroll} from '@/components/HomeMotion';
 
@@ -20,23 +21,25 @@ export default function Home() {
       <PmSiteHeader/>
       <main id="inicio">
         <EcoHero/>
+        {/* Lo más vendido justo después de la portada (19-nov-2026): las líneas del ecosistema y enseguida los productos */}
+        <HvBestSellers/>
         <HvAbout/>
+        {/* "Compra con respaldo": cierre de Quiénes somos, mismo fondo blanco (19-nov-2026) */}
+        <HvPolicies/>
         <HvBrandVideo/>
         <HvStats/>
-        <HvBigType/>
+        {/* Franja de letras grandes "Calidad que no admite fallas / Redes y energía · Una sola conexión" (HvBigType) retirada el 19-nov-2026: rompía la línea gráfica. Sigue guardada en HomeV3.tsx */}
         {/* "Del puerto a tu proyecto" (HvProcess) guardada en HomeV3.tsx; quitada el 10-nov-2026, se puede volver a poner aquí */}
-        <HvSolutions/>
-        <HvDivider/>
-        <HvQuality/>
         <HvCharacter/>
+        <HvSolutions/>
+        <HvService/>
+        {/* "Productos que cumplen la norma" (HvQuality) retirada el 19-nov-2026: ya la cubre "Compra con respaldo". Sigue guardada en HomeV3.tsx */}
         <HvContact/>
       </main>
       <PmFooter/>
       <WhatsAppButton/>
       <RevealOnScroll/>
-      <HvCable/>
       <HomeFX/>
-      <HomeIntro/>
     </div>
   );
 }

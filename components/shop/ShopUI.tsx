@@ -236,9 +236,7 @@ export function ShopHeader() {
           <button aria-label="Buscar"><Icon name="search"/></button>
         </form>
 
-        <nav className="mh-inline-nav" aria-label="Accesos">
-          <Link className={view === 'novedades' ? 'active' : ''} href="/tienda?vista=novedades"><Icon name="star"/>Novedades</Link>
-        </nav>
+        {/* 23-nov-2026: enlace "Novedades" quitado del encabezado (sigue en el menú de Categorías) */}
 
         <div className="mh-account">
           {buyer ? (
@@ -277,8 +275,6 @@ export function ShopHeader() {
           <CategoryMega onNavigate={() => setMenu(false)}/>
           <nav aria-label="Principal">
             <i className="mh-sep" aria-hidden="true"/>
-            <Link className={view === 'novedades' ? 'active' : ''} href="/tienda?vista=novedades"><Icon name="star"/>Novedades</Link>
-            <i aria-hidden="true"/>
             <Link href={buyer ? '/tienda/cuenta?tab=pqr' : hydrated && user ? '/tienda/admin?tab=pqr' : '/#contacto'}><Icon name="help"/>Ayuda / PQR</Link>
           </nav>
         </div>

@@ -2297,3 +2297,162 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 /* 20-nov (i): Bogotá en panorámica 6:1 hecha a la medida de la franja: ya no se corta */
 @media (min-width: 768px) { .lx-advice-img { object-position: center center; } }
 @media (max-width: 767px) { .lx-advice-img { object-position: 76% center; } }
+
+/* ── 23-nov-2026: fondo nuevo para ingreso y registro (referencia de la usuaria): claro, velos arriba a la izquierda
+   y onda inferior azul → rojo. Solo cambia el fondo; formularios, textos y personaje quedan igual ── */
+.au, .au:not(.au-register) { background: radial-gradient(120% 90% at 55% 40%, #ffffff 0%, #f6f8fe 45%, #e9effb 100%) !important; }
+.au-veil { position: absolute; z-index: 0; top: 0; left: 0; width: min(56%, 900px); height: auto; pointer-events: none; }
+.au-waves, .au:not(.au-register) .au-waves { display: block !important; position: absolute; z-index: 0; left: 0; right: 0; bottom: 0; width: 100%; height: clamp(120px, 18vw, 230px); pointer-events: none; }
+.au-intro, .au-card { position: relative; z-index: 1; }
+@media (max-width: 1000px) { .au-veil { width: 90%; } .au-waves, .au:not(.au-register) .au-waves { height: 140px; } }
+/* onda más delgada y contenido por encima de ella */
+.au-waves, .au:not(.au-register) .au-waves { height: clamp(110px, 13vw, 170px); }
+@media (min-width: 1001px) { .au { padding-bottom: clamp(110px, 11vw, 150px); } }
+.au { background: radial-gradient(70% 60% at 0% 0%, #e3ebfb 0%, rgba(227, 235, 251, 0) 70%), radial-gradient(120% 90% at 55% 40%, #ffffff 0%, #f6f8fe 45%, #e9effb 100%) !important; }
+/* ajuste: velos más pequeños y nítidos; la onda se ve en la pantalla sin bajar (sin relleno extra abajo) */
+.au-veil { width: min(32%, 520px); opacity: .9; }
+.au-waves, .au:not(.au-register) .au-waves { height: clamp(70px, 7vw, 110px); }
+@media (min-width: 1001px) { .au { padding-bottom: 44px; min-height: calc(100vh - 113px); } }
+/* 23-nov-2026 (v2): el fondo ahora es una IMAGEN sacada de la referencia de la usuaria (Magnific + limpieza, 3344x1880),
+   con la onda en su grosor original. Las ondas en SVG quedan ocultas */
+.au, .au:not(.au-register) { background: #f4f7fd url('/assets/fondo-ingreso-v1.jpg') center 88% / cover no-repeat !important; }
+.au-veil, .au-waves, .au:not(.au-register) .au-waves { display: none !important; }
+@media (min-width: 1001px) { .au { padding-bottom: clamp(90px, 9vw, 140px); } }
+@media (max-width: 1000px) { .au, .au:not(.au-register) { background-position: 20% 100% !important; } }
+.au, .au:not(.au-register) { background-position: center bottom !important; }
+/* la onda siempre completa al pie de la PANTALLA (no del bloque): el fondo queda fijo a la ventana en computador */
+@media (min-width: 1001px) { .au, .au:not(.au-register) { background-attachment: fixed !important; background-size: cover !important; background-position: center bottom !important; } }
+/* el fondo se mueve con la página (no fijo a la ventana); en registro sin el logo grande de la izquierda */
+@media (min-width: 1001px) { .au, .au:not(.au-register) { background-attachment: scroll !important; } }
+.au-register .au-logo { display: none; }
+/* la sección ocupa justo el alto de la pantalla (sin relleno extra abajo) para que la onda quede visible al pie */
+@media (min-width: 1001px) {
+  .au { min-height: calc(100svh - 113px) !important; padding-top: 28px !important; padding-bottom: 28px !important; align-items: center; }
+}
+/* v2 del fondo: imagen ampliada hacia abajo para que la onda termine completa y no se vea cortada */
+.au, .au:not(.au-register) { background-image: url('/assets/fondo-ingreso-v2.jpg') !important; background-position: center bottom !important; }
+.au, .au:not(.au-register) { background-position: center bottom -14vw !important; }
+.au, .au:not(.au-register) { background-position: center bottom -6vw !important; }
+
+/* ── 23-nov-2026: tamaños de letra de ingreso y registro iguales a los demás formularios (paneles, distribuidores):
+   título 22 · texto 13.5 · etiqueta 12.5 · campo 13.5 · ayudas 12 · botones 14. Formas y colores no cambian ── */
+.pm.shop .au .au-card h2 { font-size: 22px; margin-bottom: 6px; }
+.pm .au-lead, .pm .au-register .au-lead { font-size: 13.5px; margin-bottom: 16px; }
+.pm.shop .au .au-row > label { font-size: 12.5px; font-weight: 600; }
+.pm.shop .au .au-field input { font-size: 13.5px; }
+.pm.shop .au .au-field > svg { width: 18px; height: 18px; }
+.pm .au .au-rules, .pm .au .au-rules li, .pm .au .pa-hint, .pm .au-hint, .pm .au .au-error { font-size: 12px; }
+.pm .au .shop-check, .pm .au .shop-check span { font-size: 12.5px; }
+.au-forgot { font-size: 12.5px; }
+.pm .au-divider, .pm .au-demo p { font-size: 13px; }
+.pm.shop .au .button, .pm.shop .au .au-demo .button { font-size: 14px; }
+.pm .au .au-card > p:last-child, .pm .au .au-card .au-alt { font-size: 13px; }
+.pm .au .au-login { font-size: 13px; }
+/* ingreso sin el personaje; tarjeta del formulario en blanco sólido (sin transparencia sobre la onda) */
+.au:not(.au-register) .au-intro::after { display: none !important; }
+.au-card { background: #fff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.pm.shop .au .au-field input { background: #fff; }
+@media (min-width: 1001px) { .au:not(.au-register) .au-intro p { display: block !important; margin-top: 0; max-width: 420px; } .au:not(.au-register) .au-intro { justify-content: center !important; padding-top: 0 !important; } }
+@media (min-width: 1001px) { .au:not(.au-register) .au-intro h1::after, .au:not(.au-register) .au-intro h1:after { margin-bottom: 20px !important; } }
+/* título del ingreso y registro con más presencia: primera línea en seminegrita (antes 400) y un poco más compacta */
+.pm .au .au-intro h1 { font-weight: 600 !important; letter-spacing: -.015em; line-height: 1.1; }
+
+/* 23-nov-2026: "Productos relacionados" usa la MISMA tarjeta de la cuadrícula de categoría (corazón, carrito solo ícono, botón Cotizar) */
+.lx-related .lx-best-card { padding: 10px 10px 14px; border-radius: 14px; box-shadow: 0 4px 14px rgba(16, 35, 63, .05); }
+.lx-related .lx-best-img { border-radius: 10px; }
+.lx-related .lx-best-img img { padding: 10%; }
+.lx-related .lx-best-card .lx-best-tag { top: 18px; left: 18px; padding: 4px 9px 4px 7px; font-size: 11px; }
+.lx-related .lx-best-card .lx-best-tag svg { width: 11px; height: 11px; }
+.lx-related .lx-best-card .lx-best-fav { top: 16px; right: 16px; width: 32px; height: 32px; }
+.lx-related .lx-best-card .lx-best-fav svg { width: 16px; height: 16px; }
+.pm .lx-related .lx-best-card h3 { margin: 12px 2px 0; font-size: 14.5px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: calc(2 * 1.3em); }
+.pm .lx-related .lx-best-card p { margin-top: 4px; font-size: 12.5px; -webkit-line-clamp: 1; }
+.lx-related .lx-best-price { gap: 8px; padding-top: 10px; flex-wrap: wrap; }
+.lx-related .lx-best-price b { font-size: 17px; }
+.lx-related .lx-best-price i { height: 14px; }
+.lx-related .lx-best-price span { font-size: 12px; }
+.lx-related .lx-best-actions { grid-template-columns: 44px 1fr; gap: 6px; margin-top: 10px; }
+.lx-related .lx-best-add, .lx-related .lx-best-buy { min-height: 38px; border-radius: 9px; font-size: 13px; }
+.lx-related .lx-best-add { padding: 0; font-size: 0; gap: 0; }
+.lx-related .lx-best-add svg { width: 18px; height: 18px; }
+.lx-related .lx-best-actions { grid-template-columns: 34px 1fr; gap: 6px; margin-top: 10px; }
+.lx-related .lx-best-add, .lx-related .lx-best-buy { min-height: 34px; height: 34px; border-radius: 8px; border-width: 1px; }
+.lx-related .lx-best-buy { font-size: 12.5px; font-weight: 600; gap: 5px; }
+.lx-related .lx-best-buy svg { width: 14px; height: 14px; }
+.lx-related .lx-best-add svg { width: 16px; height: 16px; }
+.pm .lx-related .lx-best-card h3 { min-height: 0; }
+@media (max-width: 760px) { .pm .lx-related .lx-best-card p { display: none; } }
+/* más aire entre 'Productos relacionados' y el pie de página */
+.pm .lx-related { padding-bottom: 110px !important; }
+@media (max-width: 767px) { .pm .lx-related { padding-bottom: 64px !important; } }
+/* filtro "Tipo de producto": opción única con círculo (radio) en vez de casilla */
+.pc-check.is-radio input { border-radius: 50%; }
+.pc-check.is-radio input:checked { background: #fff; border-color: var(--blue, #003cff); }
+.pc-check.is-radio input:checked:after { width: 8px; height: 8px; border: 0; border-radius: 50%; background: var(--blue, #003cff); transform: none; }
+
+/* ── 23-nov-2026: color de marca en la barra de categorías y en la barra de resultados ── */
+/* categoría seleccionada: texto en azul MARWA, además de la línea azul debajo */
+.pm .cx-rail a.on { color: #2447e8; }
+.pm .cx-rail a:hover:not(.on) { color: #2447e8; }
+/* "Filtrar por" con una rayita roja corta debajo; cantidad de productos y orden elegido en azul */
+.pm .cx-side-head b { position: relative; }
+.pm .cx-side-head b::after { content: ''; display: block; width: 28px; height: 3px; margin-top: 6px; border-radius: 2px; background: #e52332; }
+.pm .cx-count b { color: #2447e8; }
+.pm .cx-bar .pc-sort select { color: #2447e8; }
+.pm .cx-side-head button, .pm .cx-chips-clear { color: #e52332; }
+
+/* ── 23-nov-2026: filtros como un solo bloque (sin líneas entre grupos y con menos aire), según buenas prácticas:
+   un panel continuo, títulos de grupo compactos, opciones visibles y un separador muy suave solo entre grupos ── */
+.pm .cx-side-head { border-bottom: 0; padding-bottom: 8px; }
+.pm .cx-group { border-bottom: 0; padding: 0; }
+.pm .cx-group + .cx-group { border-top: 1px solid #eef1f6; }
+.pm .cx-group-title { padding: 12px 0; font-size: 14.5px; }
+.pm .cx-group-title[aria-expanded="true"] { padding-bottom: 4px; }
+.pm .cx-opts { padding-bottom: 10px; }
+.pm .cx-opts .pc-check { padding: 5px 0; font-size: 13.5px; }
+/* "Ver más productos" con la misma forma de los botones con borde del sitio ("Ver todos los productos" del inicio):
+   esquinas 12px, borde 1.5px azul MARWA, 48px de alto, texto 15px */
+.pm .cx-more .pm-btn { min-height: 48px; padding: 0 30px; border: 1.5px solid #2447e8; border-radius: 12px; background: transparent; color: #2447e8; font-size: 15px; font-weight: 600; }
+.pm .cx-more .pm-btn:hover { background: #2447e8; color: #fff; }
+/* todos los botones pm-btn de la tienda con la regla del sitio: esquinas 12px y borde 1.5px */
+.pm.shop .pm-btn { border-radius: 12px; border-width: 1.5px; }
+/* encabezado de categoría con los colores de marca: título azul noche, frase en azul MARWA y rayita roja corta,
+   texto de apoyo en gris azulado para que mande la jerarquía */
+.pm .pc-hero.is-studio .pc-hero-copy .pc-hero-tag { color: #2447e8; font-weight: 600; }
+.pm .pc-hero.is-studio .pc-hero-copy .pc-hero-tag::after { content: ''; display: block; width: 40px; height: 3px; margin-top: 14px; border-radius: 2px; background: #e52332; }
+.pm .pc-hero.is-studio .pc-hero-copy p:not(.pc-hero-tag) { color: #4a5872; }
+/* el color va en el TÍTULO de la categoría (azul MARWA); la frase vuelve a azul noche; sin rayitas rojas
+   (ni en el encabezado ni en "Filtrar por") */
+.pm .pc-hero .pc-hero-copy h1 { color: #2447e8; }
+.pm .pc-hero.is-studio .pc-hero-copy .pc-hero-tag { color: #10233f; font-weight: 500; }
+.pm .pc-hero.is-studio .pc-hero-copy .pc-hero-tag::after, .pm .cx-side-head b::after { display: none; }
+/* el número de productos con el mismo color del texto 'productos' */
+.pm .cx-count b { color: inherit; }
+/* títulos de columna del menú de categorías: sin mayúsculas forzadas ni espacio entre letras */
+.pm .mg-col-title { font-size: 14px; font-weight: 600; letter-spacing: 0 !important; text-transform: none !important; }
+/* nombre de las fichas del menú sin mayúsculas forzadas ni espacio entre letras */
+.pm .mg-card2 b { font-size: 14px; letter-spacing: 0; text-transform: none; }
+/* fichas del menú con esquinas de 6px (regla de piezas de la tienda) */
+.pm .mg-card2 > span { border-radius: 6px; }
+/* cuadrícula de productos (categorías y todo el catálogo): sin animación al pasar el cursor;
+   la animación queda solo en los carruseles (Lo más vendido, Productos relacionados) */
+.cx-grid .lx-best-card:hover { transform: none; box-shadow: 0 4px 14px rgba(16, 35, 63, .05); }
+.cx-grid .lx-best-card:hover .lx-best-img img { transform: none; }
+/* 'Ver todo' del menú de categorías en gris (mismo gris de los textos), con el mismo peso */
+.pm .mg-col-all { color: #4a5872; }
+.pm .mg-col-all:hover { color: #2447e8; }
+/* títulos de columna del menú: texto en azul MARWA e ícono en rojo (colores invertidos) */
+.pm .mg-col-title { color: #2447e8; }
+.pm .mg-col-title svg { color: #e52332; }
+/* 23-nov-2026: 'Explora por categoría' muestra tarjetas COMPLETAS (4 en computador, 2 en tableta): sin pedazo cortado de la siguiente */
+.lx-lines-row { grid-auto-columns: calc((100% - 3 * 20px) / 4) !important; }
+.lx-lines-row > .lx-line { scroll-snap-align: start; }
+@media (max-width: 1100px) { .lx-lines-row { grid-auto-columns: calc((100% - 20px) / 2) !important; } }
+@media (max-width: 560px) { .lx-lines-row { grid-auto-columns: 78% !important; } }
+/* flechas del carrusel de categorías: apagadas al llegar al inicio o al final */
+.lx-lines-arrow:disabled { opacity: .35; cursor: default; pointer-events: none; }
+/* más aire sobre 'Ver todo el catálogo' (antes quedaba pegado al carrusel al quitar las rayitas) */
+.pm .lx-lines-all { margin-top: 40px !important; }
+/* servicios sin enlace: sin efecto al pasar el cursor */
+.lx-tile.is-static { cursor: default; }
+.lx-tile.is-static:hover img { transform: none !important; }

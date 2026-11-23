@@ -6,4 +6,8 @@ export const BEST_SELLER_IDS = [
   'patch-cord-fibra-sc-apc-sc-apc-3-m',        // Fibra óptica
   'espiral-para-cables-3-4-pulg-negro-5-m',    // Línea plástica
   'tuberia-pvc-sch-40-de-1-pulg-atado-de-15',  // Canalización y ductería
+  // 23-nov-2026: tres productos más
+  'cable-utp-flexible-cat-6-multifilamento',   // Cableado estructurado (el del banner destacado)
+  'cable-drop-1-hilo-1-km',                    // Fibra óptica
+  'patch-panel-cat-6-de-24-puertos',           // Cableado estructurado
 ];

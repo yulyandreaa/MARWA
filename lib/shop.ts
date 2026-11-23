@@ -88,6 +88,23 @@ if (typeof window !== 'undefined') {
   } catch {}
 }
 
+/* 23-nov-2026 · Una sola vez por navegador: las fichas técnicas pasaron al diseño nuevo (mismo archivo, otro nombre
+   y otro peso). Se actualizan nombre y peso en los productos guardados que usan la ficha del catálogo inicial. */
+const SHEETS_FLAG = 'marwa.catalog-fichas-diseno-nuevo.v1';
+if (typeof window !== 'undefined') {
+  try {
+    const raw = localStorage.getItem(K.products);
+    if (raw && !localStorage.getItem(SHEETS_FLAG)) {
+      const list = (JSON.parse(raw) as Product[]).map(p => {
+        const seed = seedProducts.find(s => s.id === p.id);
+        return seed?.datasheet && p.datasheet?.url === seed.datasheet.url ? {...p, datasheet: seed.datasheet} : p;
+      });
+      localStorage.setItem(K.products, JSON.stringify(list));
+    }
+    localStorage.setItem(SHEETS_FLAG, '1');
+  } catch {}
+}
+
 /* Una sola vez por navegador: si el catálogo inicial ganó vistas nuevas y el vendedor
    no cambió las fotos de ese producto, se actualiza su galería. */
 const VIEWS_FLAG = 'marwa.catalog-views.v1';

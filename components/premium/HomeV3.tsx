@@ -423,7 +423,10 @@ export function HvBestSellers() {
   const products = useProducts();
   const list = BEST_SELLER_IDS.map(id => products.find(p => p.id === id && p.visible)).filter(Boolean) as ReturnType<typeof useProducts>;
   const track = useRef<HTMLDivElement>(null);
-  const move = (dir: 1 | -1) => track.current?.scrollBy({left: dir * track.current.clientWidth * 0.8, behavior: 'smooth'});
+  const move = (dir: 1 | -1) => { // avanza de a UNA tarjeta (ancho de la tarjeta + espacio entre tarjetas)
+    const t = track.current; const card = t?.firstElementChild as HTMLElement | null; if (!t || !card) return;
+    t.scrollBy({left: dir * (card.offsetWidth + (parseFloat(getComputedStyle(t).columnGap) || 0)), behavior: 'smooth'});
+  };
   if (!list.length) return null;
   return (
     <section className="hv-best2" id="productos" aria-labelledby="hv-best-title">

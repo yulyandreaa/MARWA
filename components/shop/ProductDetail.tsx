@@ -12,7 +12,7 @@ import {date, fileSize, money, openFile, priceText} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
 import {Stars} from './Stars';
-import {FavoriteButton, ProductImage, QtyStepper, toast} from './ShopUI';
+import {FavoriteButton, MarwaCard, ProductImage, QtyStepper, toast} from './ShopUI';
 
 /**
  * Ficha de producto con la estructura de Mercado Libre:
@@ -45,7 +45,6 @@ export function ProductDetail({product}: {product: Product}) {
     {id: 'descripcion', label: 'Descripción'},
     {id: 'caracteristicas', label: 'Características'},
     ...(reviews.length ? [{id: 'opiniones', label: `Opiniones (${reviews.length})`}] : []),
-    {id: 'preguntas', label: 'Preguntas'},
   ];
 
   const related = useMemo(() => {
@@ -262,13 +261,6 @@ export function ProductDetail({product}: {product: Product}) {
           </>
         )}
 
-        <hr/>
-
-        <div id="preguntas" data-pp-section className="pp-faq">
-          <h2 className="pp-h2">Preguntas frecuentes</h2>
-          <FaqList items={page.faq}/>
-          <a className="pp-link" href={ask} target="_blank" rel="noopener">¿No encuentras tu respuesta? Pregúntale a un asesor</a>
-        </div>
       </section>
 
       {related.length > 0 && <Related items={related}/>}
@@ -367,24 +359,25 @@ function Gallery({product}: {product: Product}) {
   );
 }
 
-function Related({items}: {items: Product[]}) {
+/* Productos relacionados (23-nov-2026): misma tarjeta y carrusel de "Lo más vendido" de la tienda,
+   con las flechas por fuera de los productos. Se usa en la página de producto y en las de categoría. */
+export function Related({items}: {items: Product[]}) {
   const track = useRef<HTMLDivElement>(null);
+  const move = (dir: 1 | -1) => { // avanza de a UNA tarjeta (ancho de la tarjeta + espacio entre tarjetas)
+    const t = track.current; const card = t?.firstElementChild as HTMLElement | null; if (!t || !card) return;
+    t.scrollBy({left: dir * (card.offsetWidth + (parseFloat(getComputedStyle(t).columnGap) || 0)), behavior: 'smooth'});
+  };
   return (
-    <section className="pc-wrap pp-card pp-related">
-      <h2 className="pp-h2">Productos relacionados</h2>
+    <section className="pm-wrap pm-section lx-best lx-related">
+      <h2 className="lx-lines-title">Productos relacionados</h2>
       <div className="pm-carousel">
-        <div className="pp-related-row" ref={track}>
-          {items.map(p => (
-            <Link key={p.id} href={`/tienda/producto/${p.id}`} className="pp-related-card">
-              <span className="pp-related-img"><ProductImage src={p.image} alt="" sizes="220px"/></span>
-              <b>{p.name}</b>
-              <em>{priceText(p.price)}</em>
-              {p.badge && <small>{p.badge}</small>}
-            </Link>
-          ))}
+        <div className="pm-products" ref={track}>
+          {items.map(p => <MarwaCard key={p.id} p={p} fav sizes="(max-width: 760px) 70vw, 320px"/>)}
         </div>
-        <button className="pm-arrow prev" onClick={() => track.current?.scrollBy({left: -600, behavior: 'smooth'})} aria-label="Anteriores"><Icon name="chevron"/></button>
-        <button className="pm-arrow next" onClick={() => track.current?.scrollBy({left: 600, behavior: 'smooth'})} aria-label="Siguientes"><Icon name="chevron"/></button>
+        {items.length > 4 && <>
+          <button className="pm-arrow prev" onClick={() => move(-1)} aria-label="Anteriores"><Icon name="chevron"/></button>
+          <button className="pm-arrow next" onClick={() => move(1)} aria-label="Siguientes"><Icon name="chevron"/></button>
+        </>}
       </div>
     </section>
   );

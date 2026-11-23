@@ -102,14 +102,14 @@ function LineTabs() {
   useEffect(() => { update(); addEventListener('resize', update); return () => removeEventListener('resize', update); }, []);
   const go = (n: number) => {
     const t = track.current; if (!t) return;
-    const target = (n + pages) % pages; // al pasar del final vuelve al inicio, y al revés
+    const target = Math.min(Math.max(n, 0), pages - 1); // sin vuelta automática: al final se regresa con la flecha
     t.scrollTo({left: target * step(), behavior: 'smooth'});
   };
   return (
     <section className="pm-wrap pm-section lx-lines">
       <h2 className="lx-lines-title">Explora los mejores productos <em>MARWA</em> por <span>categoría</span></h2>
       <div className="lx-lines-car">
-        <button type="button" className="lx-lines-arrow prev" aria-label="Anterior" onClick={() => go(pos - 1)}><Icon name="chevron"/></button>
+        <button type="button" className="lx-lines-arrow prev" aria-label="Anterior" disabled={pos <= 0} onClick={() => go(pos - 1)}><Icon name="chevron"/></button>
         <div className="lx-lines-row" ref={track} onScroll={update}>
           {categories.map(c => (
             <a key={c.id} href={`/tienda?categoria=${c.id}`} className="lx-line">
@@ -118,15 +118,8 @@ function LineTabs() {
             </a>
           ))}
         </div>
-        <button type="button" className="lx-lines-arrow next" aria-label="Siguiente" onClick={() => go(pos + 1)}><Icon name="chevron"/></button>
+        <button type="button" className="lx-lines-arrow next" aria-label="Siguiente" disabled={pos >= pages - 1} onClick={() => go(pos + 1)}><Icon name="chevron"/></button>
       </div>
-      {pages > 1 && (
-        <div className="lx-lines-dots" role="tablist" aria-label="Posición del carrusel">
-          {Array.from({length: pages}, (_, n) => (
-            <button key={n} type="button" aria-label={`Ir a la posición ${n + 1}`} aria-current={n === pos} onClick={() => go(n)}><i/></button>
-          ))}
-        </div>
-      )}
       <a className="lx-lines-all" href="/tienda?vista=todos">Ver todo el catálogo <Icon name="arrow"/></a>
     </section>
   );
@@ -191,7 +184,10 @@ function BestSellers() {
   const products = useProducts();
   const list = bestSellers.map(id => products.find(p => p.id === id && p.visible)).filter(Boolean) as ReturnType<typeof useProducts>;
   const track = useRef<HTMLDivElement>(null);
-  const move = (dir: 1 | -1) => track.current?.scrollBy({left: dir * track.current.clientWidth * 0.8, behavior: 'smooth'});
+  const move = (dir: 1 | -1) => { // avanza de a UNA tarjeta (ancho de la tarjeta + espacio entre tarjetas)
+    const t = track.current; const card = t?.firstElementChild as HTMLElement | null; if (!t || !card) return;
+    t.scrollBy({left: dir * (card.offsetWidth + (parseFloat(getComputedStyle(t).columnGap) || 0)), behavior: 'smooth'});
+  };
   if (!list.length) return null;
   return (
     <section id="productos" className="pm-wrap pm-section lx-best">
@@ -423,10 +419,11 @@ function ServiceTiles() {
   return (
     <section className="pm-wrap pm-section lx-services" aria-label="Servicios MARWA">
       {services.map(s => (
-        <a key={s.title} href={s.href} {...(s.ext ? {target: '_blank', rel: 'noopener'} : {})} className="lx-tile">
+        /* 23-nov-2026: piezas informativas, sin enlace (pedido de la usuaria) */
+        <div key={s.title} className="lx-tile is-static">
           <Image src={s.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 430px"/>
           <span><b>{s.title}</b><small>{s.text}</small></span>
-        </a>
+        </div>
       ))}
     </section>
   );

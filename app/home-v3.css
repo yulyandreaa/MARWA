@@ -1319,3 +1319,60 @@ html.lenis, html.lenis body { height: auto; }
 /* ── 23-nov-2026: piezas y banners del inicio con las mismas esquinas de la tienda (6px); botones siguen en 12px ── */
 .pm.hv .hv-char.is-boxed, .pm.hv .hv-sol, .pm.hv .hv-gal-main, .pm.hv .hv-flyer, .pm.hv .hv-pcard, .pm.hv .hs-map2, .pm.hv .hs-map3d { border-radius: 6px !important; }
 .pm.hv .hv-char.is-strip h2 em.is-break { display: block; }
+
+/* ── 23-nov-2026: carrusel de ciudades DENTRO de las márgenes (antes a todo el ancho con bordes desvanecidos) ── */
+.hs-cities { width: 100%; margin-inline: 0; border-radius: 6px; -webkit-mask-image: none; mask-image: none; container-type: inline-size; }
+.hs-cities-track li { width: calc((100cqw - 32px) / 3); }
+@media (max-width: 767px) { .hs-cities-track li { width: 82cqw; } }
+
+/* ── 23-nov-2026: sellos RITEL, RETIE y LENOR más grandes y en columna (uno debajo del otro), mismo ancho ── */
+.pm.hv .hv-pol2-certs { display: flex !important; flex-direction: column; align-items: flex-start; gap: 12px; }
+.pm.hv .hv-cert { justify-content: flex-start; width: 210px; height: 60px; padding: 0 24px; gap: 12px; font-size: 19px; }
+.pm.hv .hv-cert svg { width: 22px; height: 22px; }
+.pm.hv .hv-cert.is-logo { padding: 0 24px; }
+.pm.hv .hv-cert.is-logo img { height: 44px; }
+
+/* ── 23-nov-2026 (b): Compra con respaldo centrado: título al centro; debajo RITEL y RETIE en una línea y LENOR abajo;
+   después Devoluciones a la izquierda y Garantía a la derecha ── */
+.pm.hv .hv-pol2-in { grid-template-columns: 1fr; justify-items: center; gap: 40px; }
+.pm.hv .hv-pol2-side { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.pm.hv .hv-pol-title em { display: inline; }
+.pm.hv .hv-pol2-certs { display: grid !important; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: 12px; margin-top: 28px; }
+.pm.hv .hv-cert { width: 190px; justify-content: center; }
+.pm.hv .hv-cert.is-logo { grid-column: 1 / -1; }
+.pm.hv .hv-pol-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; width: 100%; max-width: 1100px; }
+.pm.hv .hv-pol-rows li { order: 2; border-top: 1px solid #d9dfec !important; }
+.pm.hv .hv-pol-rows li + li { order: 1; }
+@media (max-width: 767px) {
+  .pm.hv .hv-pol-rows { grid-template-columns: 1fr; }
+  .pm.hv .hv-cert { width: 150px; height: 52px; font-size: 16px; }
+}
+/* los tres sellos en una sola línea */
+.pm.hv .hv-pol2-certs { grid-template-columns: repeat(3, auto); }
+.pm.hv .hv-cert.is-logo { grid-column: auto; }
+@media (max-width: 767px) { .pm.hv .hv-pol2-certs { grid-template-columns: repeat(3, auto); gap: 8px; } .pm.hv .hv-cert { width: 104px; padding: 0 10px; font-size: 14px; } .pm.hv .hv-cert.is-logo img { height: 34px; } }
+/* sin líneas arriba; una línea vertical entre Devoluciones (izquierda) y Garantía (derecha) */
+.pm.hv .hv-pol-rows { gap: 0; }
+.pm.hv .hv-pol-rows li { border-top: 0 !important; }
+.pm.hv .hv-pol-rows li + li { padding-right: 48px; }
+.pm.hv .hv-pol-rows li:first-child { padding-left: 48px; border-left: 1px solid #d9dfec; }
+@media (max-width: 767px) {
+  .pm.hv .hv-pol-rows li + li { padding-right: 0; }
+  .pm.hv .hv-pol-rows li:first-child { padding-left: 0; border-left: 0; border-top: 1px solid #d9dfec !important; }
+}
+/* más aire: entre los sellos y las columnas, y a cada lado de la línea vertical; sin la línea que separaba del equipo */
+.pm.hv .hv-pol2-in { gap: 64px; border-top: 0 !important; }
+.pm.hv .hv-pol-rows li + li { padding-right: 72px; }
+.pm.hv .hv-pol-rows li:first-child { padding-left: 72px; }
+@media (max-width: 767px) { .pm.hv .hv-pol2-in { gap: 40px; } .pm.hv .hv-pol-rows li + li { padding-right: 0; } .pm.hv .hv-pol-rows li:first-child { padding-left: 0; } }
+/* las píldoras de los sellos se pierden sobre el fondo blanco: borde fino y sombra un poco más marcada */
+.pm.hv .hv-cert { border: 1px solid #d9dfec; box-shadow: 0 8px 22px rgba(16, 35, 63, .1); }
+/* más sutil: borde muy claro y sombra suave */
+.pm.hv .hv-cert { border: 1px solid #eaeef6; box-shadow: 0 4px 14px rgba(16, 35, 63, .06); }
+/* más aire entre el título y los sellos, y entre sellos */
+.pm.hv .hv-pol2-certs { margin-top: 44px; gap: 18px; }
+/* 23-nov-2026: más aire arriba y abajo de 'Conectamos cada rincón de Colombia' (entre el video y el banner de MARWOT) */
+.pm.hv .hv-stats2 { padding-top: 170px !important; padding-bottom: 170px !important; }
+@media (max-width: 767px) { .pm.hv .hv-stats2 { padding-top: 96px !important; padding-bottom: 96px !important; } }
+/* banner de MARWOT centrado entre las dos secciones: mismo espacio arriba (carrusel) y abajo (título de Soluciones) */
+.pm.hv .hv-stats2 { padding-bottom: 186px !important; }

@@ -64,9 +64,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-cat-5e-uso-exterior-2.jpg"
     ],
     "datasheet": {
-      "name": "UTPCAT 5E EXT MARWA.pdf",
+      "name": "MARWA_Ficha_Cable_UTP_Cat5e_Exterior.pdf",
       "url": "/fichas/marwa-ficha-utpcat-5e-ext.pdf",
-      "size": 8822828
+      "size": 5157370
     }
   },
   {
@@ -98,9 +98,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-f-utp-cat-6a-lszh-2.jpg"
     ],
     "datasheet": {
-      "name": "FUTP BLINDADO CAT 6A LSZH MARWA.pdf",
+      "name": "MARWA_Ficha_Cable_FUTP_Cat6A_LSZH.pdf",
       "url": "/fichas/marwa-ficha-futp-blindado-cat-6a-lszh.pdf",
-      "size": 9485080
+      "size": 6031110
     }
   },
   {
@@ -136,9 +136,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-utp-cat-6-lszh-rigido-3.jpg"
     ],
     "datasheet": {
-      "name": "UTP CAT 6 LSZH MARWA.pdf",
+      "name": "MARWA_Ficha_Cable_UTP_Cat6_LSZH.pdf",
       "url": "/fichas/marwa-ficha-utp-cat-6-lszh.pdf",
-      "size": 8871742
+      "size": 5929083
     }
   },
   {
@@ -170,9 +170,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-utp-flexible-cat-6-multifilamento-2.jpg"
     ],
     "datasheet": {
-      "name": "UTP CAT 6 MULTIFILAR FLEX MARWA.pdf",
+      "name": "MARWA_Ficha_Cable_UTP_Cat6_Multifilar_Flexible.pdf",
       "url": "/fichas/marwa-ficha-utp-cat-6-multifilar-flex.pdf",
-      "size": 9221990
+      "size": 11680766
     }
   },
   {
@@ -207,9 +207,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-cord-utp-cat-6-de-5-m-rojo-4.jpg"
     ],
     "datasheet": {
-      "name": "PATCH CORD CAT 6 MARWA.pdf",
+      "name": "MARWA_Ficha_Patch_Cord_Cat6.pdf",
       "url": "/fichas/marwa-ficha-patch-cord-cat-6.pdf",
-      "size": 3607874
+      "size": 1344697
     }
   },
   {
@@ -243,9 +243,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-cord-utp-cat-6a-de-1-m-azul-3.jpg"
     ],
     "datasheet": {
-      "name": "PATCH CORD CAT  6A MARWA.pdf",
+      "name": "MARWA_Ficha_Patch_Cord_Cat6A.pdf",
       "url": "/fichas/marwa-ficha-patch-cord-cat-6a.pdf",
-      "size": 4468682
+      "size": 720945
     }
   },
   {
@@ -277,9 +277,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-cord-utp-cat-6a-de-3-ft-rojo-4.jpg"
     ],
     "datasheet": {
-      "name": "PATCH CORD CAT  6A MARWA.pdf",
+      "name": "MARWA_Ficha_Patch_Cord_Cat6A.pdf",
       "url": "/fichas/marwa-ficha-patch-cord-cat-6a.pdf",
-      "size": 4468682
+      "size": 720945
     }
   },
   {
@@ -311,9 +311,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/plug-rj45-ftp-cat-6a-blindado-4.jpg"
     ],
     "datasheet": {
-      "name": "RJ45 BLINDADO CAT 6A MARWA.pdf",
+      "name": "MARWA_Ficha_Plug_RJ45_Cat6A_Blindado.pdf",
       "url": "/fichas/marwa-ficha-rj45-blindado-cat-6a.pdf",
-      "size": 272908
+      "size": 760286
     }
   },
   {
@@ -346,9 +346,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/jack-keystone-cat-6-azul-4.jpg"
     ],
     "datasheet": {
-      "name": "KEYSTONE CAT6.pdf",
+      "name": "MARWA_Ficha_Jack_Keystone_Cat6.pdf",
       "url": "/fichas/marwa-ficha-keystone-cat6.pdf",
-      "size": 3328873
+      "size": 613161
     }
   },
   {
@@ -376,9 +376,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/jack-keystone-cat-6-rojo-2.jpg"
     ],
     "datasheet": {
-      "name": "KEYSTONE CAT6.pdf",
+      "name": "MARWA_Ficha_Jack_Keystone_Cat6.pdf",
       "url": "/fichas/marwa-ficha-keystone-cat6.pdf",
-      "size": 3328873
+      "size": 613161
     }
   },
   {
@@ -433,9 +433,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/jack-keystone-blindado-cat-6a-4.jpg"
     ],
     "datasheet": {
-      "name": "JACK KEYSTONE CAT6A.pdf",
+      "name": "MARWA_Ficha_Jack_Keystone_Cat6A_Blindado.pdf",
       "url": "/fichas/marwa-ficha-jack-keystone-cat6a.pdf",
-      "size": 3478464
+      "size": 559468
     }
   },
   {
@@ -526,9 +526,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-panel-cat-6-de-24-puertos-3.jpg"
     ],
     "datasheet": {
-      "name": "PATCH PANEL DE 24 PUETOS MARWA.pdf",
+      "name": "MARWA_Ficha_Patch_Panel_24_Puertos_Cat6.pdf",
       "url": "/fichas/marwa-ficha-patch-panel-de-24-puetos.pdf",
-      "size": 2685057
+      "size": 606628
     }
   },
   {
@@ -562,9 +562,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-panel-cat-6-de-48-puertos-3.jpg"
     ],
     "datasheet": {
-      "name": "PATCH PANEL DE 48 PUERTOS MARWA.pdf",
+      "name": "MARWA_Ficha_Patch_Panel_48_Puertos_Cat6.pdf",
       "url": "/fichas/marwa-ficha-patch-panel-de-48-puertos.pdf",
-      "size": 3145173
+      "size": 479281
     }
   },
   {
@@ -598,9 +598,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/patch-panel-cat-6a-de-24-puertos-3.jpg"
     ],
     "datasheet": {
-      "name": "HERRAJE CAT 6A MARWA.pdf",
+      "name": "MARWA_Ficha_Herraje_24_Puertos_Cat6A.pdf",
       "url": "/fichas/marwa-ficha-herraje-cat-6a.pdf",
-      "size": 303163
+      "size": 607425
     }
   },
   {
@@ -663,9 +663,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-drop-2-hilos-1-km-3.jpg"
     ],
     "datasheet": {
-      "name": "FIBRA DROP 2 HILOS.pdf",
+      "name": "MARWA_Ficha_Fibra_Optica_DROP_2_Hilos.pdf",
       "url": "/fichas/marwa-ficha-fibra-drop-2-hilos.pdf",
-      "size": 860836
+      "size": 418101
     }
   },
   {
@@ -697,9 +697,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/cable-drop-1-hilo-1-km-2.jpg"
     ],
     "datasheet": {
-      "name": "FIBRA DROP 1 HILO.pdf",
+      "name": "MARWA_Ficha_Fibra_Optica_DROP_1_Hilo.pdf",
       "url": "/fichas/marwa-ficha-fibra-drop-1-hilo.pdf",
-      "size": 860267
+      "size": 417817
     }
   },
   {
@@ -943,9 +943,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-10-cm-x-2-5-mm-negro-3.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -972,9 +972,9 @@ export const inventoryProducts: Product[] = [
       "Contenido": "100 unidades"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1005,9 +1005,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-15-cm-x-3-5-mm-negro-3.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1034,9 +1034,9 @@ export const inventoryProducts: Product[] = [
       "Contenido": "100 unidades"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1066,9 +1066,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-20-cm-x-4-8-mm-negro-2.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1095,9 +1095,9 @@ export const inventoryProducts: Product[] = [
       "Contenido": "100 unidades"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1127,9 +1127,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-25-cm-x-4-8-mm-negro-2.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1156,9 +1156,9 @@ export const inventoryProducts: Product[] = [
       "Contenido": "100 unidades"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1188,9 +1188,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-30-cm-x-4-8-mm-negro-2.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1217,9 +1217,9 @@ export const inventoryProducts: Product[] = [
       "Contenido": "100 unidades"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1249,9 +1249,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-40-cm-x-7-6-mm-negro-2.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1278,9 +1278,9 @@ export const inventoryProducts: Product[] = [
       "Marca": "MARWA"
     },
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1312,9 +1312,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-55-cm-x-7-6-mm-negro-4.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1345,9 +1345,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-70-cm-x-9-0-mm-negro-3.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1378,9 +1378,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-70-cm-x-9-0-mm-natural-3.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1411,9 +1411,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/amarre-plastico-81-cm-x-9-0-mm-negro-3.jpg"
     ],
     "datasheet": {
-      "name": "AMARRES MARWA.pdf",
+      "name": "MARWA_Ficha_Amarres_Plasticos_Nylon.pdf",
       "url": "/fichas/marwa-ficha-amarres.pdf",
-      "size": 3817137
+      "size": 752979
     }
   },
   {
@@ -1444,9 +1444,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/espiral-para-cables-3-4-pulg-negro-5-m-4.jpg"
     ],
     "datasheet": {
-      "name": "ESPIRALES MARWA.pdf",
+      "name": "MARWA_Ficha_Espirales_Plasticos.pdf",
       "url": "/fichas/marwa-ficha-espirales.pdf",
-      "size": 4803920
+      "size": 1561438
     }
   },
   {
@@ -1477,9 +1477,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/espiral-para-cables-1-2-pulg-natural-5-m-4.jpg"
     ],
     "datasheet": {
-      "name": "ESPIRALES MARWA.pdf",
+      "name": "MARWA_Ficha_Espirales_Plasticos.pdf",
       "url": "/fichas/marwa-ficha-espirales.pdf",
-      "size": 4803920
+      "size": 1561438
     }
   },
   {
@@ -1505,9 +1505,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/espiral-para-cables-natural-posible-3-4-pulg-2.jpg"
     ],
     "datasheet": {
-      "name": "ESPIRALES MARWA.pdf",
+      "name": "MARWA_Ficha_Espirales_Plasticos.pdf",
       "url": "/fichas/marwa-ficha-espirales.pdf",
-      "size": 4803920
+      "size": 1561438
     }
   },
   {
@@ -1632,9 +1632,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/face-plate-rj-45-tipo-keystone-sencillo-3.jpg"
     ],
     "datasheet": {
-      "name": "FACE PLATE DE 1 Y 2 PUERTOS MARWA.pdf",
+      "name": "MARWA_Ficha_Face_Plate_1_y_2_Puertos.pdf",
       "url": "/fichas/marwa-ficha-face-plate-de-1-y-2-puertos.pdf",
-      "size": 3638427
+      "size": 3422548
     }
   },
   {
@@ -1664,9 +1664,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/face-plate-rj-45-tipo-keystone-doble-3.jpg"
     ],
     "datasheet": {
-      "name": "FACE PLATE DE 1 Y 2 PUERTOS MARWA.pdf",
+      "name": "MARWA_Ficha_Face_Plate_1_y_2_Puertos.pdf",
       "url": "/fichas/marwa-ficha-face-plate-de-1-y-2-puertos.pdf",
-      "size": 3638427
+      "size": 3422548
     }
   },
   {
@@ -1698,9 +1698,9 @@ export const inventoryProducts: Product[] = [
       "/assets/productos/organizador-horizontal-2u-19-pulg-4.jpg"
     ],
     "datasheet": {
-      "name": "ORGANIZADOR DE 2U MARWA.pdf",
+      "name": "MARWA_Ficha_Organizador_Plastico_2RU.pdf",
       "url": "/fichas/marwa-ficha-organizador-de-2u.pdf",
-      "size": 3029410
+      "size": 469292
     }
   },
   {

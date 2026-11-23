@@ -12,16 +12,29 @@ const loginIntro = <>Tu plataforma para acceder a<br/> nuestro portafolio y gest
 export function AuthShell({title, lead, children, heading = <>Bienvenido a <span>MARWA</span></>, intro = loginIntro, className = ''}: ShellProps) {
   return (
     <div className={`au ${className}`}>
-      <svg className="au-waves" viewBox="0 0 1672 301" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      {/* Fondo 23-nov-2026 (referencia «Banner moderno de inicio y registro Marwa»): velos claros arriba a la izquierda
+          y onda inferior azul que pasa a rojo, con brillo */}
+      <svg className="au-veil" viewBox="0 0 800 600" fill="none" aria-hidden="true">
         <defs>
-          <linearGradient id="au-w" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="780" y2="0"><stop offset="0" stopColor="#c0d5f9"/><stop offset=".55" stopColor="#c6d9fa"/><stop offset="1" stopColor="#c6d9fa" stopOpacity="0"/></linearGradient>
-          <linearGradient id="au-b" gradientUnits="userSpaceOnUse" x1="140" y1="0" x2="1290" y2="0"><stop offset="0" stopColor="#dbe6fb"/><stop offset=".65" stopColor="#e2eafb"/><stop offset="1" stopColor="#e2eafb" stopOpacity="0"/></linearGradient>
-          <linearGradient id="au-r" x1="0" y1="0" x2="1" y2="0"><stop offset=".55" stopColor="#e52332"/><stop offset="1" stopColor="#e52332" stopOpacity=".1"/></linearGradient>
+          <linearGradient id="au-v1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#dfe8fb"/><stop offset="1" stopColor="#ffffff" stopOpacity="0"/></linearGradient>
+          <linearGradient id="au-v2" x1="0" y1="0" x2="1" y2=".6"><stop offset="0" stopColor="#ffffff" stopOpacity=".95"/><stop offset="1" stopColor="#ffffff" stopOpacity="0"/></linearGradient>
         </defs>
-        <path d="M140 301C360 240 640 100 900 72c120-12 240 110 390 229z" fill="url(#au-b)"/>
-        <path d="M1290 301c140-61 270-111 382-196v196z" fill="#dfe9fb"/>
-        <path d="M0 215C90 150 200 115 300 115c170 0 300 90 480 186H0z" fill="url(#au-w)"/>
-        <path className="au-line" d="M0 87c60-19 110-25 155-25 175 0 305 78 465 153 100 47 210 75 330 86" stroke="url(#au-r)" strokeWidth="3" vectorEffect="non-scaling-stroke"/>
+        <path d="M0 0h430C300 40 150 140 0 330z" fill="url(#au-v1)"/>
+        <path d="M0 250C120 120 280 40 520 0h-90C280 40 140 120 0 210z" fill="url(#au-v2)"/>
+        <path d="M0 360C70 230 190 120 360 60" stroke="#ffffff" strokeOpacity=".9" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/>
+      </svg>
+      <svg className="au-waves" viewBox="0 0 1672 260" preserveAspectRatio="none" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="au-pale" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#ffffff" stopOpacity=".9"/><stop offset=".6" stopColor="#e9effc" stopOpacity=".9"/><stop offset="1" stopColor="#ffffff" stopOpacity=".6"/></linearGradient>
+          <linearGradient id="au-blue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#0a35d6"/><stop offset=".35" stopColor="#1f5cf5"/><stop offset=".62" stopColor="#5d8cff" stopOpacity=".55"/><stop offset=".78" stopColor="#9db8ff" stopOpacity="0"/></linearGradient>
+          <linearGradient id="au-red" x1="0" y1="0" x2="1" y2="0"><stop offset=".5" stopColor="#ff6b78" stopOpacity="0"/><stop offset=".72" stopColor="#f04050" stopOpacity=".7"/><stop offset="1" stopColor="#e52332"/></linearGradient>
+          <linearGradient id="au-shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#ffffff" stopOpacity=".2"/><stop offset=".3" stopColor="#ffffff" stopOpacity=".95"/><stop offset=".7" stopColor="#ffffff" stopOpacity=".5"/><stop offset="1" stopColor="#ffffff" stopOpacity=".1"/></linearGradient>
+        </defs>
+        <path d="M0 110C320 40 660 60 1000 120s500 30 672-60v200H0z" fill="url(#au-pale)"/>
+        <path d="M0 200C300 150 640 150 1000 200s480 30 672-110v170H0z" fill="url(#au-red)"/>
+        <path d="M0 150C300 150 600 190 1000 236c240 22 450 22 672 6v18H0z" fill="url(#au-blue)"/>
+        <path d="M0 150C300 150 600 190 1000 236c240 22 450 22 672 6" stroke="url(#au-shine)" strokeWidth="2.5" vectorEffect="non-scaling-stroke"/>
+        <path d="M1000 200c220 26 440 20 672-110" stroke="#ffd6da" strokeOpacity=".8" strokeWidth="2" vectorEffect="non-scaling-stroke"/>
       </svg>
       <div className="au-intro">
         <Image className="au-logo" src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={1200} height={602} priority/>

@@ -18,8 +18,8 @@ const icons: Record<CategoryId, string> = {
 const subHref = (id: CategoryId, sub: string) => `/tienda?categoria=${id}&tipo=${encodeURIComponent(sub)}`;
 
 const cards = [
-  {label: 'Todo el catálogo', href: '/tienda?vista=todos', image: '/assets/tienda-carrete.jpg'},
-  {label: 'Novedades', href: '/tienda?vista=novedades', image: '/assets/producto-cable-cat5e.jpg'},
+  {label: 'Todo el catálogo', href: '/tienda?vista=todos', image: '/assets/menu-todo-catalogo-v3.jpg'},
+  {label: 'Novedades', href: '/tienda?vista=novedades', image: '/assets/menu-novedades-v2.jpg'},
 ];
 
 export function CategoryMega({onNavigate}: {onNavigate?: () => void}) {

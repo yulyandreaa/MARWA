@@ -3,7 +3,7 @@ import {Suspense} from 'react';
 import './tienda.css';
 import '../premium.css';
 import './panel.css';
-import {ShopHeader, Toaster} from '@/components/shop/ShopUI';
+import {ShopHeader, ShopWhatsApp, Toaster} from '@/components/shop/ShopUI';
 import {PmAnnouncement, PmFooter} from '@/components/premium/SiteChrome';
 import {CartDrawer} from '@/components/shop/CartDrawer';
 
@@ -21,8 +21,8 @@ export default function ShopLayout({children}: {children: React.ReactNode}) {
       </Suspense>
       <main className="shop-main">{children}</main>
       <PmFooter shop/>
-      {/* Botón flotante de WhatsApp oculto por ahora (pedido del usuario, se revisa después) */}
-      {/* <ShopWhatsApp message="Hola MARWA, tengo una pregunta sobre la tienda en línea."/> */}
+      {/* Botón flotante de WhatsApp activo también en la tienda (23-nov-2026) */}
+      <ShopWhatsApp message="Hola MARWA, tengo una pregunta sobre la tienda en línea."/>
       <Toaster/>
       <CartDrawer/>
     </div>

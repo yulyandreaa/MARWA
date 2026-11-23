@@ -10,6 +10,7 @@ import {money} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
 import {MarwaCard} from './ShopUI';
+import {Related} from './ProductDetail';
 import {sideAd} from '@/data/ads';
 
 /**
@@ -66,10 +67,26 @@ export function CategoryPage({cat, q = '', sub = ''}: {cat: Scope; q?: string; s
       </nav>
 
       <Listing cat={cat} list={list} search={!!q} sub={sub}/>
-      {!q && <Guide page={page} name={nameOf(cat)}/>}
-      <Faq page={page} title={cat === 'todos' ? 'la tienda MARWA' : inline(nameOf(cat))}/>
+      {/* 23-nov-2026: la guía de compra y las preguntas frecuentes se reemplazan por "Productos relacionados" */}
+      {!q && <CategoryRelated cat={cat}/>}
     </div>
   );
+}
+
+/* Productos relacionados de una categoría: productos de las OTRAS líneas (hasta 3 por línea, primero los que tienen
+   existencias), para completar el proyecto. En "Todo el catálogo" se muestran de todas las líneas. */
+function CategoryRelated({cat}: {cat: Scope}) {
+  const products = useProducts();
+  const items = useMemo(() => {
+    const out: Product[] = [];
+    for (const c of categories) {
+      if (c.id === cat) continue;
+      const of = products.filter(p => p.category === c.id).sort((a, b) => (b.stock > 0 ? 1 : 0) - (a.stock > 0 ? 1 : 0));
+      out.push(...of.slice(0, cat === 'todos' ? 2 : 3));
+    }
+    return out.slice(0, 16);
+  }, [products, cat]);
+  return items.length ? <Related items={items}/> : null;
 }
 
 /* Franja de beneficios en movimiento continuo. */
@@ -214,8 +231,31 @@ function Listing({cat, list, search, sub}: {cat: Scope; list: Product[]; search:
   const visible = shown.slice(0, limit);
   const side = true; // en escritorio la columna siempre está: filtros (si hay) + publicidad
 
+  /* 23-nov-2026: las subcategorías (antes botones arriba de los productos) van como primer filtro, de una sola opción */
+  const hasTipos = !all && tipos.length > 1;
   const filters = (
     <>
+      {hasTipos && (
+        <div className="cx-group">
+          <button className="cx-group-title" aria-expanded={!closed.tipo} onClick={() => setClosed(c => ({...c, tipo: !c.tipo}))}>
+            Tipo de producto<Icon name="chevron"/>
+          </button>
+          {!closed.tipo && (
+            <div className="cx-opts" role="radiogroup" aria-label="Tipo de producto">
+              <label className="pc-check is-radio">
+                <input type="radio" name="cx-tipo" checked={!tipo} onChange={() => pick('')}/>
+                <span>Todos</span><em>{list.length}</em>
+              </label>
+              {tipos.map(t => (
+                <label key={t.value} className="pc-check is-radio">
+                  <input type="radio" name="cx-tipo" checked={tipo === t.value} onChange={() => pick(t.value)}/>
+                  <span>{t.value}</span><em>{t.count}</em>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {groups.map(g => {
         const many = g.options.length > MAX_OPTS && !expanded[g.key];
         const opts = many ? g.options.slice(0, MAX_OPTS) : g.options;
@@ -255,25 +295,14 @@ function Listing({cat, list, search, sub}: {cat: Scope; list: Product[]; search:
         {side && (
           <aside className="cx-side" aria-label="Filtros">
             <div className="cx-side-head"><b>Filtrar por</b>{chips.length > 0 && <button onClick={clear}>Limpiar</button>}</div>
-            {groups.length ? filters : <p className="cx-side-empty">No hay más filtros para esta selección.</p>}
+            {groups.length || hasTipos ? filters : <p className="cx-side-empty">No hay más filtros para esta selección.</p>}
             <SideAdBox/>
           </aside>
         )}
 
         <div className="cx-main">
-          {!all && tipos.length > 1 && (
-            <div className="cx-subs" role="tablist" aria-label={all ? 'Líneas' : 'Subcategorías'}>
-              <button role="tab" aria-selected={!tipo} className={!tipo ? 'on' : ''} onClick={() => pick('')}>Todos <em>{list.length}</em></button>
-              {tipos.map(t => (
-                <button key={t.value} role="tab" aria-selected={tipo === t.value} className={tipo === t.value ? 'on' : ''} onClick={() => pick(t.value)}>
-                  {t.value} <em>{t.count}</em>
-                </button>
-              ))}
-            </div>
-          )}
-
           <div className="cx-bar">
-            {groups.length > 0 && (
+            {(groups.length > 0 || hasTipos) && (
               <button className="cx-filter-btn" onClick={() => setDrawer(true)}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
                 Filtrar{chips.length ? ` (${chips.length})` : ''}

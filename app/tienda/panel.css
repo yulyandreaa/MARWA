@@ -2582,3 +2582,5 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .lx-promos a.is-kv.is-lg::after { background: linear-gradient(90deg, rgba(240, 243, 248, .75) 0%, rgba(240, 243, 248, .35) 38%, rgba(240, 243, 248, 0) 55%); }
   .lx-promos a.is-kv.is-lg .lx-kv-bars { right: auto; left: 30%; top: -18%; width: 46%; }
 }
+.lx-promos a.is-kv.is-dark[href*="plastica"] > img { object-position: 60% 100% !important; transform: scale(.82); transform-origin: 85% 100%; }
+.lx-promos a.is-kv.is-dark[href*="plastica"]:hover > img { transform: scale(.84); }

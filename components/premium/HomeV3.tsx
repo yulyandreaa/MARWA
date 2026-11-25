@@ -435,37 +435,65 @@ function AboutVideo() {
    Se ven 2 a la vez en computador y 1 en celular; se detiene con el cursor encima o fuera de pantalla,
    y no se mueve si la persona pidió reducir el movimiento. */
 const ABOUT_PHOTOS = [
-  {src: '/assets/marwa-real-premium/oficina-vidrios.jpg', alt: 'Oficinas de MARWA en Bogotá con el logo en los vidrios'},
-  {src: '/assets/marwa-real-premium/bodega-cajas.jpg', alt: 'Bodega de MARWA con inventario listo para despacho'},
-  {src: '/assets/marwa-real-premium/oficina-equipo.jpg', alt: 'Oficinas de MARWA en Bogotá'},
-  {src: '/assets/marwa-real-premium/bodega-tuberia.jpg', alt: 'Tubería en la bodega de MARWA'},
-  {src: '/assets/marwa-real-premium/oficina-sala.jpg', alt: 'Sala de reuniones de MARWA'},
+  // 25-nov-2026: tomas sacadas del video del cliente (sin subtítulos, logo ni web). Se probó una versión v2 más "de cine" y la usuaria prefirió estas.
+  {src: '/assets/quienes-somos/equipo-v1.jpg', alt: 'Equipo de MARWA Redes y Energía en sus oficinas'},
+  {src: '/assets/quienes-somos/carretes-v1.jpg', alt: 'Carretes de cable MARWA en bodega'},
+  {src: '/assets/quienes-somos/tecnico-v1.jpg', alt: 'Técnico trabajando en un gabinete de telecomunicaciones'},
+  {src: '/assets/quienes-somos/ingeniero-v1.jpg', alt: 'Ingeniero de MARWA con casco revisando una obra'},
+  {src: '/assets/quienes-somos/reunion-v1.jpg', alt: 'Reunión del equipo comercial de MARWA'},
+  {src: '/assets/quienes-somos/cajas-fibra-v1.jpg', alt: 'Cajas de fibra óptica MARWA'},
 ];
+
 function AboutPhotos() {
   const n = ABOUT_PHOTOS.length;
   const list = [...ABOUT_PHOTOS, ...ABOUT_PHOTOS];
   const [o, setO] = useState(n); // posición: muestra list[o] arriba
   const [anim, setAnim] = useState(true);
+  const [fast, setFast] = useState(false); // con las flechas el cambio es más rápido
   const box = useRef<HTMLDivElement>(null);
-  const hold = useRef(false), visible = useRef(false);
+  const hold = useRef(false), visible = useRef(false), busy = useRef(false), last = useRef(0), touch = useRef(0);
+  // dir 1 = baja (entra una foto por arriba), -1 = sube
+  const go = (dir: 1 | -1, manual = false) => {
+    if (busy.current) return;
+    busy.current = true; if (manual) last.current = Date.now();
+    setFast(manual); setAnim(true); setO(v => v - dir);
+  };
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const el = box.current; if (!el) return;
     const io = new IntersectionObserver(([e]) => { visible.current = e.isIntersecting; }, {threshold: .2});
     io.observe(el);
-    const t = setInterval(() => { if (visible.current && !hold.current && !document.hidden) { setAnim(true); setO(v => v - 1); } }, 3800);
+    // avance solo; se detiene con el cursor encima o si la persona acaba de mover las fotos
+    const t = setInterval(() => { if (visible.current && !hold.current && !document.hidden && Date.now() - last.current > 6000) go(1); }, 3800);
     return () => { clearInterval(t); io.disconnect(); };
   }, []);
-  // al llegar al inicio de la copia, salta sin animación a la misma vista en la segunda copia
-  const done = () => { if (o <= 0) { setAnim(false); setO(n); } };
+  // en los extremos salta sin animación a la misma vista en la otra copia
+  const done = () => {
+    busy.current = false;
+    if (o <= 0) { setAnim(false); setO(o + n); } else if (o > n) { setAnim(false); setO(o - n); }
+  };
   return (
-    <div className="hv-ab4-rail" ref={box} onMouseEnter={() => { hold.current = true; }} onMouseLeave={() => { hold.current = false; }}>
-      <div className={`hv-ab4-track${anim ? '' : ' is-jump'}`} style={{'--o': o} as React.CSSProperties} onTransitionEnd={done}>
-        {list.map((p, k) => (
-          <figure key={k} className="hv-ab4-photo" aria-hidden={k < o || k > o + 1}>
-            <Image src={p.src} alt={k >= n ? '' : p.alt} fill quality={88} sizes="(max-width: 900px) 100vw, 30vw"/>
-          </figure>
-        ))}
+    <div className="hv-ab4-rail" ref={box} onMouseEnter={() => { hold.current = true; }} onMouseLeave={() => { hold.current = false; }}
+      onTouchStart={e => { touch.current = e.touches[0].clientX; }}
+      onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1, true); }}>
+      <div className={`hv-ab4-track${anim ? '' : ' is-jump'}${fast ? ' is-fast' : ''}`} style={{'--o': o} as React.CSSProperties} onTransitionEnd={e => { if (e.target === e.currentTarget) done(); }}>
+        {list.map((p, k) => {
+          const hidden = k < o || k > o + 1;
+          return (
+            <figure key={k} className="hv-ab4-photo" aria-hidden={hidden}>
+              <Image src={p.src} alt={k >= n ? '' : p.alt} fill quality={88} sizes="(max-width: 900px) 100vw, 30vw"/>
+            </figure>
+          );
+        })}
+      </div>
+      {/* botones para pasar las fotos a mano, mismo estilo que los del video */}
+      <div className="hv-ab4-nav">
+        <button type="button" onClick={() => go(-1, true)} aria-label="Foto anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
+        </button>
+        <button type="button" onClick={() => go(1, true)} aria-label="Foto siguiente">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
+        </button>
       </div>
     </div>
   );

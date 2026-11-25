@@ -1535,3 +1535,22 @@ html.lenis, html.lenis body { height: auto; }
   .hv-ab4-rail { --vis: 1; grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 10; }
   .hv-ab4-track .hv-ab4-photo { aspect-ratio: auto; }
 }
+
+/* 25-nov-2026: botones para pasar las fotos a mano (mismo estilo que los del video) y contador */
+.hv-ab4-nav { position: absolute; right: 14px; bottom: 14px; z-index: 2; display: flex; align-items: center; gap: 8px; }
+.hv-ab4-nav button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; color: #fff; background: rgba(16, 35, 63, .62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .2s, transform .2s; }
+.hv-ab4-nav button:hover, .hv-ab4-nav button:focus-visible { background: #e52332; }
+.hv-ab4-nav button:active { transform: scale(.94); }
+.hv-ab4-nav svg { width: 18px; height: 18px; }
+.hv-ab4-count { height: 40px; display: inline-flex; align-items: center; gap: 4px; padding: 0 14px; border-radius: 999px; font: 600 13px/1 Poppins, sans-serif; letter-spacing: .02em; color: #fff; background: rgba(16, 35, 63, .62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-variant-numeric: tabular-nums; }
+.hv-ab4-count i { font-style: normal; font-weight: 500; opacity: .65; }
+@media (max-width: 900px) { .hv-ab4-nav { right: 12px; bottom: 12px; } .hv-ab4-nav button, .hv-ab4-count { height: 38px; } .hv-ab4-nav button { width: 38px; } }
+
+/* 25-nov-2026: sin contador (pedido de la usuaria); las fotos ya no se abren al hacer clic */
+.hv-ab4-count { display: none; }
+/* 25-nov-2026: con las flechas la foto cambia más rápido; más aire entre el collage y los pilares */
+.hv-ab4-track.is-fast { transition-duration: .5s; }
+.hv-ab4-foot { margin-top: 72px; }
+@media (max-width: 900px) { .hv-ab4-foot { margin-top: 48px; } }
+/* 25-nov-2026: un poco menos de aire entre Quiénes somos y "Compra con respaldo" (solo computador) */
+@media (min-width: 901px) { .pm.hv .hv-ab3.is-video { padding-bottom: 40px; } }

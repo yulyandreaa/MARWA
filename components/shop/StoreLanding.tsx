@@ -230,9 +230,9 @@ const promos = [
   {title: 'Cableado estructurado', text: 'Conectividad confiable para tu red.', cta: 'Explorar productos', kv: true, image: '/assets/promo-cableado-kv-v5.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
   {title: 'Fibra óptica', text: 'Datos estables y rápidos a gran distancia.', cta: 'Explorar productos', kv: true, image: '/assets/promo-fibra-kv-dark-v3.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
   {title: 'Canalización y ductería', text: 'Tubería y ductos para proteger tu cableado.', cta: 'Explorar productos', kv: true, image: '/assets/promo-canalizacion-kv-v3.jpg', href: '/tienda?categoria=canalizacion', tone: 'light', btn: 'blue', size: 'lg'},
-  {title: 'Metalmecánica', text: 'Gabinetes y racks para proteger tus equipos.', cta: 'Explorar productos', kv: true, image: '/assets/promo-metalmecanica-kv-v1.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
-  {title: 'Línea plástica', text: 'Amarres, espirales, cajas de paso y face plates.', cta: 'Explorar productos', image: '/assets/promo-plastica-v1.jpg', href: '/tienda?categoria=plastica', tone: 'dark', btn: 'white', size: 'sm'},
-  {title: 'HDTV', text: 'Splitters y extensores para llevar tu señal de video.', cta: 'Explorar productos', image: '/assets/promo-hdtv-v1.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
+  {title: 'Metalmecánica', text: 'Gabinetes y racks para proteger tus equipos.', cta: 'Explorar productos', kv: true, image: '/assets/promo-metalmecanica-kv-v6.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
+  {title: 'Línea plástica', text: 'Face plates, cajas y accesorios para tu red.', cta: 'Explorar productos', kv: true, image: '/assets/promo-plastica-kv-dark-v2.jpg', href: '/tienda?categoria=plastica', tone: 'dark', btn: 'white', size: 'sm'},
+  {title: 'HDTV', text: 'Splitters y extensores para tu señal de video.', cta: 'Explorar productos', kv: true, image: '/assets/promo-hdtv-kv-v1.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
 ];
 
 function PromoGrid() {

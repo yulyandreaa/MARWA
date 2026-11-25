@@ -4,7 +4,7 @@ import './home-v3.css';
 import './best-sellers.css';
 import {PmFooter, PmSiteHeader} from '@/components/premium/SiteChrome';
 import {EcoHero} from '@/components/premium/EcoHero';
-import {HvAbout, HvBestSellers, HvPolicies, HvBrandVideo, HvCharacter, HvContact, HvService, HvSolutions, HvStats} from '@/components/premium/HomeV3';
+import {HvAbout, HvBestSellers, HvPolicies, HvBrandVideo, HvCharacter, HvContact, HvService, HvStats} from '@/components/premium/HomeV3';
 import {HomeFX} from '@/components/premium/HomeFX';
 import {WhatsAppButton} from '@/components/WhatsAppButton';
 import {RevealOnScroll} from '@/components/HomeMotion';
@@ -28,11 +28,12 @@ export default function Home() {
         <HvPolicies/>
         <HvBrandVideo/>
         <HvStats/>
+        {/* 24-nov-2026: despachos + distribuidores, lado a lado, justo debajo de "Conectamos cada rincón de Colombia" */}
+        <HvService/>
         {/* Franja de letras grandes "Calidad que no admite fallas / Redes y energía · Una sola conexión" (HvBigType) retirada el 19-nov-2026: rompía la línea gráfica. Sigue guardada en HomeV3.tsx */}
         {/* "Del puerto a tu proyecto" (HvProcess) guardada en HomeV3.tsx; quitada el 10-nov-2026, se puede volver a poner aquí */}
         <HvCharacter/>
-        <HvSolutions/>
-        <HvService/>
+        {/* "Una solución para cada proyecto" (HvSolutions) retirada el 24-nov-2026 a pedido del cliente. Sigue guardada en HomeV3.tsx */}
         {/* "Productos que cumplen la norma" (HvQuality) retirada el 19-nov-2026: ya la cubre "Compra con respaldo". Sigue guardada en HomeV3.tsx */}
         <HvContact/>
       </main>

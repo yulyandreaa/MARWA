@@ -9,7 +9,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   cableado: {
     tagline: 'Conectividad confiable para cada proyecto.',
     intro: 'Cables UTP, FTP, LSZH, multifilares y accesorios especializados para redes profesionales.',
-    hero: '/assets/categoria-cableado-v5.jpg',
+    hero: '/assets/categoria-cableado-dark-v1.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'categoria', label: 'Categoría'}, {key: 'presentacion', label: 'Presentación'}],
     guide: {
       title: 'Encuentra el cableado estructurado que necesitas en MARWA',
@@ -31,7 +31,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   fibra: {
     tagline: 'Velocidad y precisión en cada conexión.',
     intro: 'Soluciones monomodo ADSS y DROP, multimodo OM3, herrajes y accesorios para infraestructura de fibra óptica.',
-    hero: '/assets/categoria-fibra-v2.jpg',
+    hero: '/assets/categoria-fibra-dark-v12.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'modo', label: 'Modo'}, {key: 'conector', label: 'Conector'}],
     guide: {
       title: 'Encuentra la fibra óptica que necesitas en MARWA',
@@ -53,7 +53,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   plastica: {
     tagline: 'Organización y protección para tus instalaciones.',
     intro: 'Amarres, espirales, cajas de paso, prensaestopas, faceplates y organizadores para una gestión eficiente del cableado.',
-    hero: '/assets/categoria-plastica-v2.jpg',
+    hero: '/assets/categoria-plastica-dark-v1.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'medida', label: 'Medida'}, {key: 'color', label: 'Color'}],
     guide: {
       title: 'Encuentra la línea plástica que necesitas en MARWA',
@@ -74,7 +74,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   hdtv: {
     tagline: 'Señal de alta calidad, sin límites.',
     intro: 'Cables, extensores y splitters para soluciones de transmisión y distribución de señal de video.',
-    hero: '/assets/categoria-hdtv-v2.jpg',
+    hero: '/assets/categoria-hdtv-dark-v3.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'resolucion', label: 'Resolución'}],
     guide: {
       title: 'Encuentra lo que tu señal de video necesita en MARWA',
@@ -93,7 +93,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   canalizacion: {
     tagline: 'Infraestructura segura para cada instalación.',
     intro: 'Canaletas, tuberías SCH 40, EMT e IMC, ductos y bandejas portacables para instalaciones organizadas y confiables.',
-    hero: '/assets/categoria-canalizacion-v2.jpg',
+    hero: '/assets/categoria-canalizacion-dark-v1.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'medida', label: 'Medida'}, {key: 'material', label: 'Material'}],
     guide: {
       title: 'Encuentra la canalización que necesitas en MARWA',
@@ -114,7 +114,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
   metalmecanica: {
     tagline: 'Solidez y respaldo para tu infraestructura.',
     intro: 'Racks y gabinetes para telecomunicaciones, diseñados para organizar y proteger tus equipos de red.',
-    hero: '/assets/categoria-metalmecanica-v2.jpg',
+    hero: '/assets/categoria-metalmecanica-dark-v1.jpg',
     filters: [{key: 'tipo', label: 'Tipo de producto'}, {key: 'tamano', label: 'Tamaño'}, {key: 'instalacion', label: 'Instalación'}],
     guide: {
       title: 'Encuentra el rack o gabinete que necesitas en MARWA',
@@ -137,7 +137,7 @@ export const categoryPages: Record<CategoryId, CategoryPageInfo> = {
 export const allCatalogPage: CategoryPageInfo = {
   tagline: 'Todo para tu red, en un solo lugar.',
   intro: 'Cableado estructurado, fibra óptica, línea plástica, HDTV, canalización y metalmecánica con despacho a toda Colombia.',
-  hero: '/assets/categoria-todos-v1.jpg',
+  hero: '/assets/categoria-todos-dark-v1.jpg',
   filters: [{key: 'linea', label: 'Línea'}],
   guide: {
     title: 'Encuentra lo que tu proyecto necesita en MARWA',

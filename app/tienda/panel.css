@@ -637,7 +637,7 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 
 .mh-top { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: "logo ship search account"; align-items: center; gap: 24px; min-height: 84px; }
 .mh-logo { grid-area: logo; display: block; }
-.mh-logo img { display: block; width: auto; height: 44px; }
+.mh-logo :is(img, svg) { display: block; width: auto; height: 44px; }
 .mh-ship { grid-area: ship; min-width: 0; padding-left: 24px; border-left: 1px solid var(--line); }
 .mh-ship:empty { border: 0; padding: 0; }
 .mh-ship a { display: flex; align-items: center; gap: 10px; min-height: 44px; max-width: 200px; color: var(--ink); }
@@ -751,7 +751,7 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .mh-bar .pm-wrap > a { display: none; }
   .mh-bar li { padding: 0; font-size: 12px; white-space: normal; }
   .mh-top { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "logo account" "search search" "ship ship"; gap: 6px 8px; min-height: 0; padding: 8px 0 6px; }
-  .mh-logo img { height: 34px; }
+  .mh-logo :is(img, svg) { height: 34px; }
   .mh-ship { padding-left: 0; border-left: 0; }
   .mh-ship a { max-width: none; }
   .mh-account { gap: 4px; }
@@ -1219,7 +1219,7 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .shop:has(.sl-banner) .mh { transition: background .25s, border-color .25s; }
 .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) { background: transparent; border-bottom-color: rgba(255, 255, 255, .16); }
 .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-sub { border-top-color: rgba(255, 255, 255, .16); }
-.shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-logo img { filter: brightness(0) invert(1); }
+.shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-logo :is(img, svg) { filter: brightness(0) invert(1); }
 .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-link, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mg-toggle, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-sub nav a, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-inline-nav a, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-cart, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .pm-burger, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .nb-btn, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .pa-account > button, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-ship a, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-ship small { color: #fff; }
 .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-sub nav a:first-child svg { color: #fff; }
 .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-sub nav i, .shop:has(.sl-banner) .mh:not(.scrolled):not(:hover):not(:focus-within):not(.menu-open) .mh-sep { background: rgba(255, 255, 255, .3); }
@@ -1377,7 +1377,7 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .mh-bar li, .mh-bar .pm-wrap > a { font-size: 12.5px; }
   .mh-bar svg { width: 16px; height: 16px; }
   .mh-top { grid-template-columns: auto auto auto minmax(0, 1fr) auto auto; grid-template-areas: "logo cats ship search nav account"; gap: 22px; min-height: 72px; }
-  .mh-logo img { height: 38px; }
+  .mh-logo :is(img, svg) { height: 38px; }
   .mh-inline-cats { grid-area: cats; display: block; padding-left: 22px; border-left: 1px solid var(--line); }
   .mh-inline-nav { grid-area: nav; display: flex; align-items: center; gap: 20px; }
   .mh-inline-nav a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; }
@@ -1458,12 +1458,12 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 }
 
 /* ===== Logo oficial MARWA (apilado: isotipo sobre el nombre) ===== */
-.mh-logo img { height: 56px; }
+.mh-logo :is(img, svg) { height: 56px; }
 .pa-foot img { width: 96px; }
 .au-logo { width: 180px; }
 .co-logo img { height: 50px; }
-@media (min-width: 1200px) { .mh-logo img { height: 54px; } }
-@media (max-width: 760px) { .mh-logo img { height: 44px; } .au-logo { width: 140px; } .co-logo img { height: 42px; } }
+@media (min-width: 1200px) { .mh-logo :is(img, svg) { height: 54px; } }
+@media (max-width: 760px) { .mh-logo :is(img, svg) { height: 44px; } .au-logo { width: 140px; } .co-logo img { height: 42px; } }
 /* El menú de categorías ya no se desliza al abrir: solo aparece */
 .mg.open .mg-panel { animation: none; }
 .mg-panel::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 24px; }
@@ -2456,3 +2456,90 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 /* servicios sin enlace: sin efecto al pasar el cursor */
 .lx-tile.is-static { cursor: default; }
 .lx-tile.is-static:hover img { transform: none !important; }
+/* banner del bodegón (24-nov-2026): segunda línea del título en rojo, sin cursiva */
+.lx-hero:not(.lx-center) .lx-hero-text h1 em { display: block; font-style: normal; color: #e52332; }
+/* 24-nov-2026: banners oscuros sin sombra inferior; solo un degradado lateral liso detrás del texto (el robot conserva su luz) */
+.lx-hero:not(.lx-light)::after { background: linear-gradient(90deg, rgba(2, 10, 46, .6) 0%, rgba(2, 10, 46, .35) 30%, rgba(2, 10, 46, 0) 48%); }
+/* banner del robot: título algo más compacto para que no cruce las fibras (24-nov-2026) */
+.pm .lx-hero:not(.lx-light) .lx-hero-text h1 { max-width: none; font-size: clamp(30px, 2.7vw, 45px); }
+/* puntos del carrusel principal centrados, sin botón de pausa (24-nov-2026) */
+.pm .lx-hero-dots { left: 0; right: 0; justify-content: center; }
+/* piezas de servicios con fotos claras: degradado inferior liso y más alto para que el texto se lea (24-nov-2026) */
+.lx-services .lx-tile::after { background: linear-gradient(0deg, rgba(8, 18, 38, .9) 0%, rgba(8, 18, 38, .78) 22%, rgba(8, 18, 38, .4) 42%, rgba(8, 18, 38, 0) 62%); }
+.lx-services .lx-tile b, .lx-services .lx-tile small { text-shadow: 0 1px 3px rgba(5, 12, 28, .55); }
+.lx-services .lx-tile small { opacity: 1; }
+/* piezas de servicios: foto arriba + franja azul oscuro lisa con el texto (24-nov-2026, opción 2) */
+.lx-svc2 { display: flex; flex-direction: column; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 6px; background: #10233f; font-family: Poppins, sans-serif; color: #fff; }
+.lx-svc2-img { position: relative; flex: 1 1 auto; display: block; overflow: hidden; }
+.lx-svc2-img img { object-fit: cover; }
+.lx-svc2-bar { display: flex; flex-direction: column; padding: 16px clamp(18px, 1.8vw, 24px) 18px; background: #10233f; }
+.lx-svc2 b { font-size: clamp(17px, 1.35vw, 20px); font-weight: 700; line-height: 1.2; }
+.lx-svc2 small { margin-top: 5px; font-size: 14px; line-height: 1.45; color: #d5ddf0; }
+.lx-svc2-bar { flex: 0 0 34%; justify-content: flex-start; padding-top: 22px; }
+.lx-svc2-img { flex: 1 1 0; }
+/* textos centrados en la franja (24-nov-2026) */
+.lx-svc2-bar { justify-content: center; align-items: center; text-align: center; padding-top: 16px; }
+/* tamaños iguales al resto de la tienda: título como antes (21px), frase como las piezas de líneas y distribuidores (15px) */
+.lx-svc2 b { font-size: clamp(17px, 1.35vw, 21px); }
+.lx-svc2 small { font-size: 15px; font-weight: 400; }
+/* texto de las franjas más pequeño (24-nov-2026, la usuaria lo vio muy grande) */
+.lx-svc2 b { font-size: clamp(15px, 1.15vw, 18px); }
+.lx-svc2 small { font-size: 13.5px; margin-top: 4px; }
+.lx-svc2-bar { flex: 0 0 25%; padding-top: 12px; padding-bottom: 12px; }
+/* Logo más grande (pedido del cliente 2026-11-25): mismo tamaño que el inicio, menú más alto y más ancho */
+.mh-top { width: min(1440px, calc(100% - 64px)); min-height: 96px; }
+.mh-logo :is(img, svg) { height: 68px; }
+@media (min-width: 1200px) {
+  .mh-top { min-height: 96px; }
+  .mh-logo :is(img, svg) { height: 68px; }
+  .sl-banner, .sl-banner.lx-hero { margin-top: -131px; }
+  .sl-banner { padding-top: 151px; }
+  .lx-hero { height: calc(100svh - 131px); }
+}
+@media (max-width: 760px) {
+  .mh-top { width: calc(100% - 32px); min-height: 0; }
+  .mh-logo :is(img, svg) { height: 50px; }
+}
+/* Asesoría por WhatsApp: la foto se ancla arriba para que no se corte la cabeza de la asesora */
+.lx-svc2-img img[src*="servicio-whatsapp"] { object-position: center top; }
+.lx-svc2-img img[src*="servicio-despacho"] { object-position: center; }
+/* Dúo: diseño oscuro de antes con las fotos nuevas de día (2026-11-25); la 2.ª parte del título sigue en la misma línea y color */
+.lx-duo-hl { display: inline; color: inherit; }
+.lx-duo a > img { object-position: right center; }
+/* saltos de línea fijos en la frase del dúo ('~' en el texto) */
+.lx-duo-line { display: block; }
+@media (min-width: 768px) { .lx-duo small { max-width: none; } }
+/* Dúo: sombra más suave y solo detrás del texto, para que la foto conserve su luz (2026-11-25) */
+.lx-duo a::after { background: linear-gradient(90deg, rgba(8, 18, 38, .7) 0%, rgba(8, 18, 38, .52) 28%, rgba(8, 18, 38, .18) 46%, rgba(8, 18, 38, 0) 58%); }
+.lx-duo a > span { text-shadow: 0 1px 3px rgba(5, 12, 28, .45); }
+.lx-duo em { text-shadow: none; }
+@media (min-width: 768px) { .lx-duo small { max-width: 17rem; } }
+/* Distribuidor: el fondo de la foto es claro (ventana del local), así que la sombra de lectura es un poco más fuerte */
+.lx-duo a:first-child::after { background: linear-gradient(90deg, rgba(8, 18, 38, .9) 0%, rgba(8, 18, 38, .8) 34%, rgba(8, 18, 38, .36) 50%, rgba(8, 18, 38, 0) 62%); }
+@media (min-width: 768px) { .lx-duo small { max-width: none; } }
+/* Líneas destacadas en UNA sola pantalla (2026-11-25): filas de alto fijo según la pantalla */
+@media (min-width: 1024px) {
+  .lx-promos { --row: clamp(250px, calc((100svh - 210px) / 2), 330px); grid-auto-rows: var(--row); gap: 14px; }
+  .lx-promos a, .lx-promos a.is-sm, .lx-promos a.is-lg { aspect-ratio: auto; height: var(--row); min-height: 0; }
+  .lx-promos a.is-sm > span { margin: 22px 0 0 22px; }
+  .lx-promos a.is-sm b { font-size: clamp(19px, 1.45vw, 22px); }
+  .lx-promos b::before { width: 32px; height: 3px; margin-bottom: 10px; }
+  .lx-promos small { margin-top: 6px; font-size: 13.5px; line-height: 1.35; }
+  .lx-promos em { margin-top: 12px; padding: 9px 14px; font-size: 12.5px; }
+  .lx-promos a.is-lg b { font-size: clamp(22px, 1.9vw, 28px); }
+}
+/* Piezas de líneas con la línea gráfica KV del cliente (2026-11-25): logo arriba, línea roja, título azul oscuro,
+   botón azul y triángulo rojo en la esquina inferior derecha; foto clara con el producto real a la derecha */
+.lx-promos a.is-kv { background: #eef1f6; }
+.lx-promos a.is-kv::after { background: linear-gradient(100deg, rgba(240, 243, 248, .92) 0%, rgba(240, 243, 248, .7) 38%, rgba(240, 243, 248, 0) 62%); }
+.lx-promos a.is-kv::before { content: ""; position: absolute; z-index: 2; right: 0; bottom: 0; width: 22%; aspect-ratio: 1; background: #e52332; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.lx-promos a.is-kv > span { color: #10233f; }
+.lx-kv-logo { position: static !important; display: block; width: clamp(78px, 6.5vw, 104px) !important; height: auto !important; margin-bottom: 14px; }
+.lx-promos a.is-kv b { color: #10233f; font-size: clamp(20px, 1.6vw, 25px); }
+.lx-promos a.is-kv b::before { width: 34px; height: 4px; margin-bottom: 10px; background: #e52332; }
+.lx-promos a.is-kv small { color: #10233f; max-width: 12.5rem; }
+.lx-promos a.is-kv em { background: #1f45e6; color: #fff; border-radius: 10px; }
+.lx-promos a.is-kv > img { object-position: right bottom !important; }
+.lx-promos a.is-kv:hover > img { transform: scale(1.02); }
+.lx-promos a.is-kv > span { max-width: 56%; }
+.lx-promos a.is-kv small { font-size: 12.5px; max-width: 11.5rem; }

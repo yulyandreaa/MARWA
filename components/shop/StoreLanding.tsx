@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import {useEffect, useRef, useState} from 'react';
+import {Fragment, useEffect, useRef, useState} from 'react';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
 import {ProductTile} from '@/components/premium/Sections';
@@ -28,11 +28,11 @@ export function StoreLanding() {
       <PromoGrid/>
       {/* 20-nov: franja móvil retirada a pedido de la usuaria */}
       <BestSellers/>
-      <ProjectTiles/>
+      {/* "Soluciones por tipo de proyecto" (ProjectTiles) retirada el 24-nov-2026 a pedido del cliente; el código sigue abajo */}
       <BrandQuote/>
       <DuoBanners/>
       <FeaturedBand/>
-      <ShopCards/>
+      {/* "Un portafolio. Infinitas conexiones." (ShopCards) retirada el 24-nov-2026: el bodegón ahora es un banner principal */}
       <ServiceTiles/>
       <Advisor/>
       <Faq/>
@@ -42,19 +42,25 @@ export function StoreLanding() {
 
 /* 1 · Hero en carrusel: 16:9, alto min(82svh, 768px) */
 /* Fotos de producto sin empaque (Magnific, con fotos reales de MARWA como referencia). theme = color del texto */
-const heroSlides = [
-  {image: '/assets/hero-p-fibra-personaje-v1.jpg', theme: 'dark', bg: 'linear-gradient(180deg, rgb(4,14,44) 0%, rgb(6,20,58) 50%, rgb(8,26,70) 100%)', pos: '70% 50%', eyebrow: 'Fibra óptica', title: 'Fibra óptica de alto rendimiento', text: 'Conectividad estable, rápida y segura.', cta: 'Ver productos', href: '/tienda?categoria=fibra'},
+const heroSlides: {image: string; theme: string; bg: string; pos: string; eyebrow: string; title: string; text: string; cta: string; href: string; layout?: string}[] = [
+  {image: '/assets/hero-p-fibra-personaje-v2.jpg', theme: 'dark', bg: 'linear-gradient(180deg, rgb(4,14,44) 0%, rgb(6,20,58) 50%, rgb(8,26,70) 100%)', pos: '70% 50%', eyebrow: '', title: 'MARWOT te conecta~con todo lo que~necesitas', text: 'Cableado, fibra óptica, canalización y más, con despacho a los 32 departamentos.', cta: 'Explorar la tienda', href: '/tienda?vista=todos'},
+  /* 24-nov-2026: el bodegón del portafolio pasa a ser banner principal, con más luz (Magnific, productos reales con su marca).
+     Los otros 3 banners quedan guardados abajo por si se quieren volver a usar. */
+  {image: '/assets/hero-p-bodegon-v5.jpg', theme: 'light', bg: 'linear-gradient(180deg, rgb(211,223,248) 0%, rgb(218,226,248) 25%, rgb(219,227,249) 50%, rgb(207,215,245) 75%, rgb(218,227,247) 100%)', pos: '70% 50%', eyebrow: '', title: 'Un portafolio.|Infinitas conexiones.', text: 'Soluciones en conectividad, infraestructura y energía para proyectos que no se detienen.', cta: 'Explorar portafolio', href: '/tienda?vista=todos'},
+];
+/* banners anteriores, guardados (24-nov-2026):
   {image: '/assets/hero-p-patch-cord-v2-hq.jpg', theme: 'light', bg: 'linear-gradient(180deg, rgb(237,246,252) 0%, rgb(240,247,252) 30%, rgb(227,240,250) 55%, rgb(224,237,249) 75%, rgb(228,241,250) 100%)', pos: '70% 50%', eyebrow: 'Cableado estructurado', title: 'Cada punto de tu red, bien conectado', text: 'Cable UTP, patch cord, patch panel y accesorios.', cta: 'Comprar cableado', href: '/tienda?categoria=cableado'},
   {image: '/assets/hero-p-fibra-v2-hq.jpg', theme: 'dark', bg: 'linear-gradient(180deg, rgb(2,9,25) 0%, rgb(2,14,34) 30%, rgb(8,30,66) 50%, rgb(6,24,52) 75%, rgb(28,28,60) 100%)', pos: '70% 50%', eyebrow: 'Tienda MARWA', title: 'Soluciones integrales en redes y energía', text: 'Un portafolio completo para la infraestructura de tus proyectos.', cta: 'Ver soluciones', href: '/tienda?vista=todos'},
   {image: '/assets/hero-p-jacks-colores-v2.jpg', layout: 'center', theme: 'light', bg: 'linear-gradient(180deg, rgb(226,234,248) 0%, rgb(232,239,250) 50%, rgb(222,231,247) 100%)', pos: '50% 50%', eyebrow: 'Jack keystone Cat 6', title: 'Cada conexión, en los colores|de tu red', text: 'Jack keystone Cat 6 MARWA, en azul y rojo', cta: 'Comprar ahora', href: `/tienda?categoria=cableado&tipo=${encodeURIComponent('Accesorios pasivos')}`},
-];
+*/
+
 
 function HeroSlides() {
   const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [paused] = useState(false); // 24-nov-2026: sin botón de pausa; cambia sola cada 5 s
   useEffect(() => {
     if (paused) return;
-    const t = setTimeout(() => setI(n => (n + 1) % heroSlides.length), 6000);
+    const t = setTimeout(() => setI(n => (n + 1) % heroSlides.length), 5000);
     return () => clearTimeout(t);
   }, [i, paused]);
   return (
@@ -67,8 +73,9 @@ function HeroSlides() {
         </div>
       ))}
       <div className="pm-wrap lx-hero-text" key={i}>
-        <span>{heroSlides[i].eyebrow}</span>
-        <h1>{heroSlides[i].title.split('|')[0]}{heroSlides[i].title.includes('|') && <em>{heroSlides[i].title.split('|')[1]}</em>}</h1>
+        {heroSlides[i].eyebrow && <span>{heroSlides[i].eyebrow}</span>}
+        {/* "~" = salto de línea fijo (título del robot en 3 líneas, 24-nov-2026); "|" = segunda parte en rojo */}
+        <h1>{heroSlides[i].title.split('|')[0].split('~').map((l, k) => <Fragment key={k}>{k > 0 && <br/>}{l}</Fragment>)}{heroSlides[i].title.includes('|') && <em>{heroSlides[i].title.split('|')[1]}</em>}</h1>
         <p>{heroSlides[i].text}</p>
         <a href={heroSlides[i].href}>{heroSlides[i].cta} <Icon name="arrow"/></a>
       </div>
@@ -76,7 +83,6 @@ function HeroSlides() {
         {heroSlides.map((s, n) => (
           <button key={s.image} type="button" aria-label={`Ver destacado ${n + 1}`} aria-current={n === i} onClick={() => setI(n)}><i/></button>
         ))}
-        <button type="button" className="lx-hero-pause" aria-label={paused ? 'Reanudar' : 'Pausar'} onClick={() => setPaused(!paused)}>{paused ? '▶' : '❚❚'}</button>
       </div>
     </section>
   );
@@ -220,7 +226,7 @@ function Marquee() {
    se cambiaron por Canalización y Metalmecánica porque MARWA no tiene productos reales de esas líneas)
    tone: color del texto sobre la foto · btn: estilo del botón */
 const promos = [
-  {title: 'Cableado estructurado', text: 'Conectividad estable y de alto rendimiento para tus proyectos.', cta: 'Explorar productos', image: '/assets/promo-cableado-v10.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
+  {title: 'Cableado estructurado', text: 'Conectividad confiable y de alto rendimiento para tu infraestructura.', cta: 'Explorar productos', kv: true, image: '/assets/promo-cableado-kv-v2.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
   {title: 'Fibra óptica', text: 'Alta velocidad, mayor alcance y transmisión sin interferencias.', cta: 'Explorar productos', image: '/assets/promo-fibra-v9.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
   {title: 'Canalización y ductería', text: 'Tubería, ductos y accesorios para llevar y proteger cada cable.', cta: 'Explorar productos', image: '/assets/promo-canalizacion-v5.jpg', href: '/tienda?categoria=canalizacion', tone: 'dark', btn: 'white', size: 'lg'},
   {title: 'Metalmecánica', text: 'Gabinetes y racks para organizar y proteger tus equipos.', cta: 'Explorar productos', image: '/assets/promo-metalmecanica-v7.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
@@ -232,9 +238,10 @@ function PromoGrid() {
   return (
     <section className="pm-wrap pm-section lx-promos" aria-label="Líneas destacadas">
       {promos.map(p => (
-        <a key={p.title} href={p.href} className={`is-${p.tone} is-${p.size}`}>
+        <a key={p.title} href={p.href} className={`is-${p.tone} is-${p.size}${'kv' in p && p.kv ? ' is-kv' : ''}`}>
           <Image src={p.image} alt="" fill quality={92} sizes={p.size === 'lg' ? '(max-width: 767px) 100vw, 650px' : '(max-width: 767px) 50vw, 330px'}/>
           <span>
+            {'kv' in p && p.kv && <Image className="lx-kv-logo" src="/assets/marwa-logo-oficial.png" alt="" width={120} height={60}/>}
             <b>{p.title}</b>
             <small>{p.text}</small>
             <em className={`btn-${p.btn}`}>{p.cta} <Icon name="arrow"/></em>
@@ -387,8 +394,8 @@ function ProjectTiles() {
 
 /* 2 piezas medianas lado a lado: distribuidores y compras por volumen */
 const duo = [
-  {eyebrow: 'Distribuidores', title: 'Hazte distribuidor MARWA', text: 'Lleva nuestro portafolio a tu ciudad con respaldo de marca y acompañamiento comercial.', cta: 'Quiero ser distribuidor', image: '/assets/duo-distribuidor-v1.jpg', msg: 'Hola MARWA, quiero ser distribuidor.'},
-  {eyebrow: 'Contratistas e instaladores', title: 'Compras por volumen para tu obra', text: 'Cotizamos tu lista completa de materiales y la despachamos a todo Colombia.', cta: 'Cotizar mi lista', image: '/assets/duo-volumen-v1.jpg', msg: 'Hola MARWA, quiero cotizar materiales por volumen para una obra.'},
+  {eyebrow: 'Distribuidores', title: 'Hazte distribuidor', hl: 'MARWA', text: 'Lleva nuestro portafolio a tu ciudad~con respaldo de marca~y acompañamiento comercial.', cta: 'Quiero ser distribuidor', image: '/assets/duo-distribuidor-v2.jpg', msg: 'Hola MARWA, quiero ser distribuidor.'},
+  {eyebrow: 'Contratistas e instaladores', title: 'Todo para', hl: 'tu obra', text: 'Cotizamos tu lista completa~de materiales y la despachamos~a todo Colombia.', cta: 'Cotizar mi lista', image: '/assets/duo-volumen-v2.jpg', msg: 'Hola MARWA, quiero cotizar materiales por volumen para una obra.'},
 ];
 
 function DuoBanners() {
@@ -398,8 +405,8 @@ function DuoBanners() {
         <a key={d.title} href={waLink(d.msg)} target="_blank" rel="noopener">
           <Image src={d.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
           <span>
-            <b>{d.title}</b>
-            <small>{d.text}</small>
+            <b>{d.title} <span className="lx-duo-hl">{d.hl}</span></b>
+            <small>{d.text.split('~').map((l, k) => <span key={k} className="lx-duo-line">{l}</span>)}</small>
             <em>{d.cta} <Icon name="arrow"/></em>
           </span>
         </a>
@@ -410,9 +417,9 @@ function DuoBanners() {
 
 /* 3 piezas pequeñas: servicios */
 const services = [
-  {title: 'Fichas técnicas', text: 'Medidas, normas y especificaciones de cada producto.', image: '/assets/servicio-fichas-v1.jpg', href: '/tienda?vista=todos', ext: false},
-  {title: 'Asesoría por WhatsApp', text: 'Un asesor te ayuda a elegir la referencia correcta.', image: '/assets/servicio-whatsapp-v1.jpg', href: waLink('Hola MARWA, necesito asesoría con un producto.'), ext: true},
-  {title: 'Despacho a todo Colombia', text: 'Enviamos tu pedido a los 32 departamentos.', image: '/assets/servicio-despacho-v1.jpg', href: '/tienda?vista=todos', ext: false},
+  {title: 'Fichas técnicas', text: 'Medidas, normas y especificaciones de cada producto.', image: '/assets/servicio-fichas-v3.jpg', href: '/tienda?vista=todos', ext: false},
+  {title: 'Asesoría por WhatsApp', text: 'Un asesor te ayuda a elegir la referencia correcta.', image: '/assets/servicio-whatsapp-v4.jpg', href: waLink('Hola MARWA, necesito asesoría con un producto.'), ext: true},
+  {title: 'Despacho a todo Colombia', text: 'Enviamos tu pedido a los 32 departamentos.', image: '/assets/servicio-despacho-v6.jpg', href: '/tienda?vista=todos', ext: false},
 ];
 
 function ServiceTiles() {
@@ -420,9 +427,10 @@ function ServiceTiles() {
     <section className="pm-wrap pm-section lx-services" aria-label="Servicios MARWA">
       {services.map(s => (
         /* 23-nov-2026: piezas informativas, sin enlace (pedido de la usuaria) */
-        <div key={s.title} className="lx-tile is-static">
-          <Image src={s.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 430px"/>
-          <span><b>{s.title}</b><small>{s.text}</small></span>
+        /* 24-nov-2026: foto arriba y franja azul oscuro lisa abajo con el texto (opción 2 elegida) */
+        <div key={s.title} className="lx-svc2">
+          <span className="lx-svc2-img"><Image src={s.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 430px"/></span>
+          <span className="lx-svc2-bar"><b>{s.title}</b><small>{s.text}</small></span>
         </div>
       ))}
     </section>

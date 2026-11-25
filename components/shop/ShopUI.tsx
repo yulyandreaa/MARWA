@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {useEffect, useState, type FormEvent, type ReactNode} from 'react';
 import {categoryName, type Product} from '@/data/shopSeed';
+import {LOGO_BARS, LOGO_VB, LOGO_WORD} from '@/data/logoMarwa';
 import {CategoryMega} from '@/components/shop/CategoryMega';
 import {Icon} from '@/components/premium/Icons';
 import {AccountMenu} from '@/components/shop/account/AccountMenu';
@@ -212,7 +213,10 @@ export function ShopHeader() {
     <header className={`pm-header shop-pm-header mh${guest ? ' guest' : ''}${menu ? ' menu-open' : ''}${scrolled ? ' scrolled' : ''}`}>
       <div className="pm-wrap mh-top">
         <Link href="/tienda" className="mh-logo" aria-label="Tienda MARWA, inicio">
-          <Image src="/assets/marwa-logo-oficial.png" alt="MARWA Redes y Energía" width={1200} height={602} priority/>
+          {/* mismo logo en vector que el inicio (LOGO MARWA.ai) */}
+          <svg viewBox={LOGO_VB} role="img" aria-label="MARWA Redes y Energía">
+            {[...LOGO_BARS, ...LOGO_WORD].map((p, i) => <path key={i} d={p.d} fill={p.fill}/>)}
+          </svg>
         </Link>
 
         {/* Escritorio ancho: MARWA, Categorías, Ofertas y Novedades van en la misma fila del buscador */}

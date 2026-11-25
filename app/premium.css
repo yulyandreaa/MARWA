@@ -1406,3 +1406,16 @@ footer.mf { padding: 0; background: #10233f; color: #c3c9e0; }
 .eh-zone.on, .eh-zone:focus-visible { z-index: 8; }
 .eh-img { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%), linear-gradient(180deg, transparent 0, #000 3%, #000 97%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%), linear-gradient(180deg, transparent 0, #000 3%, #000 97%, transparent 100%); }
 .pm-logo :is(img, svg) { height: 44px; }
+/* Encabezados de categoría OSCUROS (estilo pedido por el cliente, 2026-11-25): azul noche con luces azul y roja, texto blanco */
+.pc-hero.is-studio.is-dark { background: #031737; }
+.pm .pc-hero.is-studio.is-dark h1 { color: #fff; font-weight: 700; }
+.pm .pc-hero.is-studio.is-dark .pc-hero-copy .pc-hero-tag { color: #fff; font-weight: 600; }
+.pm .pc-hero.is-studio.is-dark .pc-hero-copy p:not(.pc-hero-tag) { color: #c9d4ee; }
+.pc-hero.is-studio.is-dark .pc-marquee { background: #eef2fc; border-bottom: 1px solid #dfe5f5; }
+/* Franja de beneficios más discreta (2026-11-25): al nivel de las pestañas de categorías */
+.pc-marquee span { height: 52px; font-size: 14px; font-weight: 500; gap: 10px; padding: 0 44px; }
+.pc-marquee svg { width: 20px; height: 20px; }
+@media (max-width: 767px) { .pc-marquee span { height: 46px; font-size: 13px; padding: 0 24px; } .pc-marquee svg { width: 18px; height: 18px; } }
+.pc-hero.is-studio .pc-hero-img { bottom: 52px; }
+.pc-hero.is-studio .pc-hero-inner { padding-bottom: 92px; }
+@media (max-width: 767px) { .pc-hero.is-studio .pc-hero-img { bottom: 46px; } }

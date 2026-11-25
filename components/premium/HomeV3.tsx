@@ -8,7 +8,7 @@ import {categories} from '@/data/shopSeed';
 import {useProducts} from '@/lib/shop';
 import {mapDots, mapHub, mapNodes, mapSize} from '@/data/colombiaMap';
 import {BEST_SELLER_IDS} from '@/data/bestSellers';
-import {LOGO_BARS} from '@/data/logoMarwa';
+import {LOGO_BARS, LOGO_VB, LOGO_WORD} from '@/data/logoMarwa';
 
 /**
  * Página de inicio v3 (10-nov-2026), secciones 2 a 9. La sección 1 es EcoHero.
@@ -41,9 +41,13 @@ export function HvBrandVideo() {
         <video src="/assets/marwa-infraestructura-v2.mp4" poster="/assets/marwa-infraestructura-v2.jpg" autoPlay muted loop playsInline preload="auto" aria-hidden="true"/>
       </div>
       <div className="hv-video-shade" aria-hidden="true"/>
+      {/* logo oficial en blanco, arriba a la derecha (pedido del cliente, 24-nov-2026) */}
+      <svg className="hv-video-logo" viewBox={LOGO_VB} role="img" aria-label="MARWA Redes y Energía">
+        {[...LOGO_BARS, ...LOGO_WORD].map((p, i) => <path key={i} d={p.d} fill="#fff"/>)}
+      </svg>
       <div className="hv-wrap hv-video-copy" data-fx>
         <h2 id="hv-video-title" data-split>La infraestructura detrás<br/> <em>de cada conexión</em></h2>
-        <p>Importamos y distribuimos cableado, fibra óptica, canalización y metalmecánica con calidad certificada, para que tu proyecto funcione desde el primer día.</p>
+        <p>Importamos y distribuimos cableado estructurado, fibra óptica, canalización y metalmecánica con calidad certificada, para que tu proyecto funcione desde el primer día.</p>
         <div className="hv-actions">
           <a className="hv-btn light" href="/tienda" target="_blank" rel="noopener">Explorar la tienda <Icon name="arrow"/></a>
         </div>
@@ -465,24 +469,7 @@ export function HvBestSellers() {
    Fotos TEMPORALES (camión con el logo puesto en vector, asesor generado en Magnific) mientras el cliente envía las reales.
    "Más vendidos" va en su propia sección (HvBestSellers), por pedido expreso del cliente. */
 export function HvService() {
-  return (
-    <>
-    <section className="hv-wrap hv-svc truck-a" aria-label="Despachos a todo Colombia">
-      <a className="hv-flyer is-truck" href={wa('Hola MARWA, quiero cotizar un pedido con envío.')} target="_blank" rel="noopener" data-fx>
-        <Image src="/assets/marwa-camion-v3.jpg" alt="Camión de carga MARWA con el personaje de la marca recorriendo una avenida de Bogotá" fill quality={90} sizes="(max-width: 900px) 100vw, 1100px"/>
-        <span className="hv-flyer-shade" aria-hidden="true"/>
-        <span className="hv-flyer-copy">
-          <b>Despachamos a todo Colombia</b>
-          <span>Con vehículos propios llevamos tu pedido desde Bogotá hasta tu obra o tu bodega.</span>
-          <span className="hv-flyer-cta">Cotizar un pedido <Icon name="arrow"/></span>
-        </span>
-      </a>
-    </section>
-    {/* franja de lado a lado (punto 12 del cliente): "Conviértete en distribuidor". Reemplaza a "Respaldo técnico",
-        que repetía la sección de contacto. Textos y campos tomados de marwa.com.co/distribuidores. */}
-    <DistributorBand/>
-    </>
-  );
+  return <DistributorBand/>;
 }
 
 /* Franja + ventana centrada (igual a las de los paneles de cliente y administrador) con el formulario de distribuidores (19-nov-2026).
@@ -517,22 +504,31 @@ function DistributorBand() {
     setSent(true);
   };
   return (
-    <section className="hv-svc2" id="distribuidores" aria-labelledby="hv-dist-title">
-      <div className="hv-flyer2" data-fx>
-        <div className="hv-flyer2-copy">
-          <h2 id="hv-dist-title" className="hv-dist-title">Conviértete en distribuidor MARWA</h2>
-          <span>Déjanos tus datos y nuestro equipo comercial te contactará para iniciar tu vinculación como distribuidor autorizado.</span>
-          <ul className="hv-dist-perks">
-            {['Precios mayoristas', 'Despachos a todo Colombia', 'Respaldo técnico'].map(t => <li key={t}><Icon name="check"/>{t}</li>)}
-          </ul>
-          <button type="button" className="hv-flyer-cta" onClick={() => { setSent(false); setOpen(true); }}>Quiero ser distribuidor <Icon name="arrow"/></button>
-        </div>
-        <span className="hv-flyer2-img"><Image src="/assets/marwa-asesor-dotacion-temporal-v3.jpg" alt="Asesor comercial de MARWA con la dotación de la marca atendiendo una llamada" fill quality={90} sizes="(max-width: 900px) 100vw, 55vw"/></span>
-      </div>
+    <section className="hv-wrap hv-duo" id="distribuidores" aria-label="Despachos y distribuidores">
+      {/* 24-nov-2026: "Despachamos a todo Colombia" y "Conviértete en distribuidor" como dos piezas lado a lado, debajo de "Conectamos cada rincón de Colombia" */}
+      <a className="hv-duo-card is-truck" href={wa('Hola MARWA, quiero cotizar un pedido con envío.')} target="_blank" rel="noopener" data-fx>
+        <Image src="/assets/marwa-camion-v11.jpg" alt="Camión de carga MARWA con el personaje de la marca recorriendo una avenida de Bogotá" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        <span className="hv-duo-copy">
+          <b>Despachamos a todo Colombia</b>
+          <small>Con vehículos propios llevamos tu pedido desde Bogotá hasta tu obra o tu bodega.</small>
+          <em>Cotizar un pedido <Icon name="arrow"/></em>
+        </span>
+      </a>
+      <button type="button" className="hv-duo-card is-dist" onClick={() => { setSent(false); setOpen(true); }} data-fx>
+        <Image src="/assets/marwa-asesor-dotacion-temporal-v3.jpg" alt="Asesor comercial de MARWA con la dotación de la marca atendiendo una llamada" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        <span className="hv-duo-copy">
+          <b>Conviértete en distribuidor MARWA</b>
+          <small>Déjanos tus datos y nuestro equipo comercial te contactará para iniciar tu vinculación.</small>
+          <em>Quiero ser distribuidor <Icon name="arrow"/></em>
+        </span>
+      </button>
 
       {open && (
         <div className="hv-drawer-bg" onClick={() => setOpen(false)}>
           <aside className="hv-drawer" role="dialog" aria-modal="true" aria-labelledby="hv-drawer-title" onClick={e => e.stopPropagation()}>
+            <button type="button" className="hv-drawer-x" aria-label="Cerrar" onClick={() => setOpen(false)}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h3 id="hv-drawer-title">Conviértete en distribuidor MARWA</h3>
             {sent ? (
               <div className="hv-drawer-ok">

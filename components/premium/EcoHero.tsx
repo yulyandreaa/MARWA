@@ -18,12 +18,12 @@ type Zone = {
 };
 
 const zones: Zone[] = [
-  {id: 'cableado', title: ['Cableado', 'estructurado'], text: 'Cables UTP, FTP, LSZH, accesorios y conectividad.', href: '/tienda?categoria=cableado', color: '#1f6bff', box: [27.7, 6.8, 15.6, 25.9], label: [27.1, 18.0, 'right']},
-  {id: 'fibra', title: ['Fibra', 'óptica'], text: 'Monomodo ADSS y DROP, multimodo OM3 y herrajería.', href: '/tienda?categoria=fibra', color: '#13b5c8', box: [55.4, 6.8, 15.2, 25.9], label: [70.5, 16.3, 'left']},
-  {id: 'metalmecanica', title: ['Metalmecánica'], text: 'Racks y gabinetes para telecomunicaciones.', href: '/tienda?categoria=metalmecanica', color: '#e52332', box: [14.7, 35.1, 16.5, 27.6], label: [14.7, 48.9, 'right']},
-  {id: 'plastica', title: ['Línea', 'plástica'], text: 'Amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores.', href: '/tienda?categoria=plastica', color: '#3b4660', box: [68.1, 38.6, 15.2, 24.1], label: [83.4, 52.4, 'left']},
-  {id: 'canalizacion', title: ['Canalización', 'y ductería'], text: 'Canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.', href: '/tienda?categoria=canalizacion', color: '#1f6bff', box: [23.2, 63.3, 15.2, 24.1], label: [23.1, 75.4, 'right']},
-  {id: 'hdtv', title: ['HDTV'], text: 'Cables, extender y splitter.', href: '/tienda?categoria=hdtv', color: '#e52332', box: [61.6, 64.2, 15.2, 24.1], label: [76.6, 77.1, 'left']},
+  {id: 'cableado', title: ['Cableado', 'estructurado'], text: 'Cables UTP, FTP, LSZH, accesorios y conectividad.', href: '/tienda?categoria=cableado', color: '#1f6bff', box: [27.5, 6.5, 15.6, 25.2], label: [27.1, 17.0, 'right']},
+  {id: 'fibra', title: ['Fibra', 'óptica'], text: 'Monomodo ADSS y DROP, multimodo OM3 y herrajería.', href: '/tienda?categoria=fibra', color: '#13b5c8', box: [55.0, 4.4, 15.2, 27.3], label: [70.8, 16.3, 'left']},
+  {id: 'metalmecanica', title: ['Metalmecánica'], text: 'Racks y gabinetes para telecomunicaciones.', href: '/tienda?categoria=metalmecanica', color: '#e52332', box: [16.4, 33.0, 15.6, 31.0], label: [15.7, 47.0, 'right']},
+  {id: 'plastica', title: ['Línea', 'plástica'], text: 'Amarres, espirales, cajas de paso, prensa estopas, face plate y organizadores.', href: '/tienda?categoria=plastica', color: '#3b4660', box: [68.1, 36.8, 14.7, 26.5], label: [83.4, 52.0, 'left']},
+  {id: 'canalizacion', title: ['Canalización', 'y ductería'], text: 'Canaletas, tubería SCH 40, EMT e IMC, ductos y bandejas porta cables.', href: '/tienda?categoria=canalizacion', color: '#1f6bff', box: [23.1, 61.9, 15.3, 27.2], label: [22.9, 76.0, 'right']},
+  {id: 'hdtv', title: ['HDTV'], text: 'Cables, extender y splitter.', href: '/tienda?categoria=hdtv', color: '#e52332', box: [61.6, 64.8, 15.0, 23.6], label: [76.8, 77.5, 'left']},
 ];
 
 /* Logo del manual (LOGO MARWA.ai) en VECTOR, encima de la plataforma hexagonal de la imagen:
@@ -64,7 +64,7 @@ export function EcoHero() {
 
       <div className={`eh-stage${on ? ' has-on' : ''}`}>
         <div className="eh-img">
-          <Image src="/assets/ecosistema-marwa-v17.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA sobre una plataforma hexagonal al centro, conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería y HDTV" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px"/>
+          <Image src="/assets/ecosistema-marwa-v30.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA sobre un círculo rodeado de fibra óptica al centro, conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería y HDTV" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px"/>
         </div>
 
         {/* logo oficial del manual dentro del hexágono (no lo dibuja la IA); entra animado una sola vez */}

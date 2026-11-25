@@ -156,7 +156,6 @@ const landingLinks: [string, string][] = [
   ['ecosistema', 'Ecosistema'],
   ['productos', 'Productos'],
   ['nosotros', 'Quiénes somos'],
-  ['soluciones', 'Soluciones'],
   ['distribuidores', 'Distribuidores'],
   ['contacto', 'Contacto'],
 ];
@@ -215,7 +214,7 @@ export function PmFooter({shop = false}: {shop?: boolean}) {
   const [openCol, setOpenCol] = useState<string | null>(null);
   const cols: {title: string; links: [string, string, boolean?][]}[] = [
     {title: 'Productos', links: [...categories.map(c => [c.name, `/tienda?categoria=${c.id}`, true] as [string, string, boolean]), ['Todo el catálogo', '/tienda?vista=todos', true]]},
-    {title: 'MARWA', links: [['Quiénes somos', '/#nosotros'], ['Ecosistema MARWA', '/#ecosistema'], ['Soluciones', '/#soluciones']]},
+    {title: 'MARWA', links: [['Quiénes somos', '/#nosotros'], ['Ecosistema MARWA', '/#ecosistema']]},
     {title: 'Soporte', links: [['Mi cuenta', '/tienda/cuenta', true], ['Seguimiento de pedidos', '/tienda/cuenta', true], ['Devoluciones y garantía', '/tienda/devoluciones', true], ['PQRS', '/tienda/pqrs', true]]},
     {title: 'Contacto', links: [['310 256 9469', 'tel:+573102569469'], ['info@marwa.com.co', 'mailto:info@marwa.com.co'], ['Av. 70 #49-39, Bogotá', '/#contacto']]},
   ];

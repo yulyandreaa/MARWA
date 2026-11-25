@@ -48,7 +48,7 @@ export function CategoryPage({cat, q = '', sub = ''}: {cat: Scope; q?: string; s
 
   return (
     <div className="pc">
-      <section className={`pc-hero${page.hero.includes('/categoria-') ? ' is-studio' : ''}`}>
+      <section className={`pc-hero${page.hero.includes('/categoria-') ? ' is-studio' : ''}${page.hero.includes('-dark') ? ' is-dark' : ''}`}>
         <div className="pc-wrap pc-hero-inner">
           <div className="pc-hero-copy">
             <h1>{title}</h1>

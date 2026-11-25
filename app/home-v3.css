@@ -162,13 +162,13 @@
 
 /* ===== Menú de la página de inicio (landing premium) ===== */
 html { scroll-behavior: smooth; }
-.hv [id] { scroll-margin-top: 76px; }
+.hv [id] { scroll-margin-top: 84px; }
 .pm-header.lh { position: fixed; left: 0; right: 0; top: 0; z-index: 80; border-bottom: 1px solid transparent; background: transparent; transition: background .35s, box-shadow .35s, border-color .35s, backdrop-filter .35s; }
 .pm-header.lh.is-scrolled { background: rgba(255, 255, 255, .82); -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px); border-bottom-color: rgba(16, 35, 63, .08); box-shadow: 0 10px 30px rgba(16, 35, 63, .06); }
-.lh-row { display: flex; align-items: center; gap: 40px; height: 84px; transition: height .35s; }
-.lh.is-scrolled .lh-row { height: 66px; }
-.lh .pm-logo :is(img, svg) { height: 54px; transition: height .35s; }
-.lh.is-scrolled .pm-logo :is(img, svg) { height: 44px; }
+.lh-row { display: flex; align-items: center; gap: 40px; height: 96px; transition: height .35s; }
+.lh.is-scrolled .lh-row { height: 96px; }
+.lh .pm-logo :is(img, svg) { height: 68px; transition: height .35s; }
+.lh.is-scrolled .pm-logo :is(img, svg) { height: 68px; }
 .lh-menu { display: flex; align-items: center; gap: 6px; margin: 0 auto; padding: 5px; border-radius: 999px; background: rgba(255, 255, 255, .55); border: 1px solid rgba(16, 35, 63, .06); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .lh.is-scrolled .lh-menu { background: rgba(240, 243, 250, .7); }
 .lh-menu a { position: relative; padding: 9px 18px; border-radius: 999px; font-family: Poppins, sans-serif; font-size: 14.5px; font-weight: 500; color: #4a5872; transition: color .25s, background .25s; }
@@ -184,22 +184,22 @@ html { scroll-behavior: smooth; }
 .lh-burger svg { width: 22px; height: 22px; }
 .lh-sheet { display: none; }
 /* la portada deja espacio para el menú flotante */
-.hv .eh { padding-top: 104px; }
+.hv .eh { padding-top: 116px; }
 
 @media (max-width: 1000px) {
-  .lh-row { gap: 16px; height: 68px; }
-  .lh .pm-logo :is(img, svg) { height: 42px; }
+  .lh-row { gap: 16px; height: 72px; }
+  .lh .pm-logo :is(img, svg) { height: 50px; }
   .lh-menu, .lh-quote, .lh-actions > .lh-shop { display: none; }
   .lh-actions { margin-left: auto; }
   .lh-burger { display: grid; }
-  .lh-sheet { position: fixed; inset: 68px 0 0 0; z-index: 79; display: flex; flex-direction: column; justify-content: space-between; padding: 28px 24px calc(28px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, .97); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .lh-sheet { position: fixed; inset: 72px 0 0 0; z-index: 79; display: flex; flex-direction: column; justify-content: space-between; padding: 28px 24px calc(28px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, .97); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); opacity: 0; pointer-events: none; transition: opacity .3s; }
   .lh.menu-open .lh-sheet { opacity: 1; pointer-events: auto; }
   .lh.menu-open { background: #fff; }
   .lh-sheet nav { display: flex; flex-direction: column; }
   .lh-sheet nav a { padding: 18px 0; border-bottom: 1px solid #e6ebf2; font-family: Poppins, sans-serif; font-size: 26px; font-weight: 600; color: #10233f; opacity: 0; transform: translateY(12px); transition: opacity .35s, transform .35s; }
   .lh.menu-open .lh-sheet nav a { opacity: 1; transform: none; }
   .lh-shop.big { justify-content: center; min-height: 54px; font-size: 16px; }
-  .hv .eh { padding-top: 88px; }
+  .hv .eh { padding-top: 92px; }
 }
 
 /* ===== Ronda de efectos premium (sin créditos) ===== */
@@ -298,7 +298,7 @@ html.lenis, html.lenis body { height: auto; }
 .eh-flow { mix-blend-mode: normal; filter: drop-shadow(0 0 1.2px rgba(255,255,255,.9)) drop-shadow(0 0 2.5px rgba(36,71,232,.8)); z-index: 2; }
 /* Portada sin botones: el ecosistema ocupa más espacio (2026-11-10) */
 .hv .eh { padding-bottom: 28px; }
-.hv .eh-stage { width: min(1560px, calc(100% - 32px), calc((100vh - 168px) * 1.791)); margin-top: 6px; }
+.hv .eh-stage { width: min(1560px, calc(100% - 32px), calc((100vh - 180px) * 1.791)); margin-top: 6px; }
 /* Portada quieta (pedido del usuario): sin flotación, sin inclinación, sin destellos ni puntos */
 .hv .eh-img { animation: none; }
 .hv .eh-shine { display: none; }
@@ -306,7 +306,7 @@ html.lenis, html.lenis body { height: auto; }
 .hv .eh-stage.has-on .eh-img { filter: none; }
 
 /* ===== Portada v4: imagen 4K panorámica (6336x2688) con títulos en código ===== */
-.hv .eh-stage { aspect-ratio: 4310 / 1893; width: min(1720px, calc(100% - 32px), calc((100svh - 130px) * 2.277)); }
+.hv .eh-stage { aspect-ratio: 6336 / 2688; width: min(1720px, calc(100% - 32px), calc((100svh - 130px) * 2.357)); }
 .hv .eh { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(70% 70% at 50% 50%, #e6ebfd 0%, #dde5fc 70%, #dce4fc 100%); }
 .hv .eh-img { -webkit-mask-image: radial-gradient(closest-side, #000 82%, transparent 100%); mask-image: radial-gradient(closest-side, #000 82%, transparent 100%); }
 /* títulos */
@@ -319,6 +319,9 @@ html.lenis, html.lenis body { height: auto; }
 .eh-label.is-center::before { display: none; }
 .eh-label.is-center b::before { content: ''; display: inline-block; width: 4px; height: .95em; margin-right: 8px; border-radius: 4px; background: var(--bar); vertical-align: -.1em; }
 .eh-label.on b { color: #2447e8; }
+/* sin rayitas de color junto a los títulos (pedido del usuario, 24-nov-2026) */
+.eh-label { padding-left: 0; }
+.eh-label::before, .eh-label.is-center b::before { display: none; }
 /* zonas: sin punto ni movimiento, solo un brillo suave y la tarjeta */
 .hv .eh-zone { border-radius: 40px; }
 .hv .eh-zone::before { background: radial-gradient(55% 60% at 50% 55%, rgba(36, 71, 232, .12), transparent 75%); }
@@ -328,7 +331,8 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* logo oficial sobre la plataforma hexagonal 3D del ecosistema (19-nov-2026, imagen v12: referencia del usuario, agrandada en Magnific, sin el logo dibujado) */
 /* sin transform ni perspectiva: el logo en vector se pinta nítido (también en pantallas normales) */
-.eh-hex { position: absolute; z-index: 2; left: 44.09%; top: 40.86%; width: 11.91%; }
+/* v18 (24-nov-2026): círculo rodeado de fibra óptica en vez del hexágono (pedido del cliente) */
+.eh-hex { position: absolute; z-index: 2; left: 43.55%; top: 43.6%; width: 12.5%; }
 .hv .eh { perspective: none; }
 .eh-hex svg { display: block; width: 100%; height: auto; overflow: visible; }
 .eh-hex-bar, .eh-hex-word { transform-box: fill-box; transform-origin: center; }
@@ -1376,3 +1380,102 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 767px) { .pm.hv .hv-stats2 { padding-top: 96px !important; padding-bottom: 96px !important; } }
 /* banner de MARWOT centrado entre las dos secciones: mismo espacio arriba (carrusel) y abajo (título de Soluciones) */
 .pm.hv .hv-stats2 { padding-bottom: 186px !important; }
+
+/* logo blanco arriba a la derecha del video de infraestructura (24-nov-2026) */
+.hv-video-logo { position: absolute; z-index: 2; top: 86px; right: max(16px, calc((100% - min(1312px, 100% - 64px)) / 2 - 48px)); width: clamp(110px, 11vw, 180px); height: auto; filter: drop-shadow(0 2px 14px rgba(5, 12, 28, .35)); pointer-events: none; }
+@media (max-width: 767px) { .hv-video-logo { width: 96px; top: 84px; right: 16px; } }
+
+/* ===== Despachos + distribuidores lado a lado (24-nov-2026), mismo formato que las piezas "lx-duo" de la tienda ===== */
+.hv-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 8px 0 110px; }
+.hv-duo-card { position: relative; display: flex; align-items: center; aspect-ratio: 1.65 / 1; overflow: hidden; border: 0; border-radius: 6px; padding: 0; background: #10233f; color: #fff; font: inherit; font-family: Poppins, sans-serif; text-align: left; text-decoration: none; cursor: pointer; }
+.hv-duo-card img { object-fit: cover; object-position: right center; transition: transform .6s ease; }
+.hv-duo-card.is-dist img { object-position: 85% 30%; }
+.hv-duo-card:hover img { transform: scale(1.03); }
+/* 24-nov-2026: sombra solo detrás del texto; el resto de la foto queda con su luz natural */
+.hv-duo-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8, 18, 38, .64) 0%, rgba(8, 18, 38, .52) 32%, rgba(8, 18, 38, .22) 46%, rgba(8, 18, 38, 0) 58%); }
+.hv-duo-copy b, .hv-duo-copy small { text-shadow: 0 1px 3px rgba(5, 12, 28, .6), 0 0 1px rgba(5, 12, 28, .5); }
+.hv-duo-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; max-width: 40%; margin-left: clamp(22px, 5%, 48px); }
+.hv-duo-copy b { font-size: clamp(20px, 1.8vw, 28px); font-weight: 700; line-height: 1.1; color: #fff; }
+.hv-duo-copy small { margin-top: 10px; font-size: clamp(13px, .95vw, 15px); line-height: 1.4; color: #fff; opacity: .92; }
+.hv-duo-copy em { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 10px 16px; border-radius: 12px; background: #fff; color: #10233f; font-style: normal; font-size: 13px; font-weight: 700; transition: transform .2s ease, background .2s, color .2s; }
+.hv-duo-copy em svg { width: 16px; height: 16px; }
+.hv-duo-card:hover em { transform: translateX(3px); background: #e52332; color: #fff; }
+@media (max-width: 900px) {
+  .hv-duo { grid-template-columns: minmax(0, 1fr); padding-bottom: 72px; }
+  .hv-duo-card { aspect-ratio: 4 / 3; }
+  .hv-duo-copy { max-width: 78%; }
+}
+/* los banners de despachos y distribuidores van pegados al carrusel de ciudades (24-nov-2026) */
+.pm.hv .hv-stats2 { padding-bottom: 136px !important; }
+/* "Compra con respaldo" con menos aire (24-nov-2026, pedido del usuario) */
+.pm.hv .hv-ab3 { padding-bottom: 40px; }
+.pm.hv .hv-pol2-in { padding-top: 48px; gap: 44px; }
+.pm.hv .hv-pol2 { padding-bottom: 100px; }
+@media (max-width: 767px) { .pm.hv .hv-ab3 { padding-bottom: 24px; } .pm.hv .hv-pol2-in { padding-top: 32px; gap: 32px; } .pm.hv .hv-pol2 { padding-bottom: 72px; } }
+/* aire blanco entre el banner de MARWOT y la sección de contacto (24-nov-2026) */
+.pm.hv .hv-char.is-boxed { margin-bottom: 120px; }
+@media (max-width: 767px) { .pm.hv .hv-char.is-boxed { margin-bottom: 72px; } }
+.hv-duo-copy small { font-weight: 500; opacity: 1; }
+
+/* ===== Ritmo único de espacios en la página de inicio (24-nov-2026) =====
+   96px entre secciones distintas · 56px entre partes relacionadas (en celular ~56 / 36) */
+.pm.hv .eh { padding-bottom: 0; }
+.pm.hv .hv-best2 .hv-best { padding-top: 30px; padding-bottom: 56px; }
+.pm.hv .hv-ab3 { padding-bottom: 33px; }
+.pm.hv .hv-ab3 { padding-top: 40px; }
+.pm.hv .hv-pol2 { padding-bottom: 96px; }
+.pm.hv .hv-stats2 { padding-top: 82px !important; padding-bottom: 48px !important; }
+.pm.hv .hv-duo { padding-bottom: 56px; }
+.pm.hv .hv-char.is-boxed { margin-bottom: 40px; }
+.pm.hv .hv-contact.hc4 { padding-top: 42px; }
+.pm.hv .hc4-head { margin-top: 0; }
+@media (max-width: 767px) {
+  .pm.hv .hv-best2 .hv-best { padding-top: 24px; padding-bottom: 32px; }
+  .pm.hv .hv-ab3 { padding-top: 24px; }
+  .pm.hv .hv-pol2 { padding-bottom: 56px; }
+  .pm.hv .hv-stats2 { padding-top: 48px !important; padding-bottom: 28px !important; }
+  .pm.hv .hv-duo { padding-bottom: 36px; }
+  .pm.hv .hv-char.is-boxed { margin-bottom: 24px; }
+  .pm.hv .hv-contact.hc4 { padding-top: 32px; }
+}
+
+/* ===== "Conectamos cada rincón de Colombia" con protagonismo (24-nov-2026) =====
+   franja de fondo lila suave de borde a borde, carrusel de ciudades a todo el ancho y más grande,
+   y 96px de separación con los banners de despachos/distribuidores */
+.pm.hv .hv-stats2 { padding-top: 72px !important; padding-bottom: 72px !important; background: #f1f4fd; box-shadow: 0 0 0 100vmax #f1f4fd; clip-path: inset(0 -100vmax); }
+.pm.hv .hv-duo { padding-top: 80px; }
+@media (max-width: 767px) {
+  .pm.hv .hv-stats2 { padding-top: 56px !important; padding-bottom: 56px !important; }
+  .pm.hv .hv-duo { padding-top: 48px; }
+}
+
+
+/* ===== Ritmo intermedio (24-nov-2026, opción 2 elegida por la usuaria) =====
+   140px entre secciones distintas · 80px entre partes relacionadas · celular 80 / 48 */
+.pm.hv .hv-best2 .hv-best { padding-top: 74px; padding-bottom: 100px; }
+.pm.hv .hv-ab3 { padding-bottom: 77px; }
+.pm.hv .hv-pol2 { padding-bottom: 140px; }
+.pm.hv .hv-stats2 { padding-top: 126px !important; padding-bottom: 80px !important; }
+.pm.hv .hv-duo { padding-top: 60px; padding-bottom: 80px; }
+.pm.hv .hv-char.is-boxed { margin-bottom: 60px; }
+.pm.hv .hv-contact.hc4 { padding-top: 66px; }
+@media (max-width: 767px) {
+  .pm.hv .hv-best2 .hv-best { padding-top: 40px; padding-bottom: 56px; }
+  .pm.hv .hv-ab3 { padding-bottom: 40px; }
+  .pm.hv .hv-pol2 { padding-bottom: 80px; }
+  .pm.hv .hv-stats2 { padding-top: 72px !important; padding-bottom: 60px !important; }
+  .pm.hv .hv-duo { padding-bottom: 48px; }
+  .pm.hv .hv-char.is-boxed { margin-bottom: 36px; }
+  .pm.hv .hv-contact.hc4 { padding-top: 40px; }
+}
+/* "Conectamos cada rincón de Colombia" sobre fondo blanco (24-nov-2026, pedido de la usuaria) */
+.pm.hv .hv-stats2 { background: transparent; box-shadow: none; clip-path: none; }
+/* Menú del inicio más ancho para dar aire al logo grande (2026-11-25) */
+.lh-row { width: min(1440px, calc(100% - 64px)); }
+@media (max-width: 760px) { .lh-row { width: calc(100% - 32px); } }
+/* Formulario de distribuidores: botón X para cerrar (2026-11-25) */
+.hv-drawer { position: relative; }
+.hv-drawer-x { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: #f1f4fa; color: #10233f; cursor: pointer; transition: background .2s, color .2s; }
+.hv-drawer-x:hover { background: #e52332; color: #fff; }
+.hv-drawer-x svg { width: 18px; height: 18px; }
+.hv-drawer h3 { padding-right: 44px; }

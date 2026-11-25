@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import {LOGO_BARS} from '@/data/logoMarwa';
 import {Fragment, useEffect, useRef, useState} from 'react';
 import {Icon} from '@/components/premium/Icons';
 import {waLink} from '@/components/premium/SiteChrome';
@@ -226,10 +227,10 @@ function Marquee() {
    se cambiaron por Canalización y Metalmecánica porque MARWA no tiene productos reales de esas líneas)
    tone: color del texto sobre la foto · btn: estilo del botón */
 const promos = [
-  {title: 'Cableado estructurado', text: 'Conectividad confiable y de alto rendimiento para tu infraestructura.', cta: 'Explorar productos', kv: true, image: '/assets/promo-cableado-kv-v2.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
-  {title: 'Fibra óptica', text: 'Alta velocidad, mayor alcance y transmisión sin interferencias.', cta: 'Explorar productos', image: '/assets/promo-fibra-v9.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
-  {title: 'Canalización y ductería', text: 'Tubería, ductos y accesorios para llevar y proteger cada cable.', cta: 'Explorar productos', image: '/assets/promo-canalizacion-v5.jpg', href: '/tienda?categoria=canalizacion', tone: 'dark', btn: 'white', size: 'lg'},
-  {title: 'Metalmecánica', text: 'Gabinetes y racks para organizar y proteger tus equipos.', cta: 'Explorar productos', image: '/assets/promo-metalmecanica-v7.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
+  {title: 'Cableado estructurado', text: 'Conectividad confiable para tu red.', cta: 'Explorar productos', kv: true, image: '/assets/promo-cableado-kv-v5.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
+  {title: 'Fibra óptica', text: 'Datos estables y rápidos a gran distancia.', cta: 'Explorar productos', kv: true, image: '/assets/promo-fibra-kv-dark-v3.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
+  {title: 'Canalización y ductería', text: 'Tubería y ductos para proteger tu cableado.', cta: 'Explorar productos', kv: true, image: '/assets/promo-canalizacion-kv-v3.jpg', href: '/tienda?categoria=canalizacion', tone: 'light', btn: 'blue', size: 'lg'},
+  {title: 'Metalmecánica', text: 'Gabinetes y racks para proteger tus equipos.', cta: 'Explorar productos', kv: true, image: '/assets/promo-metalmecanica-kv-v1.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
   {title: 'Línea plástica', text: 'Amarres, espirales, cajas de paso y face plates.', cta: 'Explorar productos', image: '/assets/promo-plastica-v1.jpg', href: '/tienda?categoria=plastica', tone: 'dark', btn: 'white', size: 'sm'},
   {title: 'HDTV', text: 'Splitters y extensores para llevar tu señal de video.', cta: 'Explorar productos', image: '/assets/promo-hdtv-v1.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
 ];
@@ -240,8 +241,11 @@ function PromoGrid() {
       {promos.map(p => (
         <a key={p.title} href={p.href} className={`is-${p.tone} is-${p.size}${'kv' in p && p.kv ? ' is-kv' : ''}`}>
           <Image src={p.image} alt="" fill quality={92} sizes={p.size === 'lg' ? '(max-width: 767px) 100vw, 650px' : '(max-width: 767px) 50vw, 330px'}/>
+          {'kv' in p && p.kv && (
+            /* esquina con las barras del isotipo MARWA (reemplaza el triángulo rojo) */
+            <svg className="lx-kv-bars" viewBox="380 355 320 155" aria-hidden="true">{LOGO_BARS.map((b, i) => <path key={i} d={b.d} fill={b.fill}/>)}</svg>
+          )}
           <span>
-            {'kv' in p && p.kv && <Image className="lx-kv-logo" src="/assets/marwa-logo-oficial.png" alt="" width={120} height={60}/>}
             <b>{p.title}</b>
             <small>{p.text}</small>
             <em className={`btn-${p.btn}`}>{p.cta} <Icon name="arrow"/></em>

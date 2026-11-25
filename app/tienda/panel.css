@@ -2543,3 +2543,42 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .lx-promos a.is-kv:hover > img { transform: scale(1.02); }
 .lx-promos a.is-kv > span { max-width: 56%; }
 .lx-promos a.is-kv small { font-size: 12.5px; max-width: 11.5rem; }
+/* KV v2 (2026-11-25): sin logo ni línea roja sobre el título; producto grande y luminoso abajo a la derecha */
+.lx-promos a.is-kv b::before { display: none; }
+.lx-promos a.is-kv b { font-size: clamp(21px, 1.7vw, 26px); }
+.lx-promos a.is-kv::after { background: linear-gradient(180deg, rgba(240, 243, 248, .85) 0%, rgba(240, 243, 248, .55) 40%, rgba(240, 243, 248, 0) 60%); }
+/* KV v3: la esquina lleva las barras del isotipo MARWA en lugar del triángulo rojo */
+.lx-promos a.is-kv::before { display: none; }
+.lx-kv-bars { position: absolute; z-index: 2; right: -3%; bottom: -3%; width: 40%; height: auto; pointer-events: none; filter: drop-shadow(0 6px 14px rgba(16, 35, 63, .22)); }
+/* KV v4: isotipo usado como marca de agua grande y transparente en el espacio libre de arriba a la derecha
+   (no tapa el texto ni el producto); se quita el isotipo pequeño de la esquina */
+.lx-kv-bars { right: -18%; top: 6%; bottom: auto; width: 82%; opacity: .1; filter: none; z-index: 1; }
+.lx-promos a.is-kv > span { z-index: 3; }
+.lx-promos a.is-kv::after { background: linear-gradient(180deg, rgba(232, 237, 244, .6) 0%, rgba(232, 237, 244, .25) 40%, rgba(232, 237, 244, 0) 58%); }
+.lx-kv-bars { right: -26%; top: -6%; width: 78%; opacity: .09; }
+/* KV: jerarquía de texto más equilibrada (título un poco menor, frase un poco mayor) */
+@media (min-width: 1024px) {
+  .lx-promos a.is-kv b { font-size: clamp(19px, 1.5vw, 22px); line-height: 1.1; }
+  .lx-promos a.is-kv small { margin-top: 8px; font-size: 13.5px; line-height: 1.4; max-width: 12rem; }
+  .lx-promos a.is-kv em { margin-top: 14px; }
+}
+@media (min-width: 1024px) { .lx-promos a.is-kv small { margin-top: 6px; } .lx-promos a.is-kv em { margin-top: 10px; } }
+/* KV oscuro (Fibra, 2026-11-25): texto blanco, botón blanco, isotipo marca de agua clara */
+.lx-promos a.is-kv.is-dark { background: #050d1f; }
+.lx-promos a.is-kv.is-dark::after { background: linear-gradient(180deg, rgba(4, 10, 26, .75) 0%, rgba(4, 10, 26, .35) 42%, rgba(4, 10, 26, 0) 62%); }
+.lx-promos a.is-kv.is-dark > span, .lx-promos a.is-kv.is-dark b { color: #fff; }
+.lx-promos a.is-kv.is-dark small { color: #d5ddf0; }
+.lx-promos a.is-kv.is-dark em { background: #fff; color: #10233f; box-shadow: none; }
+.lx-promos a.is-kv.is-dark .lx-kv-bars { opacity: .12; }
+.lx-promos a.is-kv.is-dark::after { display: none; }
+.lx-promos a.is-kv.is-dark > span { text-shadow: 0 1px 3px rgba(2, 8, 22, .5); }
+.lx-promos a.is-kv.is-dark em { text-shadow: none; }
+/* KV en la pieza grande (Canalización): texto a la izquierda, centrado en vertical */
+@media (min-width: 1024px) {
+  .lx-promos a.is-kv.is-lg { align-items: center; }
+  .lx-promos a.is-kv.is-lg > span { margin: 0 0 0 clamp(26px, 3vw, 40px); max-width: 44%; }
+  .lx-promos a.is-kv.is-lg b { font-size: clamp(22px, 1.8vw, 27px); }
+  .lx-promos a.is-kv.is-lg > img { object-position: right center !important; }
+  .lx-promos a.is-kv.is-lg::after { background: linear-gradient(90deg, rgba(240, 243, 248, .75) 0%, rgba(240, 243, 248, .35) 38%, rgba(240, 243, 248, 0) 55%); }
+  .lx-promos a.is-kv.is-lg .lx-kv-bars { right: auto; left: 30%; top: -18%; width: 46%; }
+}

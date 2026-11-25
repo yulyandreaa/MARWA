@@ -388,31 +388,112 @@ function AboutGallery({photos}: {photos: {src: string; alt: string}[]}) {
   );
 }
 
-/* 8 · Quiénes somos, con fotos reales de oficinas y bodega */
+/* Video del cliente en Quiénes somos (25-nov-2026): pieza principal de la sección.
+   Arranca solo y sin sonido al entrar en pantalla (los subtítulos vienen en el video);
+   "Ver con sonido" lo pone desde el inicio con audio y al terminar vuelve a repetirse en silencio. */
+function AboutVideo() {
+  const box = useRef<HTMLDivElement>(null);
+  const vid = useRef<HTMLVideoElement>(null);
+  const [sound, setSound] = useState(false);
+  useEffect(() => {
+    const v = vid.current, el = box.current;
+    if (!v || !el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) v.play().catch(() => {});
+      else if (v.muted) v.pause();
+    }, {threshold: .35});
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const withSound = () => {
+    const v = vid.current; if (!v) return;
+    if (sound) { v.muted = true; v.loop = true; setSound(false); return; }
+    v.currentTime = 0; v.muted = false; v.loop = false; v.play().catch(() => {}); setSound(true);
+  };
+  const ended = () => { const v = vid.current; if (!v) return; v.muted = true; v.loop = true; setSound(false); v.play().catch(() => {}); };
+  const big = () => { const v = vid.current as (HTMLVideoElement & {webkitEnterFullscreen?: () => void}) | null; if (!v) return; if (v.requestFullscreen) v.requestFullscreen().catch(() => {}); else v.webkitEnterFullscreen?.(); };
+  return (
+    <div className={`hv-ab4-video${sound ? ' has-sound' : ''}`} ref={box}>
+      <video ref={vid} src="/assets/marwa-quienes-somos.mp4" poster="/assets/marwa-quienes-somos.jpg" muted loop playsInline preload="metadata" onEnded={ended}
+        aria-label="Video: conoce a MARWA Redes y Energía (34 segundos, con subtítulos)"/>
+      <div className="hv-ab4-ctrl">
+        <button type="button" className="hv-ab4-sound" onClick={withSound} aria-pressed={sound}>
+          {sound
+            ? <><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/></svg><span className="hv-ab4-lbl">Silenciar</span></>
+            : <><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg><span className="hv-ab4-lbl">Ver con sonido</span> <small>0:34</small></>}
+        </button>
+        <button type="button" className="hv-ab4-full" onClick={big} aria-label="Ver el video en pantalla completa">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* Fotos reales al lado del video (25-nov-2026): carrusel vertical que BAJA de a una foto cada 3,8 s.
+   Se ven 2 a la vez en computador y 1 en celular; se detiene con el cursor encima o fuera de pantalla,
+   y no se mueve si la persona pidió reducir el movimiento. */
+const ABOUT_PHOTOS = [
+  {src: '/assets/marwa-real-premium/oficina-vidrios.jpg', alt: 'Oficinas de MARWA en Bogotá con el logo en los vidrios'},
+  {src: '/assets/marwa-real-premium/bodega-cajas.jpg', alt: 'Bodega de MARWA con inventario listo para despacho'},
+  {src: '/assets/marwa-real-premium/oficina-equipo.jpg', alt: 'Oficinas de MARWA en Bogotá'},
+  {src: '/assets/marwa-real-premium/bodega-tuberia.jpg', alt: 'Tubería en la bodega de MARWA'},
+  {src: '/assets/marwa-real-premium/oficina-sala.jpg', alt: 'Sala de reuniones de MARWA'},
+];
+function AboutPhotos() {
+  const n = ABOUT_PHOTOS.length;
+  const list = [...ABOUT_PHOTOS, ...ABOUT_PHOTOS];
+  const [o, setO] = useState(n); // posición: muestra list[o] arriba
+  const [anim, setAnim] = useState(true);
+  const box = useRef<HTMLDivElement>(null);
+  const hold = useRef(false), visible = useRef(false);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const el = box.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => { visible.current = e.isIntersecting; }, {threshold: .2});
+    io.observe(el);
+    const t = setInterval(() => { if (visible.current && !hold.current && !document.hidden) { setAnim(true); setO(v => v - 1); } }, 3800);
+    return () => { clearInterval(t); io.disconnect(); };
+  }, []);
+  // al llegar al inicio de la copia, salta sin animación a la misma vista en la segunda copia
+  const done = () => { if (o <= 0) { setAnim(false); setO(n); } };
+  return (
+    <div className="hv-ab4-rail" ref={box} onMouseEnter={() => { hold.current = true; }} onMouseLeave={() => { hold.current = false; }}>
+      <div className={`hv-ab4-track${anim ? '' : ' is-jump'}`} style={{'--o': o} as React.CSSProperties} onTransitionEnd={done}>
+        {list.map((p, k) => (
+          <figure key={k} className="hv-ab4-photo" aria-hidden={k < o || k > o + 1}>
+            <Image src={p.src} alt={k >= n ? '' : p.alt} fill quality={88} sizes="(max-width: 900px) 100vw, 30vw"/>
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* 8 · Quiénes somos (25-nov-2026, pedido del cliente): el video manda.
+   Título y texto arriba, collage con el video grande + 2 fotos reales, y los 3 pilares abajo.
+   La versión anterior (galería + texto) quedó en _backup/antes-video-quienes/. */
 export function HvAbout() {
   const pillars = [
     ['Importación directa', 'Precios competitivos y control de calidad desde el origen.'],
     ['Cumplimiento normativo', 'Productos alineados a RITEL y RETIE en cada entrega.'],
     ['Servicio cercano', 'Un equipo que acompaña cada pedido, en todo el país.'],
   ];
-  const photos = [
-    {src: '/assets/marwa-real-premium/oficina-vidrios.jpg', alt: 'Oficinas de MARWA en Bogotá con el logo en los vidrios', cls: 'big'},
-    {src: '/assets/marwa-real-premium/oficina-equipo.jpg', alt: 'Oficinas de MARWA en Bogotá', cls: ''},
-    {src: '/assets/marwa-real-premium/bodega-cajas.jpg', alt: 'Bodega de MARWA con inventario listo para despacho', cls: ''},
-    {src: '/assets/marwa-real-premium/oficina-sala.jpg', alt: 'Sala de reuniones de MARWA', cls: ''},
-    {src: '/assets/marwa-real-premium/bodega-tuberia.jpg', alt: 'Tubería en la bodega de MARWA', cls: ''},
-  ];
   return (
-    <section className="hv-ab3" id="nosotros" aria-labelledby="hv-about-title">
-      <div className="hv-wrap hv-ab3-in">
-        {/* izquierda: galería de fotos reales con miniaturas (opción 1, aprobada 19-nov-2026) */}
-        <AboutGallery photos={photos}/>
-        {/* derecha: texto ordenado de arriba hacia abajo */}
-        <div className="hv-ab3-copy" data-fx>
+    <section className="hv-ab3 is-video" id="nosotros" aria-labelledby="hv-about-title">
+      <div className="hv-wrap">
+        <header className="hv-ab4-head hv-ab3-copy" data-fx>
           <h2 id="hv-about-title" data-split>El equipo detrás de <em>las redes de Colombia</em></h2>
           {/* palabras clave del cliente resaltadas dentro del párrafo (propuesta A, aprobada 19-nov-2026) */}
           <p className="kw-para"><b>MARWA Redes y Energía</b> es importador y distribuidor directo de <strong>productos certificados</strong> para <strong>infraestructura en telecomunicaciones</strong>. Acompañamos con <strong>ingeniería en telecomunicaciones</strong> y <strong>soluciones para proyectos</strong> de <strong>cableado estructurado</strong> y <strong>redes de voz y datos</strong>, con fibra óptica, línea plástica, HDTV, canalización y ductería, y metalmecánica.</p>
-          <ul className="hv-ab3-list">
+        </header>
+        <div className="hv-ab4-grid" data-fx>
+          <AboutVideo/>
+          <AboutPhotos/>
+        </div>
+        <div className="hv-ab4-foot" data-fx>
+          <ul className="hv-ab3-list hv-ab4-list">
             {pillars.map(([t, d]) => <li key={t}><span className="hv-ab3-ic"><Icon name="check"/></span><span><b>{t}</b>{d}</span></li>)}
           </ul>
           <a className="hv-btn" href={wa('Hola MARWA, quiero cotizar un proyecto.')} target="_blank" rel="noopener">Cotizar un proyecto <Icon name="arrow"/></a>

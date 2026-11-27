@@ -58,6 +58,7 @@ const heroSlides: {image: string; mobile?: string; theme: string; bg: string; po
 
 function HeroSlides() {
   const [i, setI] = useState(0);
+  const touchX = useRef(0), touchY = useRef(0);
   const [paused] = useState(false); // 24-nov-2026: sin botón de pausa; cambia sola cada 5 s
   useEffect(() => {
     if (paused) return;
@@ -65,7 +66,13 @@ function HeroSlides() {
     return () => clearTimeout(t);
   }, [i, paused]);
   return (
-    <section className={`lx-hero${heroSlides[i].theme === 'light' ? ' lx-light' : ''}${heroSlides[i].layout === 'center' ? ' lx-center' : ''}`} aria-roledescription="carrusel" aria-label="Destacados de la tienda">
+    <section className={`lx-hero${heroSlides[i].theme === 'light' ? ' lx-light' : ''}${heroSlides[i].layout === 'center' ? ' lx-center' : ''}`} aria-roledescription="carrusel" aria-label="Destacados de la tienda"
+      /* 27-nov-2026: deslizar con el dedo a izquierda o derecha cambia de banner */
+      onTouchStart={e => { touchX.current = e.touches[0].clientX; touchY.current = e.touches[0].clientY; }}
+      onTouchEnd={e => {
+        const dx = e.changedTouches[0].clientX - touchX.current, dy = e.changedTouches[0].clientY - touchY.current;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) setI(n => (n + (dx < 0 ? 1 : heroSlides.length - 1)) % heroSlides.length);
+      }}>
       {heroSlides.map((s, n) => (
         <div key={s.image} className={`lx-hero-slide${n === i ? ' on' : ''}${s.layout === 'center' ? ' is-center' : ''}`} aria-hidden={n !== i} style={{background: s.bg}}>
           {/* La foto 2:1 en 4K va anclada a la derecha con el alto del banner (nunca se amplía);

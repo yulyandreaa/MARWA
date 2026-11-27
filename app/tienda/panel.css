@@ -2698,3 +2698,30 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .pc-hero.is-studio.has-mob .pc-hero-img .mob-art { object-fit: cover; object-position: center bottom !important; }
   .pc-hero.is-studio.has-mob .pc-hero-inner { min-height: 0 !important; padding: 32px 0 calc(72vw + 46px) !important; }
 }
+/* Portada de la tienda en celular: los puntos por encima del velo y más visibles (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-hero-dots { z-index: 4; bottom: 20px; }
+  .lx-light .lx-hero-dots i { background: rgba(16, 35, 63, .3); }
+}
+
+/* ===== Líneas destacadas en celular (27-nov-2026) =====
+   Orden intercalado: Cableado + Fibra · Canalización · Línea plástica + HDTV · Metalmecánica.
+   Piezas grandes como en computador pero compactas: horizontales 1,6:1, texto a la izquierda sobre un
+   degradado claro y el producto a la derecha, sin que el texto lo tape. */
+@media (max-width: 767px) {
+  .lx-promos > a:nth-child(4) { order: 1; }
+  .lx-promos a.is-kv.is-lg { display: flex; align-items: center; aspect-ratio: 1.6 / 1 !important; height: auto !important; min-height: 0 !important; max-height: none !important; padding: 0; }
+  .lx-promos a.is-kv.is-lg > span { position: relative; z-index: 2; display: block; max-width: 50% !important; margin: 0 0 0 20px !important; padding: 0; }
+  .lx-promos a.is-kv.is-lg > span b, .lx-promos a.is-kv.is-lg > span small { display: block; }
+  .pm .lx-promos a.is-kv.is-lg > span b { font-size: 18px; line-height: 1.15; }
+  .lx-promos a.is-kv.is-lg > span small { margin-top: 6px; font-size: 12.5px; line-height: 1.4; }
+  .lx-promos a.is-kv.is-lg > span em { display: inline-flex; margin-top: 12px; gap: 6px; padding: 8px 12px; font-size: 12px; white-space: nowrap; }
+  .lx-promos a.is-kv.is-lg > img { inset: 0 !important; height: 100% !important; aspect-ratio: auto; object-position: 78% center !important; -webkit-mask-image: none; mask-image: none; }
+  .lx-promos a.is-kv.is-lg::after { display: block; content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(240, 243, 248, .92) 0%, rgba(240, 243, 248, .7) 40%, rgba(240, 243, 248, 0) 62%); }
+  .lx-promos a.is-kv.is-lg .lx-kv-bars { display: none; }
+}
+/* Metalmecánica en celular: el gabinete se corre a la derecha para no tocar el botón */
+@media (max-width: 767px) {
+  .lx-promos a.is-kv.is-lg[href*="metalmecanica"] { background: #e9eef6; }
+  .lx-promos a.is-kv.is-lg[href*="metalmecanica"] > img { left: 14% !important; right: -14% !important; width: 100% !important; }
+}

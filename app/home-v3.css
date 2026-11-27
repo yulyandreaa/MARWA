@@ -1613,3 +1613,69 @@ html.lenis, html.lenis body { height: auto; }
   .hv-duo-card .duo-dsk { display: none; }
   .hv-duo-card img.duo-mob, .hv-duo-card.is-dist img.duo-mob { object-position: center top; }
 }
+
+/* ===== Contacto en celular (27-nov-2026): cuadrícula 2 x 2, ícono arriba, líneas finas entre datos ===== */
+@media (max-width: 767px) {
+  .pm.hv .hc4-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; row-gap: 0; padding: 0; border-top: 1px solid rgba(16, 35, 63, .12); }
+  .pm.hv .hc4-grid li, .pm.hv .hc4-grid li:first-child, .pm.hv .hc4-grid li:hover { flex-direction: column; align-items: flex-start; gap: 10px; padding: 22px 14px 22px 0; border: 0; border-radius: 0; min-height: 0; transform: none; }
+  .pm.hv .hc4-grid li:nth-child(even) { padding: 22px 0 22px 16px; border-left: 1px solid rgba(16, 35, 63, .12); }
+  .pm.hv .hc4-grid li:nth-child(n+3) { border-top: 1px solid rgba(16, 35, 63, .12); }
+  .pm.hv .hc4-grid .hc-ico { width: 42px; height: 42px; margin: 0; }
+  .pm.hv .hc4-grid .hc-ico svg { width: 18px; height: 18px; }
+  .pm.hv .hc4-label { margin-bottom: 2px; font-size: 12.5px; }
+  .pm.hv .hc4-grid .hc-val { font-size: 14.5px; line-height: 1.4; white-space: normal; word-break: normal; overflow-wrap: normal; }
+  .pm.hv .hc4-grid .hc-val small { margin-top: 2px; font-size: 12.5px; }
+}
+/* contacto en celular: sin línea arriba y con margen interno igual a ambos lados (27-nov-2026) */
+@media (max-width: 767px) {
+  .pm.hv .hc4-grid { border-top: 0; }
+  .pm.hv .hc4-grid li, .pm.hv .hc4-grid li:first-child { padding-left: 16px; padding-right: 12px; }
+  .pm.hv .hc4-grid li:nth-child(even) { padding-left: 18px; padding-right: 12px; }
+}
+
+/* ===== Pie de página (27-nov-2026): la frase y el © se leen sobre el azul oscuro; en celular tamaños del sitio ===== */
+.pm .mf-quote, .pm.hv .mf-quote { color: #c3c9e0; }
+.pm .mf-bottom p, .pm.hv .mf-bottom p { font-size: 12px; line-height: 1.5; color: #a9b3d1; }
+@media (max-width: 767px) {
+  .pm .mf-quote, .pm.hv .mf-quote { font-size: 15px; line-height: 1.45; }
+  /* enlaces legales uno debajo del otro, con aire abajo para que el botón de WhatsApp no los tape */
+  .pm .mf-bottom { gap: 14px; padding-bottom: 96px; }
+  .pm .mf-bottom ul { flex-direction: column; gap: 10px; }
+  .pm .mf-bottom a { font-size: 12.5px; }
+}
+@media (max-width: 767px) { .pm .mf-bottom { border-top: 0; padding-top: 22px; } }
+
+/* "Ir a la tienda" visible en el encabezado también en celular y tablet, junto al menú (27-nov-2026) */
+@media (max-width: 1100px) {
+  .lh-actions > .lh-shop { display: inline-flex; min-height: 44px; padding: 0 14px; gap: 6px; font-size: 14px; white-space: nowrap; }
+  .lh-actions > .lh-shop svg { width: 14px; height: 14px; }
+}
+@media (max-width: 374px) { .lh-actions > .lh-shop { padding: 0 12px; font-size: 13px; } .lh-actions > .lh-shop svg { display: none; } }
+
+/* ===== Menú del celular (27-nov-2026): panel blanco sólido que entra por la DERECHA (lado del botón),
+   con la página oscurecida detrás. top: 100% porque el encabezado (con desenfoque) contiene al panel. ===== */
+@media (max-width: 1000px) {
+  .lh-sheet { position: absolute; top: 100%; right: 0; bottom: auto; left: auto; width: min(86vw, 380px); height: calc(100dvh - 100%); max-height: calc(100dvh - 60px);
+    padding: 12px 24px calc(24px + env(safe-area-inset-bottom)); background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none;
+    box-shadow: -16px 0 40px rgba(16, 35, 63, .12); opacity: 1; transform: translateX(105%); transition: transform .35s cubic-bezier(.2, .8, .2, 1); pointer-events: none; overflow-y: auto; }
+  .lh.menu-open .lh-sheet { transform: none; pointer-events: auto; }
+  /* velo sobre la página, a la izquierda del panel */
+  .lh::after { content: ""; position: absolute; top: 100%; left: 0; width: 100vw; height: 100dvh; background: rgba(10, 22, 48, .45); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .lh.menu-open::after { opacity: 1; }
+  .lh-sheet nav a { padding: 16px 0; font-size: 20px; font-weight: 600; }
+  .lh-sheet .lh-shop.big { margin-top: 24px; min-height: 52px; font-size: 16px; }
+}
+
+/* ===== Escala de letra en celular (27-nov-2026), igual a responsive-type.css: sección 22 · banner 21 ·
+   tarjeta/dato 16 · párrafos 15 · pequeños 12-13. Con !important porque una regla vieja (19-nov) dejaba párrafos en 17 px. ===== */
+@media (max-width: 767px) {
+  .pm.hv .hv-ab4-head .kw-para, .pm.hv .hv-stats-head .hs-lead, .pm.hv .hv-char-copy p, .pm.hv .hv-video-copy p, .pm.hv .hc4-head p { font-size: 15px !important; line-height: 1.6 !important; }
+  .pm.hv .hv-ab4-list li > span { font-size: 15px !important; }
+  .pm.hv .hv-ab4-list li > span > b { font-size: 16px !important; }
+  .pm.hv .hv-pcard-name { font-size: 16px !important; }
+  .pm.hv .hv-pcard-line { font-size: 14px !important; }
+  .pm.hv .hv-pol-k, .pm.hv .hv-pol-big { font-size: 17px !important; }
+  .pm.hv .hv-pol-text { font-size: 15px !important; }
+  .pm.hv .hv-duo-copy b { font-size: 19px !important; }
+}
+@media (max-width: 767px) { .pm.hv .hv-char.is-strip .hv-char-copy p, .pm.hv .hv-char.is-boxed .hv-char-copy p { font-size: 15px !important; } }

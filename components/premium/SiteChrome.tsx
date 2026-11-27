@@ -246,7 +246,7 @@ export function PmFooter({shop = false}: {shop?: boolean}) {
         })}
       </div>
       <div className="pm-wrap mf-bottom">
-        <p>© {new Date().getFullYear()} MARWA · Redes y Energía · Colombia (COP)</p>
+        <p>© {new Date().getFullYear()} MARWA · Redes y Energía</p>
         {/* enlaces legales (punto 13 del cliente, 19-nov-2026): todos llevan a páginas que ya existen */}
         <ul aria-label="Información legal">
           <li><a href="/tienda/tratamiento-de-datos" {...extra}>Protección de datos personales (habeas data)</a></li>

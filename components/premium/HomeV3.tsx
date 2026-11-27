@@ -743,9 +743,9 @@ export function HvStoreBridge() {
 export function HvContact() {
   const items = [
     {icon: 'phone', label: 'Teléfono', value: <><a href="tel:+573102569469">310 256 9469</a><small>PBX 601 6136490</small></>},
-    {icon: 'mail', label: 'Correo', value: <><a href="mailto:info@marwa.com.co">info@marwa.com.co</a><small>Cotizaciones y pedidos</small></>},
+    {icon: 'mail', label: 'Correo', value: <><a href="mailto:info@marwa.com.co">info@<wbr/>marwa.com.co</a><small>Cotizaciones y pedidos</small></>},
     {icon: 'pin', label: 'Dirección', value: <>Av. 70 #49-39<small>Bogotá, Colombia</small></>},
-    {icon: 'clock', label: 'Horario', value: <>Lun a jue · 7:30 – 4:00<small>Viernes · 8:00 – 4:00</small></>},
+    {icon: 'clock', label: 'Horario', value: <>Lun a jue · <span style={{whiteSpace: 'nowrap'}}>7:30 – 4:00</span><small>Viernes · <span style={{whiteSpace: 'nowrap'}}>8:00 – 4:00</span></small></>},
   ];
   return (
     <section className="hv-contact hc4" id="contacto" aria-labelledby="hv-contact-title">

@@ -1,13 +1,14 @@
 'use client';
 
 import {saveNotifPrefs, useNotifPrefs, type NotifKind} from '@/lib/notifications';
-import {useState, type FormEvent} from 'react';
-import {updateAccount, type User} from '@/lib/shop';
+import {useRef, useState, type ChangeEvent, type FormEvent} from 'react';
+import {updateAccount, updatePhoto, type User} from '@/lib/shop';
 import {isValidPhone, phoneDigits, phoneError} from '@/lib/validation';
 import {Icon} from '@/components/premium/Icons';
 import {FormRow} from '@/components/shop/AuthShell';
 import {toast} from '@/components/shop/ShopUI';
 import {SectionHead} from './AccountUI';
+import {Avatar} from './AccountMenu';
 
 const emailHelp = `https://wa.me/573102569469?text=${encodeURIComponent('Hola MARWA, quiero cambiar el correo de mi cuenta.')}`;
 const valuesOf = (u: User) => ({name: u.name, phone: u.phone, company: u.company, docId: u.docId, billingAddress: u.billingAddress ?? ''});
@@ -43,6 +44,7 @@ export function AccountProfile({user}: {user: User}) {
   return (
     <>
       <SectionHead title="Mis datos" text="Mantén actualizada tu información de contacto y facturación."/>
+      <PhotoCard user={user}/>
       <form className="form pa-form" onSubmit={submit} noValidate>
         <section className="pa-section" aria-labelledby="datos-personales">
           <h2 id="datos-personales">Datos personales</h2>
@@ -80,6 +82,65 @@ function NotifPrefsCard({email}: {email: string}) {
       <p className="pa-section-text">Elige qué novedades ves en tu campana.</p>
       <label className="shop-check"><input type="checkbox" checked={prefs.pedidos} onChange={() => toggle('pedidos')}/>Mis pedidos y devoluciones</label>
       <label className="shop-check"><input type="checkbox" checked={prefs.soporte} onChange={() => toggle('soporte')}/>Respuestas a mis solicitudes</label>
+    </section>
+  );
+}
+
+/* ── Foto de perfil (27-nov-2026), como en Mercado Libre: se recorta en cuadrado y se reduce a 320 px ── */
+const MAX_MB = 8;
+function squareJpeg(file: File, size = 320): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new window.Image();
+    img.onload = () => {
+      const side = Math.min(img.naturalWidth, img.naturalHeight);
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) { URL.revokeObjectURL(url); return reject(new Error('canvas')); }
+      ctx.drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('imagen')); };
+    img.src = url;
+  });
+}
+
+function PhotoCard({user}: {user: User}) {
+  const input = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const pick = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return toast('Elige una imagen (JPG, PNG o similar).');
+    if (file.size > MAX_MB * 1024 * 1024) return toast(`La imagen pesa más de ${MAX_MB} MB. Elige una más liviana.`);
+    setBusy(true);
+    try {
+      const ok = updatePhoto(user.email, await squareJpeg(file));
+      toast(ok ? 'Tu foto de perfil se actualizó' : 'No pudimos guardar la foto. Inténtalo de nuevo.');
+    } catch {
+      toast('No pudimos leer esa imagen. Prueba con otra.');
+    } finally {
+      setBusy(false);
+    }
+  };
+  const remove = () => { if (updatePhoto(user.email, undefined)) toast('Quitaste tu foto de perfil'); };
+  return (
+    <section className="pa-section pa-photo" aria-labelledby="datos-foto">
+      <span className="pa-photo-pic"><Avatar user={user}/></span>
+      <div className="pa-photo-copy">
+        <h2 id="datos-foto">Foto de perfil</h2>
+        <p className="pa-section-text">Usa una foto tuya o el logo de tu empresa. JPG o PNG, hasta {MAX_MB} MB.</p>
+        <div className="pa-photo-actions">
+          <button type="button" className="button primary" disabled={busy} onClick={() => input.current?.click()}>
+            {busy ? 'Subiendo…' : user.photo ? 'Cambiar foto' : 'Subir foto'}
+          </button>
+          {user.photo && <button type="button" className="button ghost" onClick={remove}>Quitar</button>}
+        </div>
+        <input ref={input} type="file" accept="image/*" hidden onChange={pick}/>
+      </div>
     </section>
   );
 }

@@ -18,11 +18,12 @@ export function AccountMenu({user, onSignOut}: {user: User; onSignOut: () => voi
 
   return (
     <div className="pa-account" ref={ref}>
-      <button type="button" aria-expanded={open} aria-label={`Menú de ${user.name}`} onClick={() => setOpen(!open)}><Icon name="user"/><span>Hola, {firstName(user.name) || 'bienvenido'}</span><Icon name="chevron"/></button>
+      {/* en celular el menú va fijo a lo ancho: se ubica justo debajo del botón (27-nov-2026) */}
+      <button type="button" aria-expanded={open} aria-label={`Menú de ${user.name}`} onClick={e => { const r = e.currentTarget.getBoundingClientRect(); ref.current?.style.setProperty('--acm-top', `${Math.round(r.bottom + 8)}px`); setOpen(!open); }}><Avatar user={user}/><span>Hola, {firstName(user.name) || 'bienvenido'}</span><Icon name="chevron"/></button>
       {open && (
         <div className="pa-account-menu">
           <div className="pa-account-id">
-            <i><Icon name="user"/></i>
+            <i><Avatar user={user}/></i>
             <div><b>{user.name}</b><span>{user.email}</span></div>
           </div>
           {accountTabs.map(t => (
@@ -34,4 +35,10 @@ export function AccountMenu({user, onSignOut}: {user: User; onSignOut: () => voi
       )}
     </div>
   );
+}
+
+/** Foto de perfil del cliente o, si no tiene, el ícono de persona (27-nov-2026). */
+export function Avatar({user}: {user: User}) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return user.photo ? <img className="pa-avatar" src={user.photo} alt=""/> : <Icon name="user"/>;
 }

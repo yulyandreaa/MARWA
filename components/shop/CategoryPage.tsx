@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {categories, categoryName, type CategoryId, type Product} from '@/data/shopSeed';
 import {allCatalogPage, categoryPages, type CategoryPageInfo} from '@/data/catalogRefs';
 import {isOnOffer, useProducts} from '@/lib/shop';
@@ -111,16 +111,44 @@ function Marquee() {
 
 /* Barra de categorías bajo el encabezado: las 6 líneas siempre a la vista, solo texto (nivel 1).
    Las subcategorías van debajo como píldoras (nivel 2). */
+/* posición de la barra entre una categoría y otra (27-nov-2026) */
+let railScroll: number | null = null;
+
 function CategoryRail({cat}: {cat: Scope}) {
   const items: {id: Scope; name: string; href: string}[] = [
     {id: 'todos', name: 'Todos los productos', href: '/tienda?vista=todos'},
     ...categories.map(c => ({id: c.id as Scope, name: c.name, href: `/tienda?categoria=${c.id}`})),
   ];
+  /* 27-nov-2026: en celular la barra se desliza; al abrir una categoría se corre sola (sin animación)
+     para dejar la categoría elegida a la vista, en vez de volver al inicio */
+  const wrap = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const w = wrap.current, on = w?.querySelector<HTMLElement>('a.on');
+    if (!w || !on || w.scrollWidth <= w.clientWidth) return;
+    const target = Math.max(0, on.offsetLeft - w.offsetLeft - (w.clientWidth - on.offsetWidth) / 2);
+    // la página se vuelve a armar al cambiar de categoría: la barra arranca donde estaba y se desliza suave
+    if (railScroll !== null) {
+      // deslizamiento propio de 450 ms; si el navegador no anima, al final queda en su sitio igual
+      const from = railScroll, t0 = performance.now(), dur = 450;
+      w.scrollLeft = from;
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        w.scrollLeft = from + (target - from) * e;
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+      setTimeout(() => { if (Math.abs(w.scrollLeft - Math.min(target, w.scrollWidth - w.clientWidth)) > 2) w.scrollLeft = target; }, dur + 150);
+    } else w.scrollLeft = target;
+    const save = () => { railScroll = w.scrollLeft; };
+    w.addEventListener('scroll', save, {passive: true}); save();
+    return () => w.removeEventListener('scroll', save);
+  }, [cat]);
   return (
     <nav className="cx-rail" aria-label="Categorías de la tienda">
-      <div className="pc-wrap">
+      <div className="pc-wrap" ref={wrap}>
         {items.map(c => (
-          <Link key={c.id} href={c.href} className={c.id === cat ? 'on' : ''} aria-current={c.id === cat ? 'page' : undefined}>{c.name}</Link>
+          <Link key={c.id} href={c.href} scroll={false} className={c.id === cat ? 'on' : ''} aria-current={c.id === cat ? 'page' : undefined}
+            onClick={() => { if (wrap.current) railScroll = wrap.current.scrollLeft; }}>{c.name}</Link>
         ))}
       </div>
     </nav>

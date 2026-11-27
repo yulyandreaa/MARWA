@@ -2928,3 +2928,40 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .pa-buys { display: grid; gap: 14px; }
   .pa-section + .pa-section { margin-top: 20px; }
 }
+
+/* ===== Menú de la cuenta en celular (27-nov-2026): se salía por la izquierda porque se alineaba con el ícono.
+   Ahora va a lo ancho de la pantalla, con 16 px a cada lado, justo debajo de la fila de íconos ===== */
+@media (max-width: 767px) {
+  .pa-account { position: static !important; }
+  .pa-account-menu { position: fixed !important; left: 16px !important; right: 16px !important; width: auto !important; top: var(--acm-top, 104px) !important; max-height: calc(100dvh - 130px); overflow-y: auto; box-shadow: 0 18px 40px rgba(16, 35, 63, .18); }
+}
+
+/* Mi cuenta en celular: sin el menú de la página (el mismo ya está en el ícono de la persona, arriba) */
+@media (max-width: 767px) { .pa.is-buyer .pa-side { display: none !important; } }
+/* Encabezado de la tienda en celular: más aire entre íconos, buscador y "Enviar a" (27-nov-2026) */
+@media (max-width: 767px) {
+  .mh-search { margin-top: 6px !important; }
+  .mh-ship { margin-top: 10px !important; padding-bottom: 12px !important; }
+}
+
+/* ===== Foto de perfil (27-nov-2026) ===== */
+.pa-avatar { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.pa-account-id i:has(.pa-avatar) { overflow: hidden; }
+.pa-photo { display: flex; align-items: center; gap: 22px; }
+.pa-photo-pic { flex: 0 0 auto; display: grid; place-items: center; width: 96px; height: 96px; overflow: hidden; border-radius: 50%; background: #eef2fb; color: #2447e8; box-shadow: 0 0 0 4px #fff, 0 0 0 5px #d3daea; }
+.pa-photo-pic svg { width: 40px; height: 40px; }
+.pa-photo-copy { min-width: 0; }
+.pa-photo-copy h2 { margin: 0 0 4px; }
+.pa-photo-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+@media (max-width: 767px) {
+  .pa-photo { gap: 16px; align-items: flex-start; }
+  .pa-photo-pic { width: 76px; height: 76px; }
+  .pa-photo-pic svg { width: 32px; height: 32px; }
+  .pa-photo-actions .button { min-height: 40px; padding: 0 16px; font-size: 14px; }
+}
+/* foto en el botón de la cuenta: en computador pequeña dentro del botón "Hola, …"; en celular el botón es la foto */
+.pa-account > button .pa-avatar { flex: 0 0 auto; width: 30px; height: 30px; }
+@media (max-width: 767px) {
+  .pa-account > button .pa-avatar { width: 44px; height: 44px; }
+  .pa-account > button:has(.pa-avatar) { overflow: hidden; padding: 0; border-radius: 50% !important; background: none; box-shadow: 0 0 0 2px #fff, 0 0 0 3px #d3daea; }
+}

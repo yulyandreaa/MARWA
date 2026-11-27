@@ -266,7 +266,7 @@ export type Profile = {
   city: string;
   address: string;
 };
-export type User = Profile & {email: string; role: Role; passwordHash: string; createdAt: string; billingAddress?: string};
+export type User = Profile & {email: string; role: Role; passwordHash: string; createdAt: string; billingAddress?: string; photo?: string};
 
 const NO_USERS: User[] = [];
 const NO_SESSION: {email: string} | null = null;
@@ -326,6 +326,12 @@ export const logout = () => write(K.session, null);
 
 export function updateAccount(email: string, data: Partial<Pick<User, 'name' | 'phone' | 'company' | 'docId' | 'billingAddress'>>) {
   return write(K.users, readUsers().map(u => (u.email === email ? {...u, ...data} : u)));
+}
+
+/* Foto de perfil (27-nov-2026). Demo: se guarda como imagen pequeña (data URL JPEG ~320 px) en el usuario.
+   INTEGRACIÓN PENDIENTE: al conectar el backend, subirla a almacenamiento y guardar solo la URL. */
+export function updatePhoto(email: string, photo: string | undefined) {
+  return write(K.users, readUsers().map(u => (u.email === email ? {...u, photo} : u)));
 }
 
 export function updateProfile(email: string, profile: Profile) {

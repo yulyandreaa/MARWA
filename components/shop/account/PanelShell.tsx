@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import {useSearchParams} from 'next/navigation';
 import {useEffect, useState, type ReactNode} from 'react';
@@ -37,7 +36,8 @@ export function PanelShell({title, tabs, active, onSignOut, extra, helpHref, chi
   useEffect(() => setMenu(false), [params]);
 
   return (
-    <div className="pa">
+    /* 27-nov-2026: en Mi cuenta (celular) el menú de la página se oculta; queda solo el del ícono de la persona */
+    <div className={`pa${helpHref.startsWith('/tienda/cuenta') ? ' is-buyer' : ''}`}>
       <div className="pa-body">
         <aside className="pa-side">
           <p className="pa-side-title"><Icon name="menu"/>{title}</p>
@@ -62,17 +62,7 @@ export function PanelShell({title, tabs, active, onSignOut, extra, helpHref, chi
         <main className="pa-main">{children}</main>
       </div>
 
-      <footer className="pa-foot">
-        <div className="pa-wrap">
-          <Link href="/tienda" aria-label="MARWA, ir a la tienda"><Image src="/assets/marwa-logo-oficial.png" alt="" width={1200} height={602}/></Link>
-          <nav aria-label="Información">
-            <a href="/tienda/terminos-y-condiciones">Términos y condiciones</a>
-            <a href="/tienda/tratamiento-de-datos">Política de privacidad</a>
-            <Link href={helpHref}>Ayuda / PQR</Link>
-            <a href="/#contacto">Contacto</a>
-          </nav>
-        </div>
-      </footer>
+      {/* 27-nov-2026: pie pequeño (logo, términos, privacidad, ayuda, contacto) quitado a pedido de la usuaria */}
     </div>
   );
 }

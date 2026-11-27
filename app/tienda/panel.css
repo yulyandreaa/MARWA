@@ -2907,3 +2907,24 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 }
 /* MARWOT en celular: el robot un poco menos a la derecha para que no se corte (27-nov-2026) */
 @media (max-width: 767px) { .lx-mascot .lx-mascot-img.dsk-art { width: 112% !important; } }
+
+/* ===== Ingresar y registro en celular (27-nov-2026): sin el logo grande (ya está en el encabezado)
+   y sin la barra de búsqueda del encabezado ===== */
+@media (max-width: 767px) {
+  .au-intro .au-logo { display: none !important; }
+  .mh-search.is-auth { display: none !important; }
+}
+/* Ingresar y registro en celular: aire arriba del título (27-nov-2026) */
+@media (max-width: 767px) { .au-intro { padding-top: 36px !important; } }
+
+/* ===== Cuenta del cliente y panel en celular (27-nov-2026): más aire entre las partes ===== */
+@media (max-width: 767px) {
+  .mh-ship { padding-top: 6px; padding-bottom: 6px; }
+  .pa-side { padding-top: 16px !important; padding-bottom: 16px !important; }
+  .pa-main { padding-top: 28px !important; }
+  .pa-head { margin-bottom: 20px !important; }
+  .pa-tools { display: flex; flex-direction: column; gap: 14px !important; margin-bottom: 24px !important; }
+  .pa-tools .pa-search { margin: 0 !important; }
+  .pa-buys { display: grid; gap: 14px; }
+  .pa-section + .pa-section { margin-top: 20px; }
+}

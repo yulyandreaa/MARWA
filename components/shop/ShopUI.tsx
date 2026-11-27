@@ -234,7 +234,8 @@ export function ShopHeader() {
           )}
         </div>
 
-        <form className="mh-search" onSubmit={search} role="search">
+        {/* 27-nov-2026: en ingresar y registro no va la búsqueda en celular (clase is-auth, ver panel.css) */}
+        <form className={`mh-search${pathname?.startsWith('/tienda/ingresar') || pathname?.startsWith('/tienda/registro') ? ' is-auth' : ''}`} onSubmit={search} role="search">
           {guest && <Icon name="search" className="mh-search-ico"/>}
           <input value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar productos o referencias…" aria-label="Buscar productos"/>
           <button aria-label="Buscar"><Icon name="search"/></button>

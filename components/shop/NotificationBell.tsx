@@ -44,7 +44,7 @@ function Bell({scope, items, unread, onArrive}: Props & {scope: string; items: N
 
   return (
     <div className="nb" ref={ref}>
-      <button type="button" className="nb-btn" aria-expanded={open} aria-label={unread ? `Notificaciones, ${unread} sin leer` : 'Notificaciones'} onClick={() => setOpen(!open)}>
+      <button type="button" className="nb-btn" aria-expanded={open} aria-label={unread ? `Notificaciones, ${unread} sin leer` : 'Notificaciones'} onClick={e => { const r = e.currentTarget.getBoundingClientRect(); ref.current?.style.setProperty('--acm-top', `${Math.round(r.bottom + 8)}px`); setOpen(!open); }}>
         <Icon name="bell"/>
         {unread > 0 && <b>{unread > 9 ? '9+' : unread}</b>}
       </button>

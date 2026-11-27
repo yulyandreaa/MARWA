@@ -33,7 +33,7 @@ export function AdminSummary() {
           <div className="panel-head"><h3>Pedidos por atender</h3><Link href="/tienda/admin?tab=pedidos">Ver todos →</Link></div>
           {todo.length ? (
             <ul className="mini-list">
-              {todo.slice(0, 6).map(o => (
+              {todo.slice(0, 3).map(o => (
                 <li key={o.id}>
                   <Link href={`/tienda/admin?tab=pedidos&pedido=${o.id}`}>
                     <b>{o.id}</b><span>{o.customer.name} · {o.customer.city}</span>
@@ -47,10 +47,11 @@ export function AdminSummary() {
         </section>
 
         <section className="pa-section">
-          <div className="panel-head"><h3>Alertas de inventario</h3><Link href="/tienda/admin?tab=productos">Inventario →</Link></div>
+          <div className="panel-head"><h3>Alertas de inventario</h3><Link href="/tienda/admin?tab=productos">Ver todos →</Link></div>
           {alerts.length ? (
             <ul className="mini-list">
-              {alerts.map(p => (
+              {/* 27-nov-2026: máximo 3 en las dos listas del resumen; el resto en "Ver todos" */}
+              {alerts.slice(0, 3).map(p => (
                 <li key={p.id}>
                   <Link href={`/tienda/admin?tab=productos&producto=${p.id}`}><b>{p.name}</b><span>Ref. {p.sku}</span></Link>
                   <span className={`stock-tag ${p.stock <= 0 ? 'out' : 'low'}`}>{p.stock <= 0 ? 'Agotado' : `${p.stock} u.`}</span>

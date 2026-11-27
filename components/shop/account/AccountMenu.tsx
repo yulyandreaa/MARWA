@@ -4,13 +4,14 @@ import Link from 'next/link';
 import {useCallback, useRef, useState} from 'react';
 import type {User} from '@/lib/shop';
 import {Icon} from '@/components/premium/Icons';
-import {accountTabs, useDismiss} from './accountNav';
+import {accountTabs, adminTabs, useDismiss} from './accountNav';
 
 /** Primer nombre con mayúscula inicial: "yuly andrea" → "Yuly". */
 const firstName = (name: string) => { const n = name.trim().split(/\s+/)[0] || ''; return n.charAt(0).toUpperCase() + n.slice(1); };
 
 /** Menú del usuario en el encabezado de la tienda: saluda con el nombre con que se registró. */
-export function AccountMenu({user, onSignOut}: {user: User; onSignOut: () => void}) {
+/** Menú de la persona en el encabezado. admin = panel administrativo (sus secciones + Ver tienda). */
+export function AccountMenu({user, onSignOut, admin = false}: {user: User; onSignOut: () => void; admin?: boolean}) {
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
@@ -26,9 +27,10 @@ export function AccountMenu({user, onSignOut}: {user: User; onSignOut: () => voi
             <i><Avatar user={user}/></i>
             <div><b>{user.name}</b><span>{user.email}</span></div>
           </div>
-          {accountTabs.map(t => (
-            <Link key={t.id} href={`/tienda/cuenta?tab=${t.id}`} onClick={close}><Icon name={t.icon}/>{t.label}</Link>
+          {(admin ? adminTabs : accountTabs).map(t => (
+            <Link key={t.id} href={`/tienda/${admin ? 'admin' : 'cuenta'}?tab=${t.id}`} onClick={close}><Icon name={t.icon}/>{t.label}</Link>
           ))}
+          {admin && <><hr/><Link href="/tienda" onClick={close}><Icon name="bag"/>Ver tienda</Link></>}
           <hr/>
           <button type="button" onClick={() => { close(); onSignOut(); }}><Icon name="logout"/>Cerrar sesión</button>
         </div>

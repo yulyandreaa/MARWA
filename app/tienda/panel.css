@@ -2923,8 +2923,9 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .pa-side { padding-top: 16px !important; padding-bottom: 16px !important; }
   .pa-main { padding-top: 28px !important; }
   .pa-head { margin-bottom: 20px !important; }
-  .pa-tools { display: flex; flex-direction: column; gap: 14px !important; margin-bottom: 24px !important; }
-  .pa-tools .pa-search { margin: 0 !important; }
+  /* buscador a lo ancho y los filtros en una fila debajo (la columna estiraba el buscador y dejaba la lupa suelta) */
+  .pa-tools { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 12px 20px !important; margin-bottom: 24px !important; }
+  .pa-tools .pa-search { flex: 1 1 100% !important; width: 100%; height: auto; margin: 0 !important; }
   .pa-buys { display: grid; gap: 14px; }
   .pa-section + .pa-section { margin-top: 20px; }
 }
@@ -2964,4 +2965,28 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 @media (max-width: 767px) {
   .pa-account > button .pa-avatar { width: 44px; height: 44px; }
   .pa-account > button:has(.pa-avatar) { overflow: hidden; padding: 0; border-radius: 50% !important; background: none; box-shadow: 0 0 0 2px #fff, 0 0 0 3px #d3daea; }
+}
+
+/* ===== Notificaciones en celular igual al menú del perfil (27-nov-2026): a lo ancho, 16 px a cada lado,
+   justo debajo de los íconos, misma tarjeta (esquinas 14, sombra) ===== */
+@media (max-width: 767px) {
+  .nb { position: static !important; }
+  .nb-pop { position: fixed !important; left: 16px !important; right: 16px !important; width: auto !important; top: var(--acm-top, 104px) !important; max-height: calc(100dvh - 130px); display: flex; flex-direction: column; border-radius: 14px; box-shadow: 0 18px 40px rgba(16, 35, 63, .18); }
+  .nb-pop ul { max-height: none; flex: 1 1 auto; }
+}
+
+/* "Registrarme" visible en el celular junto al ícono de ingresar (27-nov-2026) */
+@media (max-width: 1100px) {
+  /* igual que en computador: texto azul en negrilla con una línea a la izquierda, sin recuadro */
+  .mh.guest .mh-signup { display: inline-flex !important; align-items: center; margin-left: 6px; padding: 0 4px 0 12px; min-height: 22px; border: 0; border-left: 1px solid var(--blue); border-radius: 0; font-size: 14px; font-weight: 600; white-space: nowrap; }
+}
+@media (max-width: 359px) { .mh.guest .mh-signup { padding-left: 9px; font-size: 13px; } }
+
+/* Buscador y filtros de los paneles en celular: tamaño cómodo para el dedo (27-nov-2026) */
+@media (max-width: 767px) {
+  .pm.shop .pa-search input { height: 46px !important; padding: 0 16px 0 42px !important; border-radius: 10px !important; font-size: 16px !important; }
+  .pa-search svg { left: 15px !important; width: 18px !important; height: 18px !important; }
+  .pa-tools .ps-btn { height: 40px; font-size: 14.5px; gap: 6px; }
+  .pa-tools .ps-btn svg { width: 15px; height: 15px; }
+  .pa-tools .ps-list button { min-height: 44px; font-size: 15px; }
 }

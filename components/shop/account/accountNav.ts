@@ -9,6 +9,18 @@ export const accountTabs = [
   {id: 'pqr', label: 'Ayuda / PQR', icon: 'help'},
 ];
 
+/* Menú del panel administrativo (27-nov-2026): mismas secciones que app/tienda/admin/page.tsx */
+export const adminTabs = [
+  {id: 'resumen', label: 'Resumen', icon: 'grid'},
+  {id: 'pedidos', label: 'Pedidos', icon: 'box'},
+  {id: 'productos', label: 'Productos', icon: 'tag'},
+  {id: 'clientes', label: 'Clientes', icon: 'user'},
+  {id: 'reportes', label: 'Reportes', icon: 'layers'},
+  {id: 'pqr', label: 'PQR', icon: 'help'},
+  {id: 'opiniones', label: 'Opiniones', icon: 'star'},
+  {id: 'ajustes', label: 'Ajustes', icon: 'tools'},
+];
+
 /** Cierra un menú desplegable con Esc o al hacer clic por fuera. */
 export function useDismiss(ref: RefObject<HTMLElement>, open: boolean, close: () => void) {
   useEffect(() => {

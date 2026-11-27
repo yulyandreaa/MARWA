@@ -60,7 +60,7 @@ function Admin() {
 
   return (
     <PanelShell
-      title="Panel vendedor"
+      title="Panel administrativo"
       tabs={items}
       active={tab}
       helpHref="/tienda/admin?tab=pqr"

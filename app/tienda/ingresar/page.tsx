@@ -46,7 +46,7 @@ function LoginForm() {
         <p>Acceso directo a la demo</p>
         <div>
           <button className="button ghost" type="button" onClick={() => enterDemo('comprador')}>Panel de comprador</button>
-          <button className="button ghost" type="button" onClick={() => enterDemo('vendedor')}>Panel de vendedor</button>
+          <button className="button ghost" type="button" onClick={() => enterDemo('vendedor')}>Panel administrativo</button>
         </div>
       </div>
     </AuthShell>

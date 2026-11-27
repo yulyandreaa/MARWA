@@ -252,9 +252,9 @@ export function ShopHeader() {
             </>
           ) : hydrated && user ? (
             <>
+              {/* 27-nov-2026: igual que el cliente, menú de la persona con las secciones del panel administrativo */}
+              <AccountMenu user={user} onSignOut={signOut} admin/>
               <SellerBell onArrive={toast}/>
-              {!pathname?.startsWith('/tienda/admin') && <Link className="mh-link" href="/tienda/admin">Panel</Link>}
-              <button type="button" className="mh-link" onClick={signOut}>Salir</button>
             </>
           ) : guest ? (
             <>

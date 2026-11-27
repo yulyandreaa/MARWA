@@ -36,8 +36,8 @@ export function PanelShell({title, tabs, active, onSignOut, extra, helpHref, chi
   useEffect(() => setMenu(false), [params]);
 
   return (
-    /* 27-nov-2026: en Mi cuenta (celular) el menú de la página se oculta; queda solo el del ícono de la persona */
-    <div className={`pa${helpHref.startsWith('/tienda/cuenta') ? ' is-buyer' : ''}`}>
+    /* 27-nov-2026: en celular el menú de la página se oculta (cuenta y panel administrativo); queda solo el del ícono de la persona */
+    <div className="pa is-buyer">
       <div className="pa-body">
         <aside className="pa-side">
           <p className="pa-side-title"><Icon name="menu"/>{title}</p>

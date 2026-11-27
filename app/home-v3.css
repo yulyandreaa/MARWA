@@ -1554,3 +1554,22 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 900px) { .hv-ab4-foot { margin-top: 48px; } }
 /* 25-nov-2026: un poco menos de aire entre Quiénes somos y "Compra con respaldo" (solo computador) */
 @media (min-width: 901px) { .pm.hv .hv-ab3.is-video { padding-bottom: 40px; } }
+
+/* ===== RESPONSIVE INICIO (26-nov-2026) ===== */
+/* Despachos y Distribuidor en tablet/celular: texto abajo sobre un velo oscuro, no encima de la foto */
+@media (max-width: 900px) {
+  .hv-duo-card { align-items: flex-end; aspect-ratio: 16 / 11; }
+  .hv-duo-card::after { background: linear-gradient(0deg, rgba(8, 18, 38, .9) 0%, rgba(8, 18, 38, .68) 36%, rgba(8, 18, 38, 0) 66%); }
+  .hv-duo-copy { max-width: none; margin: 0 24px 24px; }
+  .hv-duo-card img, .hv-duo-card.is-dist img { object-position: center 30%; }
+}
+@media (max-width: 767px) {
+  .hv-duo-card { aspect-ratio: 4 / 5; }
+  .hv-duo-copy { margin: 0 20px 22px; }
+}
+/* MARWOT en tablet: el texto no se monta sobre el robot */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .pm.hv .hv-char.is-strip .hv-char-copy { max-width: 50%; }
+  .pm.hv .hv-char.is-strip::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6, 14, 40, .82) 0%, rgba(6, 14, 40, .55) 40%, rgba(6, 14, 40, 0) 62%); }
+  .pm.hv .hv-char.is-strip .hv-char-copy { z-index: 1; }
+}

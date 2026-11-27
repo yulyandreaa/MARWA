@@ -3,6 +3,7 @@ import {Suspense} from 'react';
 import './tienda.css';
 import '../premium.css';
 import './panel.css';
+import '../responsive-type.css';
 import {ShopHeader, ShopWhatsApp, Toaster} from '@/components/shop/ShopUI';
 import {PmAnnouncement, PmFooter} from '@/components/premium/SiteChrome';
 import {CartDrawer} from '@/components/shop/CartDrawer';

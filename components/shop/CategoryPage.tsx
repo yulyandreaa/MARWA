@@ -45,10 +45,12 @@ export function CategoryPage({cat, q = '', sub = ''}: {cat: Scope; q?: string; s
       return words.every(w => hay.includes(w));
     });
   }, [products, cat, q]);
+  /* 27-nov-2026: encabezado vertical para celular (Magnific): categoria-X-dark → cat-X-movil-v1 */
+  const heroMob = page.hero.match(/categoria-([a-z]+)-dark/) ? `/assets/cat-${page.hero.match(/categoria-([a-z]+)-dark/)![1]}-movil-v1.jpg` : '';
 
   return (
     <div className="pc">
-      <section className={`pc-hero${page.hero.includes('/categoria-') ? ' is-studio' : ''}${page.hero.includes('-dark') ? ' is-dark' : ''}`}>
+      <section className={`pc-hero${page.hero.includes('/categoria-') ? ' is-studio' : ''}${page.hero.includes('-dark') ? ' is-dark' : ''}${heroMob ? ' has-mob' : ''}`}>
         <div className="pc-wrap pc-hero-inner">
           <div className="pc-hero-copy">
             <h1>{title}</h1>
@@ -56,7 +58,8 @@ export function CategoryPage({cat, q = '', sub = ''}: {cat: Scope; q?: string; s
             <p>{q ? `${list.length} ${list.length === 1 ? 'producto coincide' : 'productos coinciden'} con tu búsqueda en la tienda MARWA.` : page.intro}</p>
           </div>
         </div>
-        <div className="pc-hero-img" aria-hidden="true"><Image src={page.hero} alt="" fill sizes={page.hero.includes('/categoria-') ? '(max-width: 767px) 1300px, 2600px' : '100vw'} quality={92} priority/></div>
+        <div className="pc-hero-img" aria-hidden="true"><Image className={heroMob ? 'dsk-art' : undefined} src={page.hero} alt="" fill sizes={page.hero.includes('/categoria-') ? '(max-width: 767px) 1300px, 2600px' : '100vw'} quality={92} priority/>
+          {heroMob && <Image className="mob-art" src={heroMob} alt="" fill sizes="100vw" quality={90} priority/>}</div>
         <Marquee/>
       </section>
 

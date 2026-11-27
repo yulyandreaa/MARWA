@@ -171,7 +171,7 @@ export function HvStats() {
       <div className="hs-side">
         <div className="hv-stats-head" data-fx>
           <h2 id="hv-stats-title" data-split>Conectamos cada rincón <em>de Colombia</em></h2>
-          <p className="hs-lead">Hace más de <strong><Counter to={12} run={seen}/> años</strong> importamos y distribuimos soluciones para redes y energía.<br className="hs-br"/> Hoy llevamos nuestras <strong><Counter to={6} run={seen}/> líneas de producto</strong> a los <strong><Counter to={32} run={seen}/> departamentos</strong> del país,<br className="hs-br"/> con respaldo técnico y cumplimiento normativo.</p>
+          <p className="hs-lead">Hace más de <strong>12 años</strong> importamos y distribuimos soluciones para redes y energía.<br className="hs-br"/> Hoy llevamos nuestras <strong>6 líneas de producto</strong> a los <strong>32 departamentos</strong> del país,<br className="hs-br"/> con respaldo técnico y cumplimiento normativo.</p>
         </div>
       </div>
 

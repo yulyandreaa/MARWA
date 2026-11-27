@@ -268,8 +268,14 @@ export function ProductDetail({product}: {product: Product}) {
       <div className={`pp-bar${bar ? ' show' : ''}`} aria-hidden={!bar}>
         <div className="pc-wrap">
           <b>{pending ? priceText(0) : money(product.price * qty)}</b>
-          <button className="pm-btn soft" disabled={out} onClick={add} tabIndex={bar ? 0 : -1}>Agregar al carrito</button>
-          <button className="pm-btn" disabled={out} onClick={buy} tabIndex={bar ? 0 : -1}>Comprar ahora</button>
+          {pending ? (
+            <a className="pm-btn" href={ask} target="_blank" rel="noopener" tabIndex={bar ? 0 : -1}>Cotizar con un asesor</a>
+          ) : (
+            <>
+              <button className="pm-btn soft" disabled={out} onClick={add} tabIndex={bar ? 0 : -1}>Agregar al carrito</button>
+              <button className="pm-btn" disabled={out} onClick={buy} tabIndex={bar ? 0 : -1}>Comprar ahora</button>
+            </>
+          )}
         </div>
       </div>
     </div>

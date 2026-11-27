@@ -2,6 +2,7 @@ import './home.css';
 import './premium.css';
 import './home-v3.css';
 import './best-sellers.css';
+import './responsive-type.css';
 import {PmFooter, PmSiteHeader} from '@/components/premium/SiteChrome';
 import {EcoHero} from '@/components/premium/EcoHero';
 import {HvAbout, HvBestSellers, HvPolicies, HvBrandVideo, HvCharacter, HvContact, HvService, HvStats} from '@/components/premium/HomeV3';

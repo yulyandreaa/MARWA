@@ -1940,8 +1940,8 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 .lx-best-card .lx-best-tag svg, .cx-grid .lx-best-card .lx-best-tag svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 
 /* Home de la tienda: más aire entre secciones (2026-11-10; antes 72 px) */
-.lx-lines, .lx-promos, .lx-best, .lx-faq { padding-top: 112px; }
-.lx-feat-wrap, .lx-mascot, .lx-wide, .lx-advice { margin-top: 112px; margin-bottom: 112px; }
+.lx-lines, .lx-promos, .lx-best, .lx-faq { padding-top: 100px; }
+.lx-feat-wrap, .lx-mascot, .lx-wide, .lx-advice { margin-top: 100px; margin-bottom: 100px; }
 .lx-port { margin-top: 140px; margin-bottom: 56px; }
 .lx-faq { padding-bottom: 120px; }
 @media (max-width: 1100px) {
@@ -2584,3 +2584,117 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 }
 .lx-promos a.is-kv.is-dark[href*="plastica"] > img { object-position: 60% 100% !important; transform: scale(.82); transform-origin: 85% 100%; }
 .lx-promos a.is-kv.is-dark[href*="plastica"]:hover > img { transform: scale(.84); }
+
+/* Ritmo parejo entre secciones de la tienda (26-nov-2026):
+   duo y servicios usan el mismo aire que las demás; el banner destacado ya no suma espacio abajo. */
+.lx-duo, .lx-services { padding-top: 100px; }
+.lx-feat-wrap { margin-bottom: 0; }
+@media (max-width: 1100px) { .lx-duo, .lx-services { padding-top: 88px; } .lx-feat-wrap { margin-bottom: 0; } }
+@media (max-width: 760px) { .lx-duo, .lx-services { padding-top: 64px; } .lx-feat-wrap { margin-bottom: 0; } }
+
+/* Del banner rojo hacia abajo: 90 px entre banners (26-nov-2026) */
+.lx-duo, .lx-services { padding-top: 90px; }
+.lx-feat-wrap, .lx-advice { margin-top: 90px; }
+@media (max-width: 1100px) { .lx-duo, .lx-services { padding-top: 80px; } .lx-feat-wrap, .lx-advice { margin-top: 80px; } }
+@media (max-width: 760px) { .lx-duo, .lx-services { padding-top: 58px; } .lx-feat-wrap, .lx-advice { margin-top: 58px; } }
+
+/* Banner rojo 12+ años: textos más cerca del número y etiqueta más pequeña (26-nov-2026) */
+.lx-mascot .lx-mascot-text.is-deal .lx-mascot-pill { margin-bottom: calc(var(--F) * .09); font-size: clamp(11px, .85vw, 14px); padding: .4em 1em; }
+.pm .lx-mascot .lx-mascot-text.is-deal p { margin-top: calc(var(--F) * .09); }
+/* Banner rojo: aclarar el fondo detrás del texto, la foto venía muy oscura a la izquierda (26-nov-2026) */
+@media (min-width: 768px) {
+  .lx-mascot::before { display: block; z-index: 1; background: linear-gradient(90deg, rgba(229, 35, 50, .42) 0%, rgba(229, 35, 50, .32) 40%, rgba(229, 35, 50, 0) 60%); mix-blend-mode: screen; }
+  .lx-mascot-text { z-index: 2; }
+}
+/* Tarjetas pequeñas de líneas: texto un poco más abajo (26-nov-2026) */
+@media (min-width: 1024px) {
+  .lx-promos a.is-sm > span, .lx-promos a.is-kv.is-sm > span { margin-top: 40px; margin-left: clamp(26px, 3vw, 40px); }
+}
+/* Tarjetas grandes (Canalización y Metalmecánica): texto arriba, a la misma altura que las pequeñas (26-nov-2026) */
+@media (min-width: 1024px) {
+  .lx-promos a.is-kv.is-lg { align-items: flex-start; }
+  .lx-promos a.is-kv.is-lg > span { margin-top: 40px; }
+}
+
+/* ===== RESPONSIVE TIENDA (26-nov-2026) ===== */
+/* Tablet: el texto del Cable UTP no se mete debajo del carrete */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .lx-feat { aspect-ratio: 2.3 / 1; min-height: 0; }
+  .lx-feat-text { width: 44%; }
+  .lx-feat-pill { white-space: nowrap; font-size: 11px; }
+  .lx-feat-text p { max-width: 100%; }
+}
+@media (max-width: 767px) {
+  /* 1. Banner de asesoría: el bloque crece con el texto, el título ya no se corta */
+  .lx-advice { aspect-ratio: auto; min-height: 0; max-height: none; height: auto; }
+  .lx-advice-text { width: 100%; padding: 24px 20px 28px; }
+  .pm .lx-advice h2 { max-width: none; white-space: normal; font-size: 26px; line-height: 1.12; }
+  .pm .lx-advice p { max-width: none; }
+  /* 2. Portada: velo suave detrás del texto para que se lea sobre la foto */
+  .lx-hero::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(0deg, rgba(2, 10, 46, .88) 0%, rgba(2, 10, 46, .6) 38%, rgba(2, 10, 46, 0) 64%); }
+  .lx-hero.lx-light::after { background: linear-gradient(0deg, rgba(238, 245, 249, .98) 0%, rgba(238, 245, 249, .9) 40%, rgba(238, 245, 249, 0) 66%); }
+  .lx-hero-text { z-index: 3; }
+  /* 3. Tarjetas pequeñas de categorías: título y botón caben sin partirse */
+  .pm .lx-promos a.is-sm b, .pm .lx-promos a.is-kv.is-sm b { font-size: 16px; line-height: 1.12; }
+  .lx-promos a.is-sm em, .lx-promos a.is-kv.is-sm em { gap: 6px; padding: 7px 10px; font-size: 11px; white-space: nowrap; }
+  .lx-promos a.is-sm em svg { width: 13px; height: 13px; }
+  /* 4. Banner rojo: que se vea la cabeza del robot */
+  .lx-mascot-img { object-position: 72% 8% !important; }
+  /* 5. Encabezado: más aire entre campana, Panel y Salir */
+  .mh-account { gap: 10px; }
+  .mh-logo { width: auto; }
+  /* 6. Menos aire entre secciones en pantallas pequeñas */
+  .lx-lines, .lx-promos, .lx-best, .lx-faq { padding-top: 56px; }
+  .lx-mascot { margin-top: 56px; }
+  .lx-duo, .lx-services { padding-top: 40px; }
+  .lx-feat-wrap, .lx-advice { margin-top: 40px; }
+  /* 7. Etiqueta del producto destacado legible */
+  .lx-feat-pill { font-size: 11px; }
+  /* 8. El botón de WhatsApp no tapa los enlaces del pie */
+  footer.mf { padding-bottom: 84px; }
+}
+@media (min-width: 768px) and (max-width: 1100px) { footer.mf { padding-bottom: 84px; } }
+/* Paneles (cuenta y vendedor) en tablet: menú desplegable como en celular, así ninguna pestaña queda tapada (26-nov-2026) */
+@media (min-width: 641px) and (max-width: 1000px) {
+  .pa-side { padding: 12px 24px; }
+  .pa-menu-btn { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); font: inherit; font-size: 14px; font-weight: 600; color: var(--navy-t); cursor: pointer; }
+  .pa-menu-btn svg { width: 19px; height: 19px; }
+  .pa-menu-btn svg:last-child { margin-left: auto; }
+  .pa-nav-wrap { display: none; padding-top: 6px; }
+  .pa-nav-wrap.open { display: block; }
+  .pa-nav { display: grid; grid-template-columns: 1fr 1fr; overflow: visible; }
+  .pa-nav a { width: 100%; border-radius: 10px; }
+  .pm .pa-nav a.active { background: #e6ecff; color: var(--blue); box-shadow: none; }
+  .pa-nav-wrap hr { display: block; margin: 8px 0; }
+  .pa-signout { width: 100%; }
+}
+/* Barra azul superior en tablet con cliente conectado: "Enviar a" + ayuda, sin el texto que se montaba sobre la franja roja */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .mh-bar .pm-wrap:has(.mh-bar-ship) ul { display: none; }
+}
+
+/* ===== IMÁGENES VERTICALES PARA CELULAR (27-nov-2026, Magnific) =====
+   Cada banner trae dos fotos: .dsk-art (computador y tablet) y .mob-art (celular, 4:5 o 4:3). */
+@media (min-width: 768px) { .mob-art { display: none !important; } }
+@media (max-width: 767px) {
+  .dsk-art { display: none !important; }
+
+  /* Portada de la tienda: foto 4:5 a pantalla completa; texto abajo sobre el velo */
+  /* la foto 4:5 va arriba y se funde con el fondo del banner; el texto queda debajo del robot */
+  .lx-hero { height: auto !important; aspect-ratio: 10 / 17; min-height: 0 !important; }
+  .lx-hero-slide .lx-hero-main { inset: 0 0 auto 0 !important; left: 0 !important; width: 100% !important; height: 125vw !important; transform: none !important; -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent) !important; mask-image: linear-gradient(180deg, #000 72%, transparent) !important; }
+  .lx-hero-main .mob-art { object-fit: cover; object-position: center top !important; }
+
+  /* Banner rojo de MARWOT: foto 4:5, texto arriba en la zona libre */
+  .lx-mascot { aspect-ratio: 4 / 5 !important; min-height: 0 !important; max-height: none !important; align-items: flex-start !important; }
+  .lx-mascot .mob-art { object-fit: cover; object-position: center bottom !important; transform: none !important; }
+  .lx-mascot-text { position: relative; z-index: 2; }
+
+  /* Producto destacado y Bogotá: foto 4:3 arriba del texto */
+  .lx-feat .mob-art, .lx-advice .mob-art { object-fit: cover; object-position: center !important; }
+
+  /* Encabezado de categorías: foto 4:5 de fondo; título y texto arriba, franja de beneficios abajo */
+  .pc-hero.is-studio.has-mob .pc-hero-img { top: auto !important; bottom: 46px !important; height: 125vw !important; }
+  .pc-hero.is-studio.has-mob .pc-hero-img .mob-art { object-fit: cover; object-position: center bottom !important; }
+  .pc-hero.is-studio.has-mob .pc-hero-inner { min-height: 0 !important; padding: 32px 0 calc(72vw + 46px) !important; }
+}

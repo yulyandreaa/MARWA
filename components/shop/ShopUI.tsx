@@ -303,6 +303,9 @@ export function Loading() {
 
 export function ShopWhatsApp({message}: {message: string}) {
   const {whatsapp} = useSettings();
+  const pathname = usePathname();
+  /* En el panel del vendedor no va el botón de clientes: tapaba controles en celular (26-nov-2026) */
+  if (pathname?.startsWith('/tienda/admin')) return null;
   return <WhatsAppButton number={whatsapp} message={message}/>;
 }
 

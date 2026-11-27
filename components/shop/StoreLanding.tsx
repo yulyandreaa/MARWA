@@ -43,11 +43,11 @@ export function StoreLanding() {
 
 /* 1 · Hero en carrusel: 16:9, alto min(82svh, 768px) */
 /* Fotos de producto sin empaque (Magnific, con fotos reales de MARWA como referencia). theme = color del texto */
-const heroSlides: {image: string; theme: string; bg: string; pos: string; eyebrow: string; title: string; text: string; cta: string; href: string; layout?: string}[] = [
-  {image: '/assets/hero-p-fibra-personaje-v2.jpg', theme: 'dark', bg: 'linear-gradient(180deg, rgb(4,14,44) 0%, rgb(6,20,58) 50%, rgb(8,26,70) 100%)', pos: '70% 50%', eyebrow: '', title: 'MARWOT te conecta~con todo lo que~necesitas', text: 'Cableado, fibra óptica, canalización y más, con despacho a los 32 departamentos.', cta: 'Explorar la tienda', href: '/tienda?vista=todos'},
+const heroSlides: {image: string; mobile?: string; theme: string; bg: string; pos: string; eyebrow: string; title: string; text: string; cta: string; href: string; layout?: string}[] = [
+  {image: '/assets/hero-p-fibra-personaje-v2.jpg', mobile: '/assets/tienda-marwot-movil-v1.jpg', theme: 'dark', bg: 'linear-gradient(180deg, rgb(4,14,44) 0%, rgb(6,20,58) 50%, rgb(8,26,70) 100%)', pos: '70% 50%', eyebrow: '', title: 'MARWOT te conecta~con todo lo~que necesitas', text: 'Cableado, fibra óptica, canalización y más, con despacho a los 32 departamentos.', cta: 'Explorar la tienda', href: '/tienda?vista=todos'},
   /* 24-nov-2026: el bodegón del portafolio pasa a ser banner principal, con más luz (Magnific, productos reales con su marca).
      Los otros 3 banners quedan guardados abajo por si se quieren volver a usar. */
-  {image: '/assets/hero-p-bodegon-v5.jpg', theme: 'light', bg: 'linear-gradient(180deg, rgb(211,223,248) 0%, rgb(218,226,248) 25%, rgb(219,227,249) 50%, rgb(207,215,245) 75%, rgb(218,227,247) 100%)', pos: '70% 50%', eyebrow: '', title: 'Un portafolio.|Infinitas conexiones.', text: 'Soluciones en conectividad, infraestructura y energía para proyectos que no se detienen.', cta: 'Explorar portafolio', href: '/tienda?vista=todos'},
+  {image: '/assets/hero-p-bodegon-v5.jpg', mobile: '/assets/tienda-bodegon-movil-v1.jpg', theme: 'light', bg: 'linear-gradient(180deg, rgb(211,223,248) 0%, rgb(218,226,248) 25%, rgb(219,227,249) 50%, rgb(207,215,245) 75%, rgb(218,227,247) 100%)', pos: '70% 50%', eyebrow: '', title: 'Un portafolio.|Infinitas conexiones.', text: 'Soluciones en conectividad, infraestructura y energía para proyectos que no se detienen.', cta: 'Explorar portafolio', href: '/tienda?vista=todos'},
 ];
 /* banners anteriores, guardados (24-nov-2026):
   {image: '/assets/hero-p-patch-cord-v2-hq.jpg', theme: 'light', bg: 'linear-gradient(180deg, rgb(237,246,252) 0%, rgb(240,247,252) 30%, rgb(227,240,250) 55%, rgb(224,237,249) 75%, rgb(228,241,250) 100%)', pos: '70% 50%', eyebrow: 'Cableado estructurado', title: 'Cada punto de tu red, bien conectado', text: 'Cable UTP, patch cord, patch panel y accesorios.', cta: 'Comprar cableado', href: '/tienda?categoria=cableado'},
@@ -70,7 +70,9 @@ function HeroSlides() {
         <div key={s.image} className={`lx-hero-slide${n === i ? ' on' : ''}${s.layout === 'center' ? ' is-center' : ''}`} aria-hidden={n !== i} style={{background: s.bg}}>
           {/* La foto 2:1 en 4K va anclada a la derecha con el alto del banner (nunca se amplía);
               el espacio libre a la izquierda es un degradado con los colores del borde de la foto. */}
-          <span className="lx-hero-main"><Image src={s.image} alt="" fill sizes="(max-width: 1199px) 100vw, 75vw" quality={92} priority={n === 0} style={{objectPosition: s.pos}}/></span>
+          <span className="lx-hero-main"><Image className={s.mobile ? 'dsk-art' : undefined} src={s.image} alt="" fill sizes="(max-width: 1199px) 100vw, 75vw" quality={92} priority={n === 0} style={{objectPosition: s.pos}}/>
+            {/* 27-nov-2026: versión vertical para celular (Magnific) */}
+            {s.mobile && <Image className="mob-art" src={s.mobile} alt="" fill sizes="100vw" quality={90} priority={n === 0}/>}</span>
         </div>
       ))}
       <div className="pm-wrap lx-hero-text" key={i}>
@@ -138,7 +140,7 @@ function LineTabs() {
 /* Solo se muestran los banners cuyo producto existe en el inventario (11-nov-2026: Cat. 5E interior y rack
    no están en el Excel, quedan guardados por si vuelven). */
 const featured = [
-  {id: 'cable-utp-flexible-cat-6-multifilamento', image: '/assets/destacado-utp-flex-cat6-v4.jpg', title: ['Cable UTP flexible', 'Cat. ', '6'], alt: 'Carrete de cable UTP flexible Cat. 6 multifilamento MARWA de 305 m sobre ondas azules y rojas'},
+  {id: 'cable-utp-flexible-cat-6-multifilamento', image: '/assets/destacado-utp-flex-cat6-v4.jpg', mobile: '/assets/destacado-utp-movil-v1.jpg', title: ['Cable UTP flexible', 'Cat. ', '6'], alt: 'Carrete de cable UTP flexible Cat. 6 multifilamento MARWA de 305 m sobre ondas azules y rojas'},
   /* 20-nov: el Cat. 5E interior (destacado-cable-cat5e-v1.jpg) no está en el inventario; se reemplazó por el UTP flexible Cat. 6 */
 /* 20-nov: la usuaria pidió dejar solo el UTP flexible Cat. 6. DROP y rack quedan guardados:
   {id: 'cable-drop-1-hilo-1-km', image: '/assets/destacado-fibra-drop-v2.jpg', title: ['Cable de fibra óptica', '', 'DROP'], alt: 'Bobina de fibra óptica Drop-Core MARWA sobre ondas azules y rojas'},
@@ -162,7 +164,8 @@ function FeaturedBand() {
     <div className="lx-feat-wrap" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
     <section className="lx-feat" aria-roledescription="carrusel" aria-label="Productos destacados">
       {slides.map((f, k) => (
-        <Image key={f.id} className={`lx-feat-img${k === n ? ' on' : ''}`} src={f.image} alt={k === n ? f.alt : ''} fill quality={92} sizes="(max-width: 767px) 100vw, 1312px" priority={k === 0}/>
+        <Fragment key={f.id}><Image className={`lx-feat-img dsk-art${k === n ? ' on' : ''}`} src={f.image} alt={k === n ? f.alt : ''} fill quality={92} sizes="(max-width: 767px) 100vw, 1312px" priority={k === 0}/>
+        {f.mobile && <Image className={`lx-feat-img mob-art${k === n ? ' on' : ''}`} src={f.mobile} alt="" fill quality={90} sizes="100vw"/>}</Fragment>
       ))}
       <div className="lx-feat-text" key={s.id} aria-live="polite">
         <span className="lx-feat-pill">Producto destacado · {cat?.name}</span>
@@ -229,10 +232,10 @@ function Marquee() {
 const promos = [
   {title: 'Cableado estructurado', text: 'Conectividad confiable para tu red.', cta: 'Explorar productos', kv: true, image: '/assets/promo-cableado-kv-v5.jpg', href: '/tienda?categoria=cableado', tone: 'light', btn: 'blue', size: 'sm'},
   {title: 'Fibra óptica', text: 'Datos estables y rápidos a gran distancia.', cta: 'Explorar productos', kv: true, image: '/assets/promo-fibra-kv-dark-v3.jpg', href: '/tienda?categoria=fibra', tone: 'dark', btn: 'white', size: 'sm'},
-  {title: 'Canalización y ductería', text: 'Tubería y ductos para proteger tu cableado.', cta: 'Explorar productos', kv: true, image: '/assets/promo-canalizacion-kv-v3.jpg', href: '/tienda?categoria=canalizacion', tone: 'light', btn: 'blue', size: 'lg'},
+  {title: 'Canalización y ductería', text: 'Tubería y ductos para proteger tu cableado.', cta: 'Explorar productos', kv: true, image: '/assets/promo-canalizacion-kv-v4.jpg', href: '/tienda?categoria=canalizacion', tone: 'light', btn: 'blue', size: 'lg'},
   {title: 'Metalmecánica', text: 'Gabinetes y racks para proteger tus equipos.', cta: 'Explorar productos', kv: true, image: '/assets/promo-metalmecanica-kv-v6.jpg', href: '/tienda?categoria=metalmecanica', tone: 'light', btn: 'blue', size: 'lg'},
   {title: 'Línea plástica', text: 'Face plates, cajas y accesorios para tu red.', cta: 'Explorar productos', kv: true, image: '/assets/promo-plastica-kv-dark-v2.jpg', href: '/tienda?categoria=plastica', tone: 'dark', btn: 'white', size: 'sm'},
-  {title: 'HDTV', text: 'Splitters y extensores para tu señal de video.', cta: 'Explorar productos', kv: true, image: '/assets/promo-hdtv-kv-v1.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
+  {title: 'HDTV', text: 'Splitters y extensores para tu señal de video.', cta: 'Explorar productos', kv: true, image: '/assets/promo-hdtv-kv-v2.jpg', href: '/tienda?categoria=hdtv', tone: 'light', btn: 'blue', size: 'sm'},
 ];
 
 function PromoGrid() {
@@ -262,7 +265,8 @@ function PromoGrid() {
 function BrandQuote() {
   return (
     <section className="lx-mascot" aria-label="Respaldo de más de 12 años conectando proyectos en Colombia">
-      <Image className="lx-mascot-img" src="/assets/banner-personaje-seis-lineas-v3.jpg" alt="Personaje MARWA, un robot con cabello de cables, señalando hacia el texto" fill quality={92} sizes="100vw"/>
+      <Image className="lx-mascot-img dsk-art" src="/assets/banner-personaje-seis-lineas-v3.jpg" alt="Personaje MARWA, un robot con cabello de cables, señalando hacia el texto" fill quality={92} sizes="100vw"/>
+      <Image className="lx-mascot-img mob-art" src="/assets/banner-marwot-rojo-movil-v1.jpg" alt="" fill quality={90} sizes="100vw"/>
       <div className="lx-mascot-text is-deal">
         <span className="lx-mascot-pill">Asesoría experta</span>
         <h2 className="lx-mascot-deal"><small>Respaldo de</small><span><b>12</b><i><em>+</em><em>AÑOS</em></i></span></h2>
@@ -315,7 +319,8 @@ function Advisor() {
   const wa = (text: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   return (
     <section className="lx-advice" id="asesoria" aria-label="Asesoría experta">
-      <Image className="lx-advice-img" src="/assets/asesoria-bogota-panoramica-v1.jpg" alt="Panorámica de Bogotá de noche con Monserrate y la Torre Colpatria conectadas por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 100vw, 1312px"/>
+      <Image className="lx-advice-img dsk-art" src="/assets/asesoria-bogota-panoramica-v1.jpg" alt="Panorámica de Bogotá de noche con Monserrate y la Torre Colpatria conectadas por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 100vw, 1312px"/>
+      <Image className="lx-advice-img mob-art" src="/assets/bogota-movil-v1.jpg" alt="" fill quality={90} sizes="100vw"/>
       <div className="lx-advice-text">
         <h2>¿No sabes qué referencia <em>elegir?</em></h2>
         <p>Cuéntanos tu proyecto y un asesor te ayuda a encontrar la solución correcta.</p>
@@ -332,7 +337,7 @@ function Advisor() {
    Izquierda: título y tarjeta de contacto. Derecha: acordeón en tarjetas con ícono por tema. */
 function Faq() {
   const {shippingMode, whatsapp} = useSettings();
-  const [open, setOpen] = useState(0);
+  const [open, setOpen] = useState(-1);
   const faqs = [
     {icon: 'card', q: '¿Qué medios de pago aceptan?', a: 'Puedes pagar con tarjeta débito o crédito, o por PSE con tu banco o Nequi. Recibirás la confirmación de tu pedido apenas se apruebe el pago.'},
     {icon: 'truck', q: '¿Hacen envíos a todo Colombia?', a: `Sí, despachamos a los 32 departamentos. ${shippingMode === 'fijo' ? 'Verás el costo del envío en el carrito antes de pagar.' : 'El costo del envío se coordina contigo al momento de despachar.'}`},

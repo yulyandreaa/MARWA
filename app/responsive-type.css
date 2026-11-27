@@ -1,0 +1,37 @@
+/* ===== Escala de letra para tablet y celular — toda la web (26-nov-2026) =====
+   Se carga de último en el inicio y en la tienda. En computador no cambia nada.
+                          celular   tablet
+   Portada (h1)            26        30
+   Título de sección       22        26
+   Subtítulo de bloque     20        22
+   Título de banner        21        24
+   Título de tarjeta       15        16
+   Texto de entrada        15        16
+*/
+@media (max-width: 1100px) {
+  /* Portadas */
+  .pm .lx-hero-text h1, .pm .lx-hero:not(.lx-light) .lx-hero-text h1, .pm .pc-hero .pc-hero-copy h1 { font-size: 30px !important; line-height: 1.08 !important; }
+  /* Títulos de sección */
+  .pm .lx-lines-title, .pm.hv .hv-ab4-head h2, .pm.hv .hv-head h2, .pm.hv #hv-pol-title, .pm.hv #hv-stats-title, .pm.hv #hv-about-title, .pm.hv #hv-best-title, .pm.hv #hv-process-title, .pm.hv #hv-sol-title, .pm.hv #hv-q-title, .pm.hv #hv-bridge-title, .pm.hv #hv-contact-title { font-size: 26px !important; line-height: 1.12 !important; }
+  /* Subtítulos de bloque */
+  .pm .lx-best .lx-lines-title, .pm .lx-faq h2, .pm .pp-h2, .pm .pp-info h1 { font-size: 22px !important; line-height: 1.15 !important; }
+  /* Títulos de banner */
+  .pm.hv #hv-video-title, .pm.hv .hv-char.is-strip #hv-char-title, .pm .lx-feat-text h2, .pm .lx-advice h2 { font-size: 24px !important; line-height: 1.1 !important; }
+  /* Títulos de tarjeta */
+  .pm .lx-best-card h3 { font-size: 16px !important; line-height: 1.25 !important; }
+  /* Texto de entrada bajo los títulos */
+  .pm.hv .hs-lead, .pm.hv #hv-video-title + p, .pm.hv .hv-head p, .pm.hv .hv-ab4-head p, .pm .pc-hero.is-studio .pc-hero-copy p:not(.pc-hero-tag) { font-size: 16px !important; line-height: 1.55 !important; }
+}
+@media (max-width: 767px) {
+  .pm .lx-hero-text h1, .pm .lx-hero:not(.lx-light) .lx-hero-text h1, .pm .pc-hero .pc-hero-copy h1 { font-size: 26px !important; }
+  .pm .lx-lines-title, .pm.hv .hv-ab4-head h2, .pm.hv .hv-head h2, .pm.hv #hv-pol-title, .pm.hv #hv-stats-title, .pm.hv #hv-about-title, .pm.hv #hv-best-title, .pm.hv #hv-process-title, .pm.hv #hv-sol-title, .pm.hv #hv-q-title, .pm.hv #hv-bridge-title, .pm.hv #hv-contact-title { font-size: 22px !important; }
+  .pm .lx-best .lx-lines-title, .pm .lx-faq h2, .pm .pp-h2, .pm .pp-info h1 { font-size: 20px !important; }
+  .pm.hv #hv-video-title, .pm.hv .hv-char.is-strip #hv-char-title, .pm .lx-feat-text h2, .pm .lx-advice h2 { font-size: 21px !important; }
+  .pm .lx-best-card h3 { font-size: 15px !important; }
+  .pm.hv .hs-lead, .pm.hv #hv-video-title + p, .pm.hv .hv-head p, .pm.hv .hv-ab4-head p, .pm .pc-hero.is-studio .pc-hero-copy p:not(.pc-hero-tag) { font-size: 15px !important; }
+}
+
+/* ===== Sin viudas (26-nov-2026): ningún párrafo ni título termina con una palabra sola en la última línea =====
+   Títulos: líneas repartidas parejas. Párrafos: el navegador evita la palabra suelta al final. Aplica en todos los tamaños. */
+.pm h1, .pm h2, .pm h3, .pm h4, .pm .lx-promos b, .pm .hv-duo-copy b, .pm .lx-duo b, .pm .lx-tile b, .pm .lx-mascot-text h2 { text-wrap: balance; }
+.pm p, .pm li, .pm small, .pm figcaption, .pm blockquote, .pm .lx-promos small, .pm .hv-duo-copy small, .pm .lx-duo small { text-wrap: pretty; }

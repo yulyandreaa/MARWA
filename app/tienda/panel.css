@@ -2905,3 +2905,5 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
   .lx-mascot, .lx-feat, .lx-duo a, .lx-svc2, .lx-advice, .lx-promos a { border-radius: 6px !important; }
   .lx-promos a em, .lx-feat-btn, .lx-duo em, .lx-advice-btn { border-radius: 8px !important; }
 }
+/* MARWOT en celular: el robot un poco menos a la derecha para que no se corte (27-nov-2026) */
+@media (max-width: 767px) { .lx-mascot .lx-mascot-img.dsk-art { width: 112% !important; } }

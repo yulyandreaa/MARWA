@@ -64,7 +64,9 @@ export function EcoHero() {
 
       <div className={`eh-stage${on ? ' has-on' : ''}`}>
         <div className="eh-img">
-          <Image src="/assets/ecosistema-marwa-v30.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA sobre un círculo rodeado de fibra óptica al centro, conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería y HDTV" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px"/>
+          <Image src="/assets/ecosistema-marwa-v30.jpg" alt="Ecosistema MARWA Redes y Energía: el logo MARWA sobre un círculo rodeado de fibra óptica al centro, conectado a cableado estructurado, fibra óptica, metalmecánica, línea plástica, canalización y ductería y HDTV" fill priority quality={92} sizes="(max-width: 767px) 100vw, 1600px" className="eco-dsk"/>
+          {/* 27-nov-2026: versión vertical 4:5 para celular (Magnific): plataformas alrededor del disco, más grandes */}
+          <Image src="/assets/ecosistema-movil-v1.jpg" alt="" fill priority quality={90} sizes="100vw" className="eco-mob"/>
         </div>
 
         {/* logo oficial del manual dentro del hexágono (no lo dibuja la IA); entra animado una sola vez */}

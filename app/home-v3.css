@@ -1573,3 +1573,43 @@ html.lenis, html.lenis body { height: auto; }
   .pm.hv .hv-char.is-strip::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(90deg, rgba(6, 14, 40, .82) 0%, rgba(6, 14, 40, .55) 40%, rgba(6, 14, 40, 0) 62%); }
   .pm.hv .hv-char.is-strip .hv-char-copy { z-index: 1; }
 }
+
+/* ===== ECOSISTEMA EN CELULAR (27-nov-2026): imagen vertical 4:5, sin espacio vacío arriba y abajo ===== */
+@media (min-width: 768px) { .eh-img .eco-mob { display: none; } }
+@media (max-width: 767px) {
+  .eh-img .eco-dsk { display: none; }
+  .hv .eh { min-height: 0; justify-content: flex-start; padding: 8px 0 32px; }
+  .hv .eh-stage { width: 100%; aspect-ratio: 4 / 5; margin-top: 0; }
+  .hv .eh-img { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 86%, transparent 100%); }
+  .eh-img .eco-mob { object-fit: cover; }
+  /* logo sobre el disco central de la imagen vertical */
+  .eh-hex { left: 39.8%; top: 44.4%; width: 20.4%; }
+}
+/* menos aire entre la imagen y los botones: la imagen trae ~19 % vacío abajo (27-nov-2026) */
+@media (max-width: 767px) {
+  .hv .eh-list { position: relative; z-index: 4; margin-top: -17vw; }
+}
+/* aire debajo de los botones de las líneas en celular (27-nov-2026) */
+@media (max-width: 767px) {
+  .pm.hv .eh { padding-bottom: 44px; }
+}
+
+/* ===== Fotos de Quiénes somos en celular (27-nov-2026): carrusel horizontal con flechas a los lados ===== */
+.hv-ab4-side { display: none; }
+@media (max-width: 767px) {
+  .hv-ab4-track { flex-direction: row; height: 100%; transform: translateX(calc(var(--o) * -1 * (100cqw + var(--gap)))); }
+  .hv-ab4-track .hv-ab4-photo { flex: 0 0 100cqw; width: 100cqw; height: 100%; }
+  .hv-ab4-nav { display: none; }
+  .hv-ab4-side { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; color: #fff; background: rgba(16, 35, 63, .62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transform: translateY(-50%); transition: background .2s; }
+  .hv-ab4-side.is-prev { left: 12px; }
+  .hv-ab4-side.is-next { right: 12px; }
+  .hv-ab4-side:active { background: #e52332; }
+  .hv-ab4-side svg { width: 20px; height: 20px; }
+}
+
+/* ===== Despachos y Distribuidor en celular (27-nov-2026): fotos 4:5 propias, el camión y el asesor completos ===== */
+@media (min-width: 768px) { .hv-duo-card .duo-mob { display: none; } }
+@media (max-width: 767px) {
+  .hv-duo-card .duo-dsk { display: none; }
+  .hv-duo-card img.duo-mob, .hv-duo-card.is-dist img.duo-mob { object-position: center top; }
+}

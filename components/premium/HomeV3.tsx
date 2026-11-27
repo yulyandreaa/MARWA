@@ -452,6 +452,8 @@ function AboutPhotos() {
   const [fast, setFast] = useState(false); // con las flechas el cambio es más rápido
   const box = useRef<HTMLDivElement>(null);
   const hold = useRef(false), visible = useRef(false), busy = useRef(false), last = useRef(0), touch = useRef(0);
+  // en celular (≤767 px) las fotos van en fila y se pasan a los lados (27-nov-2026)
+  const row = () => window.matchMedia('(max-width: 767px)').matches;
   // dir 1 = baja (entra una foto por arriba), -1 = sube
   const go = (dir: 1 | -1, manual = false) => {
     if (busy.current) return;
@@ -464,7 +466,8 @@ function AboutPhotos() {
     const io = new IntersectionObserver(([e]) => { visible.current = e.isIntersecting; }, {threshold: .2});
     io.observe(el);
     // avance solo; se detiene con el cursor encima o si la persona acaba de mover las fotos
-    const t = setInterval(() => { if (visible.current && !hold.current && !document.hidden && Date.now() - last.current > 6000) go(1); }, 3800);
+    // en celular (fila horizontal) avanza hacia la izquierda: la siguiente foto entra por la derecha
+    const t = setInterval(() => { if (visible.current && !hold.current && !document.hidden && Date.now() - last.current > 6000) go(row() ? -1 : 1); }, 3800);
     return () => { clearInterval(t); io.disconnect(); };
   }, []);
   // en los extremos salta sin animación a la misma vista en la otra copia
@@ -475,7 +478,7 @@ function AboutPhotos() {
   return (
     <div className="hv-ab4-rail" ref={box} onMouseEnter={() => { hold.current = true; }} onMouseLeave={() => { hold.current = false; }}
       onTouchStart={e => { touch.current = e.touches[0].clientX; }}
-      onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1, true); }}>
+      onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) go((dx < 0) !== row() ? 1 : -1, true); }}>
       <div className={`hv-ab4-track${anim ? '' : ' is-jump'}${fast ? ' is-fast' : ''}`} style={{'--o': o} as React.CSSProperties} onTransitionEnd={e => { if (e.target === e.currentTarget) done(); }}>
         {list.map((p, k) => {
           const hidden = k < o || k > o + 1;
@@ -495,6 +498,13 @@ function AboutPhotos() {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
         </button>
       </div>
+      {/* celular: una flecha a cada lado, a media altura */}
+      <button type="button" className="hv-ab4-side is-prev" onClick={() => go(1, true)} aria-label="Foto anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
+      </button>
+      <button type="button" className="hv-ab4-side is-next" onClick={() => go(-1, true)} aria-label="Foto siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>
+      </button>
     </div>
   );
 }
@@ -616,7 +626,9 @@ function DistributorBand() {
     <section className="hv-wrap hv-duo" id="distribuidores" aria-label="Despachos y distribuidores">
       {/* 24-nov-2026: "Despachamos a todo Colombia" y "Conviértete en distribuidor" como dos piezas lado a lado, debajo de "Conectamos cada rincón de Colombia" */}
       <a className="hv-duo-card is-truck" href={wa('Hola MARWA, quiero cotizar un pedido con envío.')} target="_blank" rel="noopener" data-fx>
-        <Image src="/assets/marwa-camion-v11.jpg" alt="Camión de carga MARWA con el personaje de la marca recorriendo una avenida de Bogotá" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        <Image className="duo-dsk" src="/assets/marwa-camion-v11.jpg" alt="Camión de carga MARWA con el personaje de la marca recorriendo una avenida de Bogotá" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        {/* 27-nov-2026: celular = recorte 4:5 con el camión completo y acera extendida abajo (Magnific expand) */}
+        <Image className="duo-mob" src="/assets/marwa-camion-movil-v1.jpg" alt="" fill quality={88} sizes="100vw"/>
         <span className="hv-duo-copy">
           <b>Despachamos a todo Colombia</b>
           <small>Con vehículos propios llevamos tu pedido desde Bogotá hasta tu obra o tu bodega.</small>
@@ -624,7 +636,8 @@ function DistributorBand() {
         </span>
       </a>
       <button type="button" className="hv-duo-card is-dist" onClick={() => { setSent(false); setOpen(true); }} data-fx>
-        <Image src="/assets/marwa-asesor-dotacion-temporal-v3.jpg" alt="Asesor comercial de MARWA con la dotación de la marca atendiendo una llamada" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        <Image className="duo-dsk" src="/assets/marwa-asesor-dotacion-temporal-v3.jpg" alt="Asesor comercial de MARWA con la dotación de la marca atendiendo una llamada" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+        <Image className="duo-mob" src="/assets/marwa-asesor-movil-v1.jpg" alt="" fill quality={88} sizes="100vw"/>
         <span className="hv-duo-copy">
           <b>Conviértete en distribuidor MARWA</b>
           <small>Déjanos tus datos y nuestro equipo comercial te contactará para iniciar tu vinculación.</small>

@@ -10,7 +10,7 @@ import {CategoryMega} from '@/components/shop/CategoryMega';
 import {Icon} from '@/components/premium/Icons';
 import {AccountMenu} from '@/components/shop/account/AccountMenu';
 import {BuyerBell, SellerBell} from '@/components/shop/NotificationBell';
-import {addToCart, isOnOffer, logout, toggleFavorite, useAddresses, useCart, useFavorites, useSessionUser} from '@/lib/shop';
+import {addToCart, isOnOffer, logout, toggleFavorite, useAddresses, useCart, useFavorites, isPricePending, usePilotActive, useSessionUser} from '@/lib/shop';
 import {openCart} from '@/lib/cartDrawer';
 import {useHydrated} from '@/lib/persist';
 import {useSettings} from '@/lib/settings';
@@ -22,7 +22,8 @@ export function ProductImage({src, alt, sizes, quality, priority}: {src: string;
 }
 
 export function StockTag({stock, price}: {stock: number; price?: number}) {
-  if (price !== undefined && price <= 0) return <span className="stock-tag low">Por cotizar</span>;
+  const pilot = usePilotActive();
+  if (price !== undefined && isPricePending({price}, pilot)) return <span className="stock-tag low">Por cotizar</span>;
   if (stock <= 0) return <span className="stock-tag out">Agotado</span>;
   if (stock <= 5) return <span className="stock-tag low">Últimas {stock} unidades</span>;
   return <span className="stock-tag ok">Disponible</span>;
@@ -45,7 +46,7 @@ export function Toaster() {
 }
 
 export function AddButton({product, qty = 1, block = false}: {product: Product; qty?: number; block?: boolean}) {
-  const pending = product.price <= 0;
+  const pending = isPricePending(product, usePilotActive());
   const out = pending || product.stock <= 0;
   return (
     <button
@@ -92,7 +93,7 @@ export function FavoriteButton({product, className = ''}: {product: Product; cla
 }
 
 export function ProductCard({product}: {product: Product}) {
-  const out = product.stock <= 0 || product.price <= 0;
+  const out = product.stock <= 0 || isPricePending(product, usePilotActive());
   return (
     <article className={`shop-card${out ? ' is-out' : ''}`}>
       <div className="shop-card-img">
@@ -128,7 +129,7 @@ export function ProductCard({product}: {product: Product}) {
 /** Wholesale list row: quantity + add without leaving the catalog. */
 export function ProductRow({product}: {product: Product}) {
   const [qty, setQty] = useState(1);
-  const pending = product.price <= 0;
+  const pending = isPricePending(product, usePilotActive());
   const out = pending || product.stock <= 0;
   const max = Math.max(1, product.stock);
   return (
@@ -198,6 +199,7 @@ export function ShopHeader() {
 
   const signOut = () => { logout(); router.push('/tienda'); };
   const pathname = usePathname();
+  const pilot = usePilotActive();
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const check = () => setScrolled(window.scrollY > 40);
@@ -211,6 +213,7 @@ export function ShopHeader() {
 
   return (
     <header className={`pm-header shop-pm-header mh${guest ? ' guest' : ''}${menu ? ' menu-open' : ''}${scrolled ? ' scrolled' : ''}`}>
+      {pilot && <p className="mh-pilot" role="note">Prueba piloto: compra de prueba con pago simulado. No se cobra nada.</p>}
       <div className="pm-wrap mh-top">
         <Link href="/tienda" className="mh-logo" aria-label="Tienda MARWA, inicio">
           {/* mismo logo en vector que el inicio (LOGO MARWA.ai) */}
@@ -322,7 +325,7 @@ export function MarwaCard({p, badge = false, fav = false, sizes = '(max-width: 7
     return () => clearTimeout(t);
   }, [added]);
   const href = `/tienda/producto/${p.id}`;
-  const pending = p.price <= 0;
+  const pending = isPricePending(p, usePilotActive());
   const out = pending || p.stock <= 0;
   const outLabel = pending ? 'Por cotizar' : 'Agotado';
   const isNew = p.badge === 'Nuevo';

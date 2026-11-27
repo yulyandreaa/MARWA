@@ -15,6 +15,7 @@ const K = {
   addresses: 'marwa.addresses.v1',
   stockLog: 'marwa.stock-log.v1',
   sellerPhoto: 'marwa.seller-photo.v1',
+  pilot: 'marwa.pilot-backup.v1',
 };
 
 /* ------------------------------------------------------------------ */
@@ -216,6 +217,33 @@ export function resetProducts() {
   write(K.products, seedProducts);
 }
 
+/* ── Prueba piloto (27-nov-2026). Aún no hay pasarela (Wompi) ni base de datos: la prueba se hace en un solo
+   navegador con el pago simulado. Los PRECIOS SE QUEDAN COMO ESTÁN (en 0, pedido de la usuaria): mientras la prueba
+   está activa los productos sin precio se pueden comprar ($0). Solo se carga stock de prueba y se guarda una copia
+   para restaurarlo. Algunos quedan en stock bajo y agotados para probar avisos. ── */
+type PilotBackup = Record<string, {price: number; stock: number}>;
+export const usePilotActive = () => usePersisted<PilotBackup | null>(K.pilot, null) !== null;
+const pilotOn = () => read<PilotBackup | null>(K.pilot, null) !== null;
+/** Precio "por confirmar": no se puede comprar, salvo en la prueba piloto. */
+export const isPricePending = (p: {price: number}, pilot: boolean) => p.price <= 0 && !pilot;
+
+export function loadPilotData() {
+  const list = readProducts();
+  if (!read<PilotBackup | null>(K.pilot, null)) write(K.pilot, Object.fromEntries(list.map(p => [p.id, {price: p.price, stock: p.stock}])));
+  return write(K.products, list.map((p, i) => ({
+    ...p,
+    stock: i % 9 === 4 ? 3 : i % 13 === 7 ? 0 : 40,
+  })));
+}
+
+export function restorePilotData() {
+  const backup = read<PilotBackup | null>(K.pilot, null);
+  if (!backup) return false;
+  const ok = write(K.products, readProducts().map(p => (backup[p.id] ? {...p, ...backup[p.id]} : p)));
+  if (ok) write(K.pilot, null);
+  return ok;
+}
+
 /* ------------------------------------------------------------------ */
 /* Cart                                                                */
 /* ------------------------------------------------------------------ */
@@ -227,7 +255,7 @@ const readCart = () => read<CartLine[]>(K.cart, EMPTY_CART);
 /* Sin precio (0 = por confirmar) no se puede comprar: se cotiza con un asesor. */
 function stockOf(id: string) {
   const p = readProducts().find(p => p.id === id);
-  return p && p.price > 0 ? p.stock : 0;
+  return p && (p.price > 0 || pilotOn()) ? p.stock : 0;
 }
 /** Returns the quantity actually in the cart after adding. */
 export function addToCart(id: string, qty = 1) {

@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 import {useEffect, useMemo, useRef, useState, type MouseEvent} from 'react';
 import {categories, categoryName, type Product} from '@/data/shopSeed';
 import {categoryPages} from '@/data/catalogRefs';
-import {addToCart, isOnOffer, useProducts, useSessionUser} from '@/lib/shop';
+import {addToCart, isOnOffer, isPricePending, usePilotActive, useProducts, useSessionUser} from '@/lib/shop';
 import {useReviews} from '@/lib/reviews';
 import {date, fileSize, money, openFile, priceText} from '@/lib/format';
 import {Icon} from '@/components/premium/Icons';
@@ -33,7 +33,8 @@ export function ProductDetail({product}: {product: Product}) {
   const cta = useRef<HTMLDivElement>(null);
   const page = categoryPages[product.category];
   /* Precio 0 = precio por confirmar: no se vende en línea, se cotiza con un asesor. */
-  const pending = product.price <= 0;
+  const pilot = usePilotActive();
+  const pending = isPricePending(product, pilot);
   const out = pending || product.stock <= 0;
   const low = !out && product.stock <= 5;
   const max = Math.max(1, product.stock);

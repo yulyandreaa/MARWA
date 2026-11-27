@@ -7,7 +7,7 @@ import {toast} from '../ShopUI';
 import {SectionHead} from '../account/AccountUI';
 import {PlainSelect} from '../account/PlainSelect';
 import {PhotoCard} from '../account/AccountProfile';
-import {useSessionUser} from '@/lib/shop';
+import {loadPilotData, restorePilotData, usePilotActive, useSessionUser} from '@/lib/shop';
 
 export function AdminSettings() {
   const user = useSessionUser();
@@ -45,6 +45,7 @@ export function AdminSettings() {
       <SectionHead title="Ajustes" text="Datos de la empresa, envío y subcategorías de la tienda."/>
       {/* 27-nov-2026: foto de perfil del administrador, igual que la del cliente */}
       {user && <PhotoCard user={user}/>}
+      <PilotCard/>
       <form className="form pa-form pa-settings" onSubmit={submit}>
         <section className="pa-section">
           <h2>Empresa</h2>
@@ -96,5 +97,25 @@ export function AdminSettings() {
         </ul>
       </section>
     </>
+  );
+}
+
+/* Prueba piloto (27-nov-2026): precios y stock de prueba mientras no hay pasarela de pago */
+function PilotCard() {
+  const active = usePilotActive();
+  return (
+    <section className={`pa-section pa-pilot${active ? ' is-on' : ''}`} aria-labelledby="ajustes-piloto">
+      <h2 id="ajustes-piloto">Prueba piloto{active ? ': activa' : ''}</h2>
+      <p className="pa-section-text">
+        {active
+          ? 'Los productos se pueden comprar aunque su precio esté en $0 y tienen stock DE PRUEBA. El pago es simulado: no se cobra nada. Al terminar, restaura el stock real.'
+          : 'Activa la compra de prueba: los precios se quedan como están (en $0) y se carga stock de prueba para recorrer la compra completa (carrito, pago simulado, pedido y estados). Se guarda una copia del stock actual.'}
+      </p>
+      <div className="pa-photo-actions">
+        {active
+          ? <button type="button" className="button primary" onClick={() => toast(restorePilotData() ? 'Se restauró el stock real y terminó la prueba piloto' : 'No había datos de prueba')}>Terminar prueba y restaurar</button>
+          : <button type="button" className="button primary" onClick={() => toast(loadPilotData() ? 'Prueba piloto activa: ya se puede comprar' : 'No se pudieron cargar los datos de prueba')}>Activar prueba piloto</button>}
+      </div>
+    </section>
   );
 }

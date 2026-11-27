@@ -1,6 +1,6 @@
 'use client';
 
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import {read, usePersisted, write} from './persist';
 import {useReviews} from './reviews';
 import {CANCELLED_BY_MARWA, returnLabel, statusLabel, useOrders, useProducts, useUsers} from './shop';
@@ -25,8 +25,34 @@ const NO_PREFS: Record<string, NotifPrefs> = {};
 export const useNotifPrefs = (email: string) => usePersisted(PREFS_KEY, NO_PREFS)[email] ?? ALL_ON;
 export const saveNotifPrefs = (email: string, prefs: NotifPrefs) => write(PREFS_KEY, {...read(PREFS_KEY, NO_PREFS), [email]: prefs});
 
-function finish(list: Draft[], readIds: string[]) {
+/* 27-nov-2026: las notificaciones se borran solas a los 15 días. Se cuenta desde su fecha (at) o, si no
+   tiene (p. ej. "Producto agotado"), desde la primera vez que apareció (se guarda en seenKey). */
+export const NOTIF_DAYS = 15;
+const NOTIF_MS = NOTIF_DAYS * 24 * 60 * 60 * 1000;
+const NO_SEEN: Record<string, string> = {};
+const seenKey = (scope: string) => `marwa.notif-seen.${scope}`;
+const isFresh = (n: Draft, seen: Record<string, string>, now: number) => {
+  const when = n.at ?? seen[n.id];
+  return !when || now - new Date(when).getTime() < NOTIF_MS;
+};
+
+/** Anota la fecha de primera aparición de las notificaciones nuevas y olvida las que ya no existen. */
+function useRememberSeen(scope: string, ids: string[]) {
+  const key = ids.join('|');
+  useEffect(() => {
+    const seen = read<Record<string, string>>(seenKey(scope), NO_SEEN);
+    const now = new Date().toISOString();
+    const next: Record<string, string> = {};
+    for (const id of ids) next[id] = seen[id] ?? now;
+    if (Object.keys(next).length !== Object.keys(seen).length || ids.some(id => !seen[id])) write(seenKey(scope), next);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scope, key]);
+}
+
+function finish(list: Draft[], readIds: string[], seen: Record<string, string>) {
+  const now = Date.now();
   const items = list
+    .filter(n => isFresh(n, seen, now))
     .sort((a, b) => (b.at ?? '').localeCompare(a.at ?? ''))
     .slice(0, MAX_ITEMS)
     .map(n => ({...n, read: readIds.includes(n.id)}));
@@ -43,8 +69,9 @@ export function useSellerNotifications() {
   const pqrs = usePqrs();
   const reviews = useReviews();
   const readIds = usePersisted(readKey(SELLER_SCOPE), NO_READ);
+  const seen = usePersisted(seenKey(SELLER_SCOPE), NO_SEEN);
 
-  return useMemo(() => {
+  const result = useMemo(() => {
     const list: Draft[] = [];
     for (const o of orders) {
       const href = `/tienda/admin?tab=pedidos&pedido=${o.id}`;
@@ -81,8 +108,10 @@ export function useSellerNotifications() {
     for (const r of reviews) {
       list.push({id: `opinion-${r.id}`, icon: 'star', title: `Nueva opinión: ${r.rating} de 5`, text: r.productName, href: '/tienda/admin?tab=opiniones', at: r.at});
     }
-    return finish(list, readIds);
-  }, [orders, products, users, pqrs, reviews, readIds]);
+    return {...finish(list, readIds, seen), ids: list.map(n => n.id)};
+  }, [orders, products, users, pqrs, reviews, readIds, seen]);
+  useRememberSeen(SELLER_SCOPE, result.ids);
+  return result;
 }
 
 /** Novedades del comprador: avances de sus pedidos y respuestas del equipo MARWA. */
@@ -91,8 +120,9 @@ export function useBuyerNotifications(email: string) {
   const pqrs = usePqrs();
   const prefs = useNotifPrefs(email);
   const readIds = usePersisted(readKey(email), NO_READ);
+  const seen = usePersisted(seenKey(email), NO_SEEN);
 
-  return useMemo(() => {
+  const result = useMemo(() => {
     const list: Draft[] = [];
     for (const o of orders) {
       if (o.email !== email) continue;
@@ -113,8 +143,10 @@ export function useBuyerNotifications(email: string) {
         if (m.from === 'marwa') list.push({id: `${q.id}-respuesta-${i}`, kind: 'soporte', icon: 'help', title: `Respondimos tu ${q.type.toLowerCase()} ${q.id}`, text: q.subject, href: `/tienda/cuenta?tab=pqr&pqr=${q.id}`, at: m.at});
       });
     }
-    return finish(list.filter(n => !n.kind || prefs[n.kind]), readIds);
-  }, [orders, pqrs, email, prefs, readIds]);
+    return {...finish(list.filter(n => !n.kind || prefs[n.kind]), readIds, seen), ids: list.map(n => n.id)};
+  }, [orders, pqrs, email, prefs, readIds, seen]);
+  useRememberSeen(email, result.ids);
+  return result;
 }
 
 export function markNotificationRead(scope: string, id: string) {

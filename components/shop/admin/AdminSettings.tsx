@@ -6,8 +6,11 @@ import {saveSettings, useSettings, type StoreSettings} from '@/lib/settings';
 import {toast} from '../ShopUI';
 import {SectionHead} from '../account/AccountUI';
 import {PlainSelect} from '../account/PlainSelect';
+import {PhotoCard} from '../account/AccountProfile';
+import {useSessionUser} from '@/lib/shop';
 
 export function AdminSettings() {
+  const user = useSessionUser();
   const saved = useSettings();
   const [v, setV] = useState<StoreSettings>(saved);
   const [line, setLine] = useState<string>(categories[0].id);
@@ -40,6 +43,8 @@ export function AdminSettings() {
   return (
     <>
       <SectionHead title="Ajustes" text="Datos de la empresa, envío y subcategorías de la tienda."/>
+      {/* 27-nov-2026: foto de perfil del administrador, igual que la del cliente */}
+      {user && <PhotoCard user={user}/>}
       <form className="form pa-form pa-settings" onSubmit={submit}>
         <section className="pa-section">
           <h2>Empresa</h2>

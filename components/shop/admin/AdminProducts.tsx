@@ -47,14 +47,16 @@ export function AdminProducts() {
   const [filter, setFilter] = useState<Filter>('todos');
   const [confirmReset, setConfirmReset] = useState(false);
 
+  /* 27-nov-2026: las tarjetas y el total de unidades cuentan solo la categoría elegida ("Todas" = inventario completo) */
+  const base = cat === 'todas' ? products : products.filter(p => p.category === cat);
   const count = {
-    todos: products.length,
-    agotados: products.filter(p => p.stock <= 0).length,
-    bajo: products.filter(p => p.stock > 0 && p.stock <= LOW_STOCK).length,
-    ocultos: products.filter(p => !p.visible).length,
+    todos: base.length,
+    agotados: base.filter(p => p.stock <= 0).length,
+    bajo: base.filter(p => p.stock > 0 && p.stock <= LOW_STOCK).length,
+    ocultos: base.filter(p => !p.visible).length,
   };
-  const units = products.reduce((s, p) => s + p.stock, 0);
-  const value = products.reduce((s, p) => s + p.stock * p.price, 0);
+  const units = base.reduce((s, p) => s + p.stock, 0);
+  const value = base.reduce((s, p) => s + p.stock * p.price, 0);
 
   const shown = useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -121,7 +123,7 @@ export function AdminProducts() {
           label="Categorías"
           value={cat}
           onChange={setCat}
-          options={[{value: 'todas' as typeof cat, label: 'Categorías'}, ...categories.map(c => ({value: c.id as typeof cat, label: c.name}))]}
+          options={[{value: 'todas' as typeof cat, label: 'Todas las categorías'}, ...categories.map(c => ({value: c.id as typeof cat, label: c.name}))]}
         />
         <PlainSelect label="Ordenar por" value={sort} onChange={setSort} options={sortOptions}/>
       </div>

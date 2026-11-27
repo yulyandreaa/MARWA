@@ -107,7 +107,7 @@ function squareJpeg(file: File, size = 320): Promise<string> {
   });
 }
 
-function PhotoCard({user}: {user: User}) {
+export function PhotoCard({user}: {user: User}) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const pick = async (e: ChangeEvent<HTMLInputElement>) => {

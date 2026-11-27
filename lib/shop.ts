@@ -14,6 +14,7 @@ const K = {
   favorites: 'marwa.favorites.v1',
   addresses: 'marwa.addresses.v1',
   stockLog: 'marwa.stock-log.v1',
+  sellerPhoto: 'marwa.seller-photo.v1',
 };
 
 /* ------------------------------------------------------------------ */
@@ -288,8 +289,9 @@ const norm = (email: string) => email.trim().toLowerCase();
 export function useSessionUser(): User | null {
   const session = usePersisted(K.session, NO_SESSION);
   const users = useUsers();
+  const sellerPhoto = usePersisted<string>(K.sellerPhoto, '');
   if (!session) return null;
-  if (session.email === sellerUser.email) return sellerUser;
+  if (session.email === sellerUser.email) return sellerPhoto ? {...sellerUser, photo: sellerPhoto} : sellerUser;
   return users.find(u => u.email === session.email) ?? null;
 }
 
@@ -331,6 +333,8 @@ export function updateAccount(email: string, data: Partial<Pick<User, 'name' | '
 /* Foto de perfil (27-nov-2026). Demo: se guarda como imagen pequeña (data URL JPEG ~320 px) en el usuario.
    INTEGRACIÓN PENDIENTE: al conectar el backend, subirla a almacenamiento y guardar solo la URL. */
 export function updatePhoto(email: string, photo: string | undefined) {
+  // el administrador de la demo está fijo en el código: su foto se guarda aparte
+  if (email === sellerUser.email) return write(K.sellerPhoto, photo ?? '');
   return write(K.users, readUsers().map(u => (u.email === email ? {...u, photo} : u)));
 }
 

@@ -1679,3 +1679,5 @@ html.lenis, html.lenis body { height: auto; }
   .pm.hv .hv-duo-copy b { font-size: 19px !important; }
 }
 @media (max-width: 767px) { .pm.hv .hv-char.is-strip .hv-char-copy p, .pm.hv .hv-char.is-boxed .hv-char-copy p { font-size: 15px !important; } }
+/* Botones de las líneas del ecosistema en celular: esquinas como los botones del sitio, no píldora (27-nov-2026) */
+@media (max-width: 767px) { .pm.hv .eh-list a { border-radius: 10px; } }

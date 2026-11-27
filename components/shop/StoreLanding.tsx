@@ -176,7 +176,8 @@ function FeaturedBand() {
       ))}
       <div className="lx-feat-text" key={s.id} aria-live="polite">
         <span className="lx-feat-pill">Producto destacado · {cat?.name}</span>
-        <h2>{s.title[0]} <span>{s.title[1]}<em>{s.title[2]}</em></span></h2>
+        {/* la última palabra de la 1.ª parte va pegada a "Cat. 6" (27-nov-2026): "Cable UTP / flexible Cat. 6" */}
+        <h2>{s.title[0].split(' ').slice(0, -1).join(' ')} <span className="lx-feat-tail"><span className="lx-feat-last">{s.title[0].split(' ').slice(-1)[0]}</span> <span>{s.title[1]}<em>{s.title[2]}</em></span></span></h2>
         <p>{p.description}</p>
         <div className="lx-feat-price"><b>{priceText(p.price)}</b>{p.price > 0 && <><i aria-hidden="true"/><small>/ {p.unit}</small></>}</div>
         <a className="lx-feat-btn" href={`/tienda/producto/${p.id}`}>Ver producto <i aria-hidden="true"/><Icon name="arrow"/></a>
@@ -326,7 +327,7 @@ function Advisor() {
   const wa = (text: string) => `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
   return (
     <section className="lx-advice" id="asesoria" aria-label="Asesoría experta">
-      <Image className="lx-advice-img dsk-art" src="/assets/asesoria-bogota-panoramica-v1.jpg" alt="Panorámica de Bogotá de noche con Monserrate y la Torre Colpatria conectadas por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 100vw, 1312px"/>
+      <Image className="lx-advice-img dsk-art" src="/assets/asesoria-bogota-panoramica-v1.jpg" alt="Panorámica de Bogotá de noche con Monserrate y la Torre Colpatria conectadas por líneas de luz azules y rojas con marcadores de ubicación" fill quality={90} sizes="(max-width: 767px) 320vw, 1312px"/>
       <Image className="lx-advice-img mob-art" src="/assets/bogota-movil-v1.jpg" alt="" fill quality={90} sizes="100vw"/>
       <div className="lx-advice-text">
         <h2>¿No sabes qué referencia <em>elegir?</em></h2>
@@ -411,7 +412,7 @@ function ProjectTiles() {
 /* 2 piezas medianas lado a lado: distribuidores y compras por volumen */
 const duo = [
   {eyebrow: 'Distribuidores', title: 'Hazte distribuidor', hl: 'MARWA', text: 'Lleva nuestro portafolio a tu ciudad~con respaldo de marca~y acompañamiento comercial.', cta: 'Quiero ser distribuidor', image: '/assets/duo-distribuidor-v2.jpg', msg: 'Hola MARWA, quiero ser distribuidor.'},
-  {eyebrow: 'Contratistas e instaladores', title: 'Todo para', hl: 'tu obra', text: 'Cotizamos tu lista completa~de materiales y la despachamos~a todo Colombia.', cta: 'Cotizar mi lista', image: '/assets/duo-volumen-v2.jpg', msg: 'Hola MARWA, quiero cotizar materiales por volumen para una obra.'},
+  {eyebrow: 'Contratistas e instaladores', mobile: '/assets/duo-volumen-movil-v1.jpg', title: 'Todo para', hl: 'tu obra', text: 'Cotizamos tu lista completa~de materiales y la despachamos~a todo Colombia.', cta: 'Cotizar mi lista', image: '/assets/duo-volumen-v2.jpg', msg: 'Hola MARWA, quiero cotizar materiales por volumen para una obra.'},
 ];
 
 function DuoBanners() {
@@ -419,7 +420,9 @@ function DuoBanners() {
     <section className="pm-wrap pm-section lx-duo" aria-label="Distribuidores y compras por volumen">
       {duo.map(d => (
         <a key={d.title} href={waLink(d.msg)} target="_blank" rel="noopener">
-          <Image src={d.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+          <Image className={'mobile' in d ? 'dsk-art' : undefined} src={d.image} alt="" fill quality={90} sizes="(max-width: 767px) 100vw, 650px"/>
+          {/* 27-nov-2026: en celular, foto extendida a la derecha (Magnific expand) para que el trabajador no quede en el borde */}
+          {'mobile' in d && <Image className="mob-art" src={d.mobile as string} alt="" fill quality={88} sizes="100vw"/>}
           <span>
             <b>{d.title} <span className="lx-duo-hl">{d.hl}</span></b>
             <small>{d.text.split('~').map((l, k) => <span key={k} className="lx-duo-line">{l}</span>)}</small>

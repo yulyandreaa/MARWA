@@ -2786,3 +2786,122 @@ form.form.pa-form:not(.pa-section) { gap: 20px; }
 @media (max-width: 767px) {
   .lx-mascot .lx-mascot-text, .lx-mascot .lx-mascot-text.is-deal { padding-left: 16px !important; --F: clamp(46px, 13.5vw, 62px) !important; }
 }
+/* MARWOT en celular: más bajo, copy más grande y robot más a la derecha (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-mascot { aspect-ratio: 2.75 / 1 !important; }
+  .lx-mascot .lx-mascot-img.dsk-art { left: 0 !important; right: auto !important; width: 118% !important; object-position: 100% 32% !important; }
+  .lx-mascot .lx-mascot-text, .lx-mascot .lx-mascot-text.is-deal { padding-left: 18px !important; --F: clamp(54px, 16vw, 74px) !important; }
+}
+/* MARWOT en celular: texto y robot un poco más a la derecha (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-mascot .lx-mascot-img.dsk-art { width: 130% !important; }
+  .lx-mascot .lx-mascot-text, .lx-mascot .lx-mascot-text.is-deal { padding-left: 9% !important; }
+}
+@media (max-width: 767px) { .lx-mascot .lx-mascot-img.dsk-art { max-width: none !important; } }
+@media (max-width: 767px) { .lx-mascot .lx-mascot-img.dsk-art { width: 122% !important; } }
+
+/* ===== Hazte distribuidor / Todo para tu obra en celular (27-nov-2026): más bajos, como las demás piezas ===== */
+@media (max-width: 767px) {
+  .lx-duo a { aspect-ratio: 1.9 / 1 !important; min-height: 0 !important; height: auto !important; border-radius: 16px; }
+  .lx-duo a > img { object-position: 70% 35% !important; }
+  .lx-duo a > span { max-width: 62% !important; margin: 0 0 0 18px !important; padding: 0 !important; }
+  .pm .lx-duo b { font-size: 17px !important; line-height: 1.15 !important; }
+  .lx-duo small { margin-top: 5px !important; font-size: 11.5px !important; line-height: 1.35 !important; }
+  .lx-duo em { margin-top: 10px !important; min-height: 0 !important; padding: 7px 11px !important; gap: 6px; font-size: 11.5px !important; }
+  .lx-duo em svg { width: 13px; height: 13px; }
+}
+/* "Todo para tu obra" en celular: la foto se corre a la izquierda para que el trabajador no se corte */
+@media (max-width: 767px) { .lx-duo a:nth-child(2) > img { object-position: 100% 35% !important; } }
+@media (max-width: 767px) { .lx-duo a:nth-child(2) > img.mob-art { object-position: 80% 40% !important; } }
+@media (max-width: 767px) { .lx-duo a:nth-child(2) > img.mob-art { object-position: 64% 40% !important; } }
+
+/* ===== Producto destacado en celular (27-nov-2026): como el banner de MARWOT. Horizontal 2,4:1, la foto
+   ancha ocupa todo el banner (carrete a la derecha) y a la izquierda solo el título y "Ver producto". ===== */
+@media (max-width: 767px) {
+  .lx-feat { position: relative !important; display: flex !important; flex-direction: row !important; align-items: center !important; aspect-ratio: 2.4 / 1 !important; min-height: 0 !important; max-height: none !important; height: auto !important; margin-block: 40px !important; overflow: hidden; border-radius: 16px; }
+  .lx-feat .lx-feat-img.mob-art { display: none !important; }
+  .lx-feat .lx-feat-img.dsk-art { display: block; position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; aspect-ratio: auto !important; object-fit: cover; object-position: 88% 50% !important; }
+  .lx-feat .lx-feat-text { position: relative !important; z-index: 2; width: 52% !important; margin: 0 !important; padding: 0 0 0 7% !important; background: none !important; }
+  .lx-feat .lx-feat-pill, .lx-feat .lx-feat-text > p, .lx-feat .lx-feat-price, .lx-feat .lx-feat-dots { display: none !important; }
+  .pm .lx-feat .lx-feat-text h2 { margin: 0 !important; font-size: 19px !important; line-height: 1.12 !important; }
+  .lx-feat .lx-feat-btn { margin-top: 12px !important; min-height: 0 !important; padding: 7px 12px !important; gap: 8px; font-size: 12px !important; }
+  .lx-feat .lx-feat-btn svg { width: 14px; height: 14px; }
+}
+@media (max-width: 767px) { .lx-feat .lx-feat-img.dsk-art { display: block !important; } }
+/* Producto destacado en celular: título más grande (27-nov-2026) */
+@media (max-width: 767px) {
+  .pm .lx-feat .lx-feat-text h2 { font-size: clamp(22px, 6.6vw, 28px) !important; line-height: 1.08 !important; }
+  .lx-feat .lx-feat-text { width: 56% !important; padding-left: 6% !important; }
+}
+/* Título del destacado: en computador igual que antes ("Cable UTP flexible" / "Cat. 6");
+   en celular "Cable UTP" / "flexible Cat. 6" (27-nov-2026) */
+.lx-feat h2 > span.lx-feat-tail { display: inline; }
+.lx-feat h2 .lx-feat-tail > span:not(.lx-feat-last) { display: block; }
+@media (max-width: 767px) {
+  .lx-feat h2 > span.lx-feat-tail { display: inline-block; white-space: nowrap; }
+  .lx-feat h2 .lx-feat-tail > span:not(.lx-feat-last) { display: inline; }
+}
+@media (max-width: 400px) {
+  .pm .lx-feat .lx-feat-text h2 { font-size: 6.1vw !important; }
+  .lx-feat .lx-feat-img.dsk-art { object-position: 100% 50% !important; }
+}
+
+/* ===== Servicios de la tienda en celular (27-nov-2026): filas compactas, foto a la izquierda y texto a la derecha ===== */
+@media (max-width: 767px) {
+  .lx-services { display: grid !important; grid-template-columns: 1fr !important; gap: 12px !important; }
+  .lx-svc2 { display: flex !important; flex-direction: row !important; align-items: stretch !important; aspect-ratio: auto !important; height: 116px !important; min-height: 0 !important; overflow: hidden; border-radius: 14px; }
+  .lx-svc2-img { position: relative !important; flex: 0 0 42% !important; height: 100% !important; aspect-ratio: auto !important; }
+  .lx-svc2-bar { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: flex-start !important; text-align: left !important; padding: 12px 16px !important; }
+  .lx-svc2 b { font-size: 15px !important; line-height: 1.2 !important; }
+  .lx-svc2 small { margin-top: 4px !important; font-size: 12.5px !important; line-height: 1.4 !important; }
+}
+
+/* ===== Banner de asesoría (Bogotá) en celular (27-nov-2026): compacto, foto de fondo en todo el banner
+   y el texto con los botones encima, sobre un velo oscuro abajo ===== */
+@media (max-width: 767px) {
+  .lx-advice { position: relative !important; display: flex !important; flex-direction: column !important; justify-content: flex-end !important; aspect-ratio: 1.45 / 1 !important; height: auto !important; min-height: 0 !important; max-height: none !important; overflow: hidden; border-radius: 16px; }
+  .lx-advice .lx-advice-img.mob-art { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; aspect-ratio: auto !important; object-fit: cover; object-position: center 30% !important; }
+  .lx-advice::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(0deg, rgba(8, 16, 46, .94) 0%, rgba(8, 16, 46, .78) 38%, rgba(8, 16, 46, 0) 70%); }
+  .lx-advice .lx-advice-text { position: relative !important; z-index: 2; width: 100% !important; margin: 0 !important; padding: 0 18px 18px !important; background: none !important; }
+  .pm .lx-advice h2 { margin: 0 !important; font-size: 19px !important; line-height: 1.15 !important; }
+  .lx-advice .lx-advice-text p { margin: 5px 0 0 !important; font-size: 12px !important; line-height: 1.4 !important; }
+  .lx-advice-actions { display: flex !important; flex-wrap: nowrap !important; gap: 8px !important; margin-top: 12px !important; }
+  .lx-advice-btn { min-height: 0 !important; padding: 8px 12px !important; font-size: 12px !important; white-space: nowrap; }
+}
+/* Asesoría en celular: sin la frase, más bajo y título con más protagonismo (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-advice { aspect-ratio: 1.75 / 1 !important; }
+  .lx-advice .lx-advice-text p { display: none !important; }
+  .pm .lx-advice h2 { font-size: clamp(20px, 5.8vw, 24px) !important; }
+}
+/* Asesoría en celular como en computador: misma foto panorámica, texto a la izquierda sobre la parte oscura
+   y la ciudad con la Torre Colpatria a la derecha (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-advice { justify-content: center !important; aspect-ratio: 1.9 / 1 !important; background: #0b1636; }
+  .lx-advice .lx-advice-img.mob-art { display: none !important; }
+  .lx-advice .lx-advice-img.dsk-art { display: block !important; position: absolute !important; inset: 0 !important; left: auto !important; right: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; aspect-ratio: auto !important; object-fit: cover; object-position: 96% 50% !important; }
+  .lx-advice::after { background: linear-gradient(90deg, rgba(8, 16, 46, .92) 0%, rgba(8, 16, 46, .7) 45%, rgba(8, 16, 46, 0) 75%) !important; }
+  .lx-advice .lx-advice-text { padding: 0 0 0 18px !important; width: 74% !important; }
+  .pm .lx-advice h2 { font-size: clamp(18px, 5.2vw, 22px) !important; }
+}
+@media (max-width: 767px) {
+  .lx-advice { aspect-ratio: 1.7 / 1 !important; }
+  .lx-advice .lx-advice-img.dsk-art { object-position: 80% 50% !important; }
+  .lx-advice .lx-advice-text { width: 58% !important; }
+  .lx-advice-actions { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; margin-top: 12px !important; }
+  .lx-advice::after { background: linear-gradient(90deg, rgba(8, 16, 46, .9) 0%, rgba(8, 16, 46, .62) 40%, rgba(8, 16, 46, 0) 62%) !important; }
+}
+/* Asesoría en celular más horizontal, como en computador (27-nov-2026) */
+@media (max-width: 767px) {
+  .lx-advice { aspect-ratio: 2.15 / 1 !important; }
+  .pm .lx-advice h2 { font-size: clamp(17px, 4.8vw, 21px) !important; }
+  .lx-advice-actions { gap: 6px !important; margin-top: 10px !important; }
+  .lx-advice-btn { padding: 6px 11px !important; font-size: 11.5px !important; }
+}
+
+/* ===== Esquinas en celular iguales a computador (27-nov-2026): banners 6 px; botones pequeños 8 px
+   (en celular son más bajos y con 12 px se veían como píldoras) ===== */
+@media (max-width: 767px) {
+  .lx-mascot, .lx-feat, .lx-duo a, .lx-svc2, .lx-advice, .lx-promos a { border-radius: 6px !important; }
+  .lx-promos a em, .lx-feat-btn, .lx-duo em, .lx-advice-btn { border-radius: 8px !important; }
+}
